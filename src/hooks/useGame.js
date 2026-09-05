@@ -10,6 +10,10 @@ export const useGame = () => {
   const [phase, setPhase] = useState('setup'); // setup | role | voting | results
   const [votes, setVotes] = useState([]);
   const [currentVoterIndex, setCurrentVoterIndex] = useState(0);
+  // Jugador eliminado de la ronda: se calcula una sola vez, justo cuando
+  // se registra el último voto, para no recalcularlo (ni resortear el
+  // desempate) en cada render.
+  const [eliminatedIndex, setEliminatedIndex] = useState(-1);
   // Recordamos la última palabra y el último impostor para no repetirlos
   // dos veces seguidas cuando se juega otra ronda.
   const [lastWord, setLastWord] = useState(null);
@@ -38,6 +42,7 @@ export const useGame = () => {
     setCurrentPlayerIndex(0);
     setCurrentVoterIndex(0);
     setVotes(new Array(playerNames.length).fill(0));
+    setEliminatedIndex(-1);
     setPhase('role');
   }, [lastWord, lastImpostorName, pickImpostor]);
 
@@ -68,13 +73,28 @@ export const useGame = () => {
 
   // Registra el voto del jugador actual (currentVoterIndex) para
   // eliminar al jugador acusado (accusedIndex) y avanza el turno de
-  // votación. Cuando el último jugador vota, la partida pasa
-  // automáticamente a la pantalla de resultados, donde se revela a
-  // quién eliminó el grupo.
+  // votación. Cuando el último jugador vota, se suman todos los votos
+  // y se elimina solo a quien tenga más (si hay empate, se sortea entre
+  // los empatados, pero siempre queda UN solo eliminado).
   const castVote = useCallback((accusedIndex) => {
+    const isLastVote = currentVoterIndex + 1 >= players.length;
+
     setVotes(prev => {
       const newVotes = [...prev];
       newVotes[accusedIndex] = (newVotes[accusedIndex] || 0) + 1;
+
+      if (isLastVote) {
+        const maxVotes = Math.max(...newVotes);
+        const tied = newVotes.reduce((acc, count, index) => {
+          if (count === maxVotes && count > 0) acc.push(index);
+          return acc;
+        }, []);
+        const winner = tied.length > 0
+          ? tied[Math.floor(Math.random() * tied.length)]
+          : -1;
+        setEliminatedIndex(winner);
+      }
+
       return newVotes;
     });
 
@@ -86,7 +106,7 @@ export const useGame = () => {
       }
       return next;
     });
-  }, [players.length]);
+  }, [players.length, currentVoterIndex]);
 
   const resetGame = useCallback(() => {
     setPlayers([]);
@@ -97,6 +117,7 @@ export const useGame = () => {
     setCurrentVoterIndex(0);
     setPhase('setup');
     setVotes([]);
+    setEliminatedIndex(-1);
     setLastWord(null);
     setLastImpostorName(null);
   }, []);
@@ -109,24 +130,11 @@ export const useGame = () => {
     return currentPlayerIndex === impostorIndex;
   }, [currentPlayerIndex, impostorIndex]);
 
-  // Jugador(es) eliminado(s): el/los que recibieron más votos.
-  const getEliminated = useCallback(() => {
-    if (votes.length === 0) return [];
-    const maxVotes = Math.max(...votes);
-    return votes.reduce((acc, count, index) => {
-      if (count === maxVotes && count > 0) {
-        acc.push(index);
-      }
-      return acc;
-    }, []);
-  }, [votes]);
-
   const getWinner = useCallback(() => {
-    const eliminated = getEliminated();
-    if (eliminated.length === 0) return null;
-    // Si el impostor fue eliminado, ganan los tripulantes
-    return eliminated.includes(impostorIndex) ? 'crew' : 'impostor';
-  }, [getEliminated, impostorIndex]);
+    if (eliminatedIndex === -1) return null;
+    // Si el eliminado es el impostor, ganan los tripulantes
+    return eliminatedIndex === impostorIndex ? 'crew' : 'impostor';
+  }, [eliminatedIndex, impostorIndex]);
 
   return {
     players,
@@ -137,6 +145,7 @@ export const useGame = () => {
     currentVoterIndex,
     phase,
     votes,
+    eliminatedIndex,
     startGame,
     playAgainSamePlayers,
     nextPlayer,
@@ -144,7 +153,6 @@ export const useGame = () => {
     resetGame,
     getCurrentPlayer,
     isImpostor,
-    getEliminated,
     getWinner,
     setPhase
   };

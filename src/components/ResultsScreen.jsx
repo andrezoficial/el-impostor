@@ -5,18 +5,16 @@ import { FaUsers, FaUserSecret, FaSkull } from 'react-icons/fa';
 export const ResultsScreen = ({
   players,
   votes,
-  eliminated,
+  eliminatedIndex,
   impostorIndex,
   word,
   clue,
   onReset,
   onPlayAgain
 }) => {
-  const crewWins = eliminated.includes(impostorIndex);
+  const crewWins = eliminatedIndex !== -1 && eliminatedIndex === impostorIndex;
   const totalVotes = votes.reduce((a, b) => a + b, 0);
-  const maxVotes = votes.length > 0 ? Math.max(...votes) : 0;
-
-  const eliminatedNames = eliminated.map(index => players[index]);
+  const eliminatedName = eliminatedIndex !== -1 ? players[eliminatedIndex] : null;
 
   return (
     <motion.div
@@ -52,8 +50,8 @@ export const ResultsScreen = ({
 
         <div style={{ marginTop: '15px', color: 'white' }}>
           <FaSkull style={{ marginRight: '8px' }} />
-          {eliminatedNames.length > 0
-            ? `Eliminado${eliminatedNames.length > 1 ? 's' : ''}: ${eliminatedNames.join(', ')}`
+          {eliminatedName
+            ? `Eliminado: ${eliminatedName}`
             : 'Nadie recibió votos suficientes'}
         </div>
 
@@ -87,7 +85,7 @@ export const ResultsScreen = ({
                   Impostor
                 </span>
               )}
-              {eliminated.includes(index) && (
+              {eliminatedIndex === index && (
                 <span className="badge" style={{ marginLeft: '10px', background: 'var(--warning)', color: 'var(--background)' }}>
                   <FaSkull style={{ marginRight: '5px' }} />
                   Eliminado
@@ -96,7 +94,7 @@ export const ResultsScreen = ({
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
               <span className="vote-count">{votes[index]}</span>
-              {votes[index] === maxVotes && votes[index] > 0 && (
+              {eliminatedIndex === index && (
                 <span style={{ fontSize: '20px' }}>🏆</span>
               )}
             </div>

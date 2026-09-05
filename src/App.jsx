@@ -46,7 +46,7 @@ function App() {
           <ResultsScreen
             players={game.players}
             votes={game.votes}
-            eliminated={game.getEliminated()}
+            eliminatedIndex={game.eliminatedIndex}
             impostorIndex={game.impostorIndex}
             word={game.currentWord?.word}
             clue={game.currentWord?.clue}
