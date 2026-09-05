@@ -3,36 +3,44 @@ import { getRandomWord } from '../data/wordBank';
 
 export const useGame = () => {
   const [players, setPlayers] = useState([]);
-  const [category, setCategory] = useState(null); // null / 'Todas' = sin filtro
+  const [category, setCategory] = useState(null);
   const [currentWord, setCurrentWord] = useState(null);
   const [impostorIndex, setImpostorIndex] = useState(-1);
   const [currentPlayerIndex, setCurrentPlayerIndex] = useState(0);
   const [phase, setPhase] = useState('setup'); // setup | role | voting | results
   const [votes, setVotes] = useState([]);
   const [currentVoterIndex, setCurrentVoterIndex] = useState(0);
-  // Jugador eliminado de la ronda: se calcula una sola vez, justo cuando
-  // se registra el último voto, para no recalcularlo (ni resortear el
-  // desempate) en cada render.
   const [eliminatedIndex, setEliminatedIndex] = useState(-1);
-  // Recordamos la última palabra y el último impostor para no repetirlos
-  // dos veces seguidas cuando se juega otra ronda.
   const [lastWord, setLastWord] = useState(null);
   const [lastImpostorName, setLastImpostorName] = useState(null);
 
+  // Multi-round voting state
+  const [votingRound, setVotingRound] = useState(1);      // ronda actual (1, 2, 3)
+  const [maxVotingRounds, setMaxVotingRounds] = useState(1); // cuántas rondas máx
+  const [votingTied, setVotingTied] = useState(false);    // hubo empate en ronda previa
+  const [tiedPlayers, setTiedPlayers] = useState([]);     // índices empatados
+  const [allRoundsVotes, setAllRoundsVotes] = useState([]); // historial de rondas
+
   const pickImpostor = useCallback((playerNames, previousImpostorName) => {
     if (playerNames.length <= 1) return 0;
-
     let index;
     do {
       index = Math.floor(Math.random() * playerNames.length);
     } while (playerNames.length > 1 && playerNames[index] === previousImpostorName);
-
     return index;
   }, []);
+
+  // Calcula cuántas rondas de votación según número de jugadores
+  const calcMaxRounds = (count) => {
+    if (count >= 9) return 3;
+    if (count >= 6) return 2;
+    return 1;
+  };
 
   const beginRound = useCallback((playerNames, cat) => {
     const word = getRandomWord(lastWord, cat);
     const impostor = pickImpostor(playerNames, lastImpostorName);
+    const rounds = calcMaxRounds(playerNames.length);
 
     setPlayers(playerNames);
     setCurrentWord(word);
@@ -43,6 +51,11 @@ export const useGame = () => {
     setCurrentVoterIndex(0);
     setVotes(new Array(playerNames.length).fill(0));
     setEliminatedIndex(-1);
+    setVotingRound(1);
+    setMaxVotingRounds(rounds);
+    setVotingTied(false);
+    setTiedPlayers([]);
+    setAllRoundsVotes([]);
     setPhase('role');
   }, [lastWord, lastImpostorName, pickImpostor]);
 
@@ -54,9 +67,6 @@ export const useGame = () => {
     beginRound(playerNames, selectedCategory);
   }, [beginRound]);
 
-  // Empieza una nueva ronda con los mismos jugadores y la misma
-  // categoría (sin volver a escribir los nombres), con palabra e
-  // impostor nuevos.
   const playAgainSamePlayers = useCallback(() => {
     if (players.length < 3) return;
     beginRound(players, category);
@@ -71,11 +81,14 @@ export const useGame = () => {
     }
   }, [currentPlayerIndex, players.length]);
 
-  // Registra el voto del jugador actual (currentVoterIndex) para
-  // eliminar al jugador acusado (accusedIndex) y avanza el turno de
-  // votación. Cuando el último jugador vota, se suman todos los votos
-  // y se elimina solo a quien tenga más (si hay empate, se sortea entre
-  // los empatados, pero siempre queda UN solo eliminado).
+  // Determina el resultado de una ronda de votación
+  const resolveVotes = useCallback((newVotes, eligibleIndices = null) => {
+    const indices = eligibleIndices !== null ? eligibleIndices : newVotes.map((_, i) => i);
+    const maxV = Math.max(...indices.map(i => newVotes[i]));
+    const tied = indices.filter(i => newVotes[i] === maxV && newVotes[i] > 0);
+    return { maxV, tied };
+  }, []);
+
   const castVote = useCallback((accusedIndex) => {
     const isLastVote = currentVoterIndex + 1 >= players.length;
 
@@ -84,15 +97,31 @@ export const useGame = () => {
       newVotes[accusedIndex] = (newVotes[accusedIndex] || 0) + 1;
 
       if (isLastVote) {
-        const maxVotes = Math.max(...newVotes);
-        const tied = newVotes.reduce((acc, count, index) => {
-          if (count === maxVotes && count > 0) acc.push(index);
-          return acc;
-        }, []);
-        const winner = tied.length > 0
-          ? tied[Math.floor(Math.random() * tied.length)]
-          : -1;
-        setEliminatedIndex(winner);
+        const { tied } = resolveVotes(newVotes);
+
+        if (tied.length === 1) {
+          // Ganador claro
+          setEliminatedIndex(tied[0]);
+          setAllRoundsVotes(r => [...r, { votes: newVotes, round: votingRound }]);
+          setPhase('results');
+        } else if (votingRound < maxVotingRounds && tied.length > 1) {
+          // Empate → ronda adicional entre empatados
+          setAllRoundsVotes(r => [...r, { votes: newVotes, round: votingRound }]);
+          setVotingTied(true);
+          setTiedPlayers(tied);
+          setVotingRound(r => r + 1);
+          setVotes(new Array(players.length).fill(0));
+          setCurrentVoterIndex(0);
+          // No cambia phase (sigue en voting) → el VotingScreen detecta el nuevo round
+        } else {
+          // Empate y ya no hay más rondas → sorteo entre empatados
+          const winner = tied.length > 0
+            ? tied[Math.floor(Math.random() * tied.length)]
+            : -1;
+          setEliminatedIndex(winner);
+          setAllRoundsVotes(r => [...r, { votes: newVotes, round: votingRound }]);
+          setPhase('results');
+        }
       }
 
       return newVotes;
@@ -100,13 +129,10 @@ export const useGame = () => {
 
     setCurrentVoterIndex(prev => {
       const next = prev + 1;
-      if (next >= players.length) {
-        setPhase('results');
-        return prev;
-      }
+      if (next >= players.length) return prev;
       return next;
     });
-  }, [players.length, currentVoterIndex]);
+  }, [players.length, currentVoterIndex, votingRound, maxVotingRounds, resolveVotes]);
 
   const resetGame = useCallback(() => {
     setPlayers([]);
@@ -120,6 +146,11 @@ export const useGame = () => {
     setEliminatedIndex(-1);
     setLastWord(null);
     setLastImpostorName(null);
+    setVotingRound(1);
+    setMaxVotingRounds(1);
+    setVotingTied(false);
+    setTiedPlayers([]);
+    setAllRoundsVotes([]);
   }, []);
 
   const getCurrentPlayer = useCallback(() => {
@@ -132,7 +163,6 @@ export const useGame = () => {
 
   const getWinner = useCallback(() => {
     if (eliminatedIndex === -1) return null;
-    // Si el eliminado es el impostor, ganan los tripulantes
     return eliminatedIndex === impostorIndex ? 'crew' : 'impostor';
   }, [eliminatedIndex, impostorIndex]);
 
@@ -146,6 +176,11 @@ export const useGame = () => {
     phase,
     votes,
     eliminatedIndex,
+    votingRound,
+    maxVotingRounds,
+    votingTied,
+    tiedPlayers,
+    allRoundsVotes,
     startGame,
     playAgainSamePlayers,
     nextPlayer,
