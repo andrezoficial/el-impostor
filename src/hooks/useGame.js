@@ -10,24 +10,51 @@ export const useGame = () => {
   const [descriptions, setDescriptions] = useState([]);
   const [votes, setVotes] = useState([]);
   const [currentVoterIndex, setCurrentVoterIndex] = useState(0);
+  // Recordamos la última palabra y el último impostor para no repetirlos
+  // dos veces seguidas cuando se juega otra ronda.
+  const [lastWord, setLastWord] = useState(null);
+  const [lastImpostorName, setLastImpostorName] = useState(null);
 
-  const startGame = useCallback((playerNames) => {
-    if (playerNames.length < 3) {
-      throw new Error('Necesitas al menos 3 jugadores');
-    }
+  const pickImpostor = useCallback((playerNames, previousImpostorName) => {
+    if (playerNames.length <= 1) return 0;
 
-    const word = getRandomWord();
-    const impostor = Math.floor(Math.random() * playerNames.length);
+    let index;
+    do {
+      index = Math.floor(Math.random() * playerNames.length);
+    } while (playerNames.length > 1 && playerNames[index] === previousImpostorName);
+
+    return index;
+  }, []);
+
+  const beginRound = useCallback((playerNames) => {
+    const word = getRandomWord(lastWord);
+    const impostor = pickImpostor(playerNames, lastImpostorName);
 
     setPlayers(playerNames);
     setCurrentWord(word);
+    setLastWord(word.word);
     setImpostorIndex(impostor);
+    setLastImpostorName(playerNames[impostor]);
     setCurrentPlayerIndex(0);
     setCurrentVoterIndex(0);
     setDescriptions(new Array(playerNames.length).fill(''));
     setVotes(new Array(playerNames.length).fill(0));
     setPhase('role');
-  }, []);
+  }, [lastWord, lastImpostorName, pickImpostor]);
+
+  const startGame = useCallback((playerNames) => {
+    if (playerNames.length < 3) {
+      throw new Error('Necesitas al menos 3 jugadores');
+    }
+    beginRound(playerNames);
+  }, [beginRound]);
+
+  // Empieza una nueva ronda con los mismos jugadores (sin volver a
+  // escribir los nombres), eligiendo una palabra y un impostor nuevos.
+  const playAgainSamePlayers = useCallback(() => {
+    if (players.length < 3) return;
+    beginRound(players);
+  }, [players, beginRound]);
 
   const nextPlayer = useCallback(() => {
     if (currentPlayerIndex < players.length - 1) {
@@ -76,6 +103,8 @@ export const useGame = () => {
     setPhase('setup');
     setDescriptions([]);
     setVotes([]);
+    setLastWord(null);
+    setLastImpostorName(null);
   }, []);
 
   const getCurrentPlayer = useCallback(() => {
@@ -114,6 +143,7 @@ export const useGame = () => {
     descriptions,
     votes,
     startGame,
+    playAgainSamePlayers,
     nextPlayer,
     addDescription,
     castVote,

@@ -5,6 +5,7 @@ import { RoleScreen } from './components/RoleScreen';
 import { VotingScreen } from './components/VotingScreen';
 import { ResultsScreen } from './components/ResultsScreen';
 import { AnimatePresence } from 'framer-motion';
+import { FaInstagram } from 'react-icons/fa';
 import './styles/global.css';
 
 function App() {
@@ -54,6 +55,7 @@ function App() {
             word={game.currentWord?.word}
             clue={game.currentWord?.clue}
             onReset={game.resetGame}
+            onPlayAgain={game.playAgainSamePlayers}
           />
         );
       
@@ -63,12 +65,28 @@ function App() {
   };
 
   return (
-    <div className="container">
-      <AnimatePresence mode="wait">
-        <div key={game.phase}>
-          {renderScreen()}
-        </div>
-      </AnimatePresence>
+    <div className="app-wrapper">
+      <div className="container">
+        <AnimatePresence mode="wait">
+          <div key={game.phase}>
+            {renderScreen()}
+          </div>
+        </AnimatePresence>
+      </div>
+
+      <footer className="app-footer">
+        Creado por <strong>Andrés Suárez Moreno</strong>
+        {' · '}
+        <a
+          href="https://instagram.com/andres.suarez.moreno"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="app-footer-link"
+        >
+          <FaInstagram style={{ marginRight: '4px', verticalAlign: 'middle' }} />
+          @andres.suarez.moreno
+        </a>
+      </footer>
     </div>
   );
 }

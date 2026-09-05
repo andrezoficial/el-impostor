@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaCheck, FaUsers } from 'react-icons/fa';
+import { PassDevice } from './PassDevice';
 
 export const VotingScreen = ({
   players,
@@ -9,10 +10,23 @@ export const VotingScreen = ({
   currentVoterIndex,
   voterName
 }) => {
+  // Igual que en RoleScreen, este componente se remonta con cada
+  // votante nuevo (key en App.jsx), así que el gate se reinicia solo.
+  const [deviceReady, setDeviceReady] = useState(false);
   const [selected, setSelected] = useState(null);
   const [voted, setVoted] = useState(false);
 
   const totalPlayers = players.length;
+
+  if (!deviceReady) {
+    return (
+      <PassDevice
+        name={voterName}
+        subtitle="Es tu turno de votar"
+        onReady={() => setDeviceReady(true)}
+      />
+    );
+  }
 
   const handleVote = (index) => {
     if (!voted && index !== currentVoterIndex) {

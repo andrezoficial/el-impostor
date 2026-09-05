@@ -1,70 +1,42 @@
-# Getting Started with Create React App
+# 🕵️ El Impostor
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Juego de fiesta para jugar en un solo dispositivo (pasando el celular). Todos los jugadores reciben una palabra secreta... excepto el impostor, que solo recibe una pista. Cada quien da una descripción y, al final, todos votan para descubrir quién es el impostor.
 
-## Available Scripts
+Creado por **Andrés Suárez Moreno** — Instagram: [@andres.suarez.moreno](https://instagram.com/andres.suarez.moreno)
 
-In the project directory, you can run:
+## Cómo se juega
+
+1. **Setup**: se ingresan los nombres de 3 a 12 jugadores.
+2. **Roles**: el dispositivo pasa de jugador en jugador. Cada uno confirma que lo tiene ("Pasa el dispositivo a...") antes de ver su rol, así nadie ve información ajena. Los tripulantes ven la palabra; el impostor solo ve una pista.
+3. **Descripciones**: cada jugador escribe una palabra o frase corta que describa (o disimule, si es el impostor) el objeto secreto.
+4. **Votación**: el dispositivo vuelve a pasar de jugador en jugador para votar en privado por quien crean que es el impostor.
+5. **Resultados**: se revela quién era el impostor, cuál era la palabra y quién ganó. Se puede jugar otra ronda con los mismos jugadores o empezar una partida nueva.
+
+## Novedades de esta versión
+
+- Pantalla de "pasar el dispositivo" antes de cada rol y cada voto, para más privacidad entre jugadores.
+- Botón para jugar otra ronda con los mismos jugadores, sin tener que volver a escribir los nombres.
+- La palabra y el impostor no se repiten dos veces seguidas.
+- Validación de nombres de jugadores duplicados.
+- Banco de palabras ampliado con más categorías.
+- Crédito del autor visible en la app.
+
+## Scripts disponibles
+
+En la carpeta del proyecto puedes ejecutar:
+
+### `npm install`
+
+Instala las dependencias del proyecto.
 
 ### `npm start`
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
-
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Corre la app en modo desarrollo. Abre [http://localhost:3000](http://localhost:3000) para verla en el navegador.
 
 ### `npm run build`
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Genera la versión de producción en la carpeta `build`, lista para desplegar.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+---
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Proyecto construido con [Create React App](https://github.com/facebook/create-react-app), [Framer Motion](https://www.framer.com/motion/) y [React Icons](https://react-icons.github.io/react-icons/).

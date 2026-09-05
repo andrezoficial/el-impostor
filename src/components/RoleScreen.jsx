@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaEye, FaUserSecret, FaCheck } from 'react-icons/fa';
+import { PassDevice } from './PassDevice';
 
 export const RoleScreen = ({ 
   player, 
@@ -11,6 +12,10 @@ export const RoleScreen = ({
   totalPlayers,
   currentIndex 
 }) => {
+  // El componente se vuelve a montar en cada cambio de jugador (App.jsx
+  // usa `key` con el índice), así que este estado arranca en false cada
+  // vez y obliga a confirmar antes de ver el rol.
+  const [deviceReady, setDeviceReady] = useState(false);
   const [revealed, setRevealed] = useState(false);
   const [description, setDescription] = useState('');
 
@@ -22,6 +27,16 @@ export const RoleScreen = ({
     if (description.trim() === '') return;
     onNext(description.trim());
   };
+
+  if (!deviceReady) {
+    return (
+      <PassDevice
+        name={player}
+        subtitle={`Jugador ${currentIndex + 1} de ${totalPlayers}`}
+        onReady={() => setDeviceReady(true)}
+      />
+    );
+  }
 
   return (
     <motion.div

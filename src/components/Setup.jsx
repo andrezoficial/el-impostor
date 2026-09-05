@@ -26,11 +26,22 @@ export const Setup = ({ onStart }) => {
   };
 
   const handleSubmit = () => {
-    const validPlayers = players.filter(name => name.trim() !== '');
+    const validPlayers = players
+      .map(name => name.trim())
+      .filter(name => name !== '');
+
     if (validPlayers.length < 3) {
       setError('¡Necesitas al menos 3 jugadores!');
       return;
     }
+
+    const namesLower = validPlayers.map(name => name.toLowerCase());
+    const hasDuplicates = new Set(namesLower).size !== namesLower.length;
+    if (hasDuplicates) {
+      setError('¡No puede haber dos jugadores con el mismo nombre!');
+      return;
+    }
+
     setError('');
     onStart(validPlayers);
   };

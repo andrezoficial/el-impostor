@@ -9,7 +9,8 @@ export const ResultsScreen = ({
   impostorIndex,
   word,
   clue,
-  onReset
+  onReset,
+  onPlayAgain
 }) => {
   const maxVotes = Math.max(...votes);
   const winners = votes.reduce((acc, count, index) => {
@@ -113,15 +114,28 @@ export const ResultsScreen = ({
         <div className="role-clue">{clue}</div>
       </motion.div>
 
-      <motion.button
-        whileHover={{ scale: 1.03 }}
-        whileTap={{ scale: 0.97 }}
-        onClick={onReset}
-        className="button button-primary"
-        style={{ marginTop: '20px' }}
-      >
-        🔄 Nueva Partida
-      </motion.button>
+      <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', marginTop: '20px' }}>
+        {onPlayAgain && (
+          <motion.button
+            whileHover={{ scale: 1.03 }}
+            whileTap={{ scale: 0.97 }}
+            onClick={onPlayAgain}
+            className="button button-primary"
+            style={{ flex: '1', minWidth: '220px' }}
+          >
+            🔁 Otra Ronda (mismos jugadores)
+          </motion.button>
+        )}
+        <motion.button
+          whileHover={{ scale: 1.03 }}
+          whileTap={{ scale: 0.97 }}
+          onClick={onReset}
+          className="button button-secondary"
+          style={{ flex: '1', minWidth: '220px' }}
+        >
+          🆕 Nueva Partida
+        </motion.button>
+      </div>
     </motion.div>
   );
 };

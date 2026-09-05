@@ -77,10 +77,39 @@ export const wordBank = [
   { word: "Nieve", clue: "Agua congelada que cae", category: "Naturaleza" },
   { word: "Volcán", clue: "Montaña que expulsa fuego", category: "Naturaleza" },
   { word: "Océano", clue: "Gran masa de agua", category: "Naturaleza" },
+  { word: "Estrella", clue: "Brilla en el cielo nocturno", category: "Naturaleza" },
+  { word: "Río", clue: "Corriente de agua dulce", category: "Naturaleza" },
+
+  // 🎉 Fiestas y Celebraciones
+  { word: "Cumpleaños", clue: "Se celebra una vez al año", category: "Celebraciones" },
+  { word: "Boda", clue: "Celebración de una unión", category: "Celebraciones" },
+  { word: "Navidad", clue: "Fiesta de diciembre", category: "Celebraciones" },
+  { word: "Carnaval", clue: "Fiesta con disfraces y color", category: "Celebraciones" },
+
+  // 🏠 Hogar
+  { word: "Cocina", clue: "Lugar donde se prepara comida", category: "Hogar" },
+  { word: "Sofá", clue: "Mueble para sentarse", category: "Hogar" },
+  { word: "Ducha", clue: "Se usa para bañarse", category: "Hogar" },
+  { word: "Nevera", clue: "Mantiene la comida fría", category: "Hogar" },
+
+  // ⚽ Personajes y Roles
+  { word: "Superhéroe", clue: "Tiene poderes especiales", category: "Ficción" },
+  { word: "Pirata", clue: "Navega buscando tesoros", category: "Ficción" },
+  { word: "Astronauta", clue: "Viaja al espacio", category: "Profesiones" },
+  { word: "Detective", clue: "Resuelve misterios", category: "Profesiones" },
 ];
 
-export const getRandomWord = () => {
-  return wordBank[Math.floor(Math.random() * wordBank.length)];
+export const getRandomWord = (excludeWord) => {
+  if (wordBank.length <= 1) {
+    return wordBank[0];
+  }
+
+  let candidate;
+  do {
+    candidate = wordBank[Math.floor(Math.random() * wordBank.length)];
+  } while (candidate.word === excludeWord);
+
+  return candidate;
 };
 
 export const getCategories = () => {
