@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FaCheck, FaUsers } from 'react-icons/fa';
+import { FaSkull, FaUsers } from 'react-icons/fa';
 import { PassDevice } from './PassDevice';
 
 export const VotingScreen = ({
   players,
-  descriptions,
   onVote,
   currentVoterIndex,
   voterName
@@ -54,7 +53,7 @@ export const VotingScreen = ({
       <h2 style={{ textAlign: 'center', marginBottom: '10px' }}>🗳️ Votación</h2>
       <p style={{ textAlign: 'center', color: '#a7a9be', marginBottom: '4px' }}>
         <FaUsers style={{ marginRight: '8px' }} />
-        ¿Quién es el impostor?
+        ¿A quién quieren eliminar?
       </p>
       <p style={{ textAlign: 'center', color: 'white', fontWeight: 'bold', marginBottom: '20px' }}>
         Turno de votar: {voterName}
@@ -84,14 +83,6 @@ export const VotingScreen = ({
                       (tú)
                     </span>
                   )}
-                  <span style={{
-                    marginLeft: '10px',
-                    color: '#a7a9be',
-                    fontSize: '14px',
-                    fontStyle: 'italic'
-                  }}>
-                    "{descriptions[index] || '...'}"
-                  </span>
                 </div>
               </motion.div>
             );
@@ -112,8 +103,8 @@ export const VotingScreen = ({
               onClick={confirmVote}
               className="button button-primary"
             >
-              <FaCheck style={{ marginRight: '8px' }} />
-              Votar por {players[selected]}
+              <FaSkull style={{ marginRight: '8px' }} />
+              Eliminar a {players[selected]}
             </motion.button>
           </motion.div>
         )}

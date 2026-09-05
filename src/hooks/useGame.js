@@ -3,11 +3,11 @@ import { getRandomWord } from '../data/wordBank';
 
 export const useGame = () => {
   const [players, setPlayers] = useState([]);
+  const [category, setCategory] = useState(null); // null / 'Todas' = sin filtro
   const [currentWord, setCurrentWord] = useState(null);
   const [impostorIndex, setImpostorIndex] = useState(-1);
   const [currentPlayerIndex, setCurrentPlayerIndex] = useState(0);
   const [phase, setPhase] = useState('setup'); // setup | role | voting | results
-  const [descriptions, setDescriptions] = useState([]);
   const [votes, setVotes] = useState([]);
   const [currentVoterIndex, setCurrentVoterIndex] = useState(0);
   // Recordamos la última palabra y el último impostor para no repetirlos
@@ -26,8 +26,8 @@ export const useGame = () => {
     return index;
   }, []);
 
-  const beginRound = useCallback((playerNames) => {
-    const word = getRandomWord(lastWord);
+  const beginRound = useCallback((playerNames, cat) => {
+    const word = getRandomWord(lastWord, cat);
     const impostor = pickImpostor(playerNames, lastImpostorName);
 
     setPlayers(playerNames);
@@ -37,24 +37,25 @@ export const useGame = () => {
     setLastImpostorName(playerNames[impostor]);
     setCurrentPlayerIndex(0);
     setCurrentVoterIndex(0);
-    setDescriptions(new Array(playerNames.length).fill(''));
     setVotes(new Array(playerNames.length).fill(0));
     setPhase('role');
   }, [lastWord, lastImpostorName, pickImpostor]);
 
-  const startGame = useCallback((playerNames) => {
+  const startGame = useCallback((playerNames, selectedCategory = null) => {
     if (playerNames.length < 3) {
       throw new Error('Necesitas al menos 3 jugadores');
     }
-    beginRound(playerNames);
+    setCategory(selectedCategory);
+    beginRound(playerNames, selectedCategory);
   }, [beginRound]);
 
-  // Empieza una nueva ronda con los mismos jugadores (sin volver a
-  // escribir los nombres), eligiendo una palabra y un impostor nuevos.
+  // Empieza una nueva ronda con los mismos jugadores y la misma
+  // categoría (sin volver a escribir los nombres), con palabra e
+  // impostor nuevos.
   const playAgainSamePlayers = useCallback(() => {
     if (players.length < 3) return;
-    beginRound(players);
-  }, [players, beginRound]);
+    beginRound(players, category);
+  }, [players, category, beginRound]);
 
   const nextPlayer = useCallback(() => {
     if (currentPlayerIndex < players.length - 1) {
@@ -65,18 +66,11 @@ export const useGame = () => {
     }
   }, [currentPlayerIndex, players.length]);
 
-  const addDescription = useCallback((description) => {
-    setDescriptions(prev => {
-      const newDescriptions = [...prev];
-      newDescriptions[currentPlayerIndex] = description;
-      return newDescriptions;
-    });
-  }, [currentPlayerIndex]);
-
-  // Registra el voto del jugador actual (currentVoterIndex) contra el
-  // jugador acusado (accusedIndex) y avanza el turno de votación.
-  // Cuando el último jugador vota, la partida pasa automáticamente
-  // a la pantalla de resultados.
+  // Registra el voto del jugador actual (currentVoterIndex) para
+  // eliminar al jugador acusado (accusedIndex) y avanza el turno de
+  // votación. Cuando el último jugador vota, la partida pasa
+  // automáticamente a la pantalla de resultados, donde se revela a
+  // quién eliminó el grupo.
   const castVote = useCallback((accusedIndex) => {
     setVotes(prev => {
       const newVotes = [...prev];
@@ -96,12 +90,12 @@ export const useGame = () => {
 
   const resetGame = useCallback(() => {
     setPlayers([]);
+    setCategory(null);
     setCurrentWord(null);
     setImpostorIndex(-1);
     setCurrentPlayerIndex(0);
     setCurrentVoterIndex(0);
     setPhase('setup');
-    setDescriptions([]);
     setVotes([]);
     setLastWord(null);
     setLastImpostorName(null);
@@ -115,42 +109,42 @@ export const useGame = () => {
     return currentPlayerIndex === impostorIndex;
   }, [currentPlayerIndex, impostorIndex]);
 
-  const getVoteResults = useCallback(() => {
+  // Jugador(es) eliminado(s): el/los que recibieron más votos.
+  const getEliminated = useCallback(() => {
+    if (votes.length === 0) return [];
     const maxVotes = Math.max(...votes);
-    const winners = votes.reduce((acc, count, index) => {
+    return votes.reduce((acc, count, index) => {
       if (count === maxVotes && count > 0) {
         acc.push(index);
       }
       return acc;
     }, []);
-    return winners;
   }, [votes]);
 
   const getWinner = useCallback(() => {
-    const results = getVoteResults();
-    if (results.length === 0) return null;
-    // Si el más votado es el impostor, ganan los tripulantes
-    return results.includes(impostorIndex) ? 'crew' : 'impostor';
-  }, [getVoteResults, impostorIndex]);
+    const eliminated = getEliminated();
+    if (eliminated.length === 0) return null;
+    // Si el impostor fue eliminado, ganan los tripulantes
+    return eliminated.includes(impostorIndex) ? 'crew' : 'impostor';
+  }, [getEliminated, impostorIndex]);
 
   return {
     players,
+    category,
     currentWord,
     impostorIndex,
     currentPlayerIndex,
     currentVoterIndex,
     phase,
-    descriptions,
     votes,
     startGame,
     playAgainSamePlayers,
     nextPlayer,
-    addDescription,
     castVote,
     resetGame,
     getCurrentPlayer,
     isImpostor,
-    getVoteResults,
+    getEliminated,
     getWinner,
     setPhase
   };

@@ -3,29 +3,23 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { FaEye, FaUserSecret, FaCheck } from 'react-icons/fa';
 import { PassDevice } from './PassDevice';
 
-export const RoleScreen = ({ 
-  player, 
-  isImpostor, 
-  word, 
-  clue, 
-  onNext, 
+export const RoleScreen = ({
+  player,
+  isImpostor,
+  word,
+  clue,
+  onNext,
   totalPlayers,
-  currentIndex 
+  currentIndex
 }) => {
   // El componente se vuelve a montar en cada cambio de jugador (App.jsx
   // usa `key` con el índice), así que este estado arranca en false cada
   // vez y obliga a confirmar antes de ver el rol.
   const [deviceReady, setDeviceReady] = useState(false);
   const [revealed, setRevealed] = useState(false);
-  const [description, setDescription] = useState('');
 
   const handleReveal = () => {
     setRevealed(true);
-  };
-
-  const handleNext = () => {
-    if (description.trim() === '') return;
-    onNext(description.trim());
   };
 
   if (!deviceReady) {
@@ -106,16 +100,8 @@ export const RoleScreen = ({
                         ⚠️ No sabes la palabra exacta, solo esta pista
                       </div>
                       <div style={{ marginTop: '10px', color: '#f5c842', fontSize: '12px' }}>
-                        💡 Da una descripción que encaje con la pista
+                        💡 Cuando hables en voz alta, disimula sin decir algo obvio
                       </div>
-                      <input
-                        type="text"
-                        placeholder="Escribe tu descripción..."
-                        value={description}
-                        onChange={(e) => setDescription(e.target.value)}
-                        onKeyPress={(e) => e.key === 'Enter' && handleNext()}
-                        style={{ marginTop: '15px' }}
-                      />
                     </>
                   ) : (
                     <>
@@ -134,16 +120,8 @@ export const RoleScreen = ({
                         </motion.div>
                       </div>
                       <div style={{ marginTop: '15px', color: '#a7a9be', fontSize: '14px' }}>
-                        ✅ Da una descripción que ayude a identificar la palabra
+                        ✅ Cuando sea tu turno, di una palabra o frase relacionada en voz alta
                       </div>
-                      <input
-                        type="text"
-                        placeholder="Escribe tu descripción..."
-                        value={description}
-                        onChange={(e) => setDescription(e.target.value)}
-                        onKeyPress={(e) => e.key === 'Enter' && handleNext()}
-                        style={{ marginTop: '15px' }}
-                      />
                     </>
                   )}
                 </motion.div>
@@ -153,8 +131,8 @@ export const RoleScreen = ({
         </div>
 
         <div className="progress-bar">
-          <motion.div 
-            className="progress-bar-fill" 
+          <motion.div
+            className="progress-bar-fill"
             initial={{ width: 0 }}
             animate={{ width: `${((currentIndex + 1) / totalPlayers) * 100}%` }}
             transition={{ duration: 0.5 }}
@@ -166,17 +144,11 @@ export const RoleScreen = ({
             <motion.button
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
-              whileHover={{ scale: description.trim() ? 1.05 : 1 }}
-              whileTap={{ scale: description.trim() ? 0.95 : 1 }}
-              onClick={handleNext}
-              disabled={description.trim() === ''}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={onNext}
               className="button button-primary"
-              style={{
-                flex: '1',
-                minWidth: '200px',
-                opacity: description.trim() === '' ? 0.5 : 1,
-                cursor: description.trim() === '' ? 'not-allowed' : 'pointer'
-              }}
+              style={{ flex: '1', minWidth: '200px' }}
             >
               {currentIndex === totalPlayers - 1 ? '🔎 Ir a Votación' : '👀 Siguiente Jugador'}
             </motion.button>

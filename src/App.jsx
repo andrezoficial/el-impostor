@@ -15,7 +15,7 @@ function App() {
     switch (game.phase) {
       case 'setup':
         return <Setup onStart={game.startGame} />;
-      
+
       case 'role':
         return (
           <RoleScreen
@@ -24,33 +24,29 @@ function App() {
             isImpostor={game.isImpostor()}
             word={game.currentWord?.word}
             clue={game.currentWord?.clue}
-            onNext={(description) => {
-              game.addDescription(description);
-              game.nextPlayer();
-            }}
+            onNext={game.nextPlayer}
             totalPlayers={game.players.length}
             currentIndex={game.currentPlayerIndex}
           />
         );
-      
+
       case 'voting':
         return (
           <VotingScreen
             key={`voter-${game.currentVoterIndex}`}
             players={game.players}
-            descriptions={game.descriptions}
             onVote={game.castVote}
             currentVoterIndex={game.currentVoterIndex}
             voterName={game.players[game.currentVoterIndex]}
           />
         );
-      
+
       case 'results':
         return (
           <ResultsScreen
             players={game.players}
-            descriptions={game.descriptions}
             votes={game.votes}
+            eliminated={game.getEliminated()}
             impostorIndex={game.impostorIndex}
             word={game.currentWord?.word}
             clue={game.currentWord?.clue}
@@ -58,7 +54,7 @@ function App() {
             onPlayAgain={game.playAgainSamePlayers}
           />
         );
-      
+
       default:
         return null;
     }

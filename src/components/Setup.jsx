@@ -1,9 +1,13 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FaPlus, FaTrash, FaUserPlus } from 'react-icons/fa';
+import { FaTrash, FaUserPlus, FaTags } from 'react-icons/fa';
+import { getCategories } from '../data/wordBank';
+
+const ALL_CATEGORIES = getCategories();
 
 export const Setup = ({ onStart }) => {
   const [players, setPlayers] = useState(['', '', '', '']);
+  const [category, setCategory] = useState('Todas');
   const [error, setError] = useState('');
 
   const handleAddPlayer = () => {
@@ -43,7 +47,7 @@ export const Setup = ({ onStart }) => {
     }
 
     setError('');
-    onStart(validPlayers);
+    onStart(validPlayers, category);
   };
 
   return (
@@ -121,6 +125,44 @@ export const Setup = ({ onStart }) => {
           </motion.p>
         )}
       </AnimatePresence>
+
+      <div style={{ marginBottom: '20px' }}>
+        <label
+          htmlFor="category-select"
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px',
+            color: 'var(--text-secondary)',
+            fontSize: '14px',
+            marginBottom: '8px'
+          }}
+        >
+          <FaTags />
+          Categoría de palabras
+        </label>
+        <select
+          id="category-select"
+          value={category}
+          onChange={(e) => setCategory(e.target.value)}
+          style={{
+            width: '100%',
+            padding: '14px 18px',
+            borderRadius: '12px',
+            border: '2px solid rgba(255, 255, 255, 0.1)',
+            background: 'var(--card)',
+            color: 'var(--text)',
+            fontSize: '16px'
+          }}
+        >
+          <option value="Todas">🎲 Todas las categorías</option>
+          {ALL_CATEGORIES.map((cat) => (
+            <option key={cat} value={cat}>
+              {cat}
+            </option>
+          ))}
+        </select>
+      </div>
 
       <motion.button
         whileHover={{ scale: 1.03, boxShadow: '0 8px 25px rgba(233, 69, 96, 0.4)' }}

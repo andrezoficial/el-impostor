@@ -1,25 +1,22 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { FaTrophy, FaSkull, FaUsers, FaUserSecret } from 'react-icons/fa';
+import { FaUsers, FaUserSecret, FaSkull } from 'react-icons/fa';
 
-export const ResultsScreen = ({ 
-  players, 
-  descriptions, 
-  votes, 
+export const ResultsScreen = ({
+  players,
+  votes,
+  eliminated,
   impostorIndex,
   word,
   clue,
   onReset,
   onPlayAgain
 }) => {
-  const maxVotes = Math.max(...votes);
-  const winners = votes.reduce((acc, count, index) => {
-    if (count === maxVotes && count > 0) acc.push(index);
-    return acc;
-  }, []);
-  
-  const crewWins = winners.includes(impostorIndex);
+  const crewWins = eliminated.includes(impostorIndex);
   const totalVotes = votes.reduce((a, b) => a + b, 0);
+  const maxVotes = votes.length > 0 ? Math.max(...votes) : 0;
+
+  const eliminatedNames = eliminated.map(index => players[index]);
 
   return (
     <motion.div
@@ -28,19 +25,19 @@ export const ResultsScreen = ({
       transition={{ duration: 0.5 }}
     >
       <h2 style={{ textAlign: 'center', marginBottom: '10px' }}>🔎 Resultados</h2>
-      
+
       <motion.div
         initial={{ scale: 0.5, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ type: "spring", stiffness: 200, delay: 0.2 }}
         className="role-box"
-        style={{ 
+        style={{
           borderColor: crewWins ? '#4ecdc4' : '#e94560',
           background: crewWins ? 'rgba(78, 205, 196, 0.1)' : 'rgba(233, 69, 96, 0.1)'
         }}
       >
         <motion.div
-          animate={{ 
+          animate={{
             scale: [1, 1.2, 1],
             rotate: [0, 10, -10, 0]
           }}
@@ -52,7 +49,15 @@ export const ResultsScreen = ({
         <h2 style={{ color: crewWins ? '#4ecdc4' : '#e94560' }}>
           {crewWins ? '¡Los Tripulantes Ganaron!' : '¡El Impostor Ganó!'}
         </h2>
-        <div style={{ marginTop: '15px', color: '#a7a9be' }}>
+
+        <div style={{ marginTop: '15px', color: 'white' }}>
+          <FaSkull style={{ marginRight: '8px' }} />
+          {eliminatedNames.length > 0
+            ? `Eliminado${eliminatedNames.length > 1 ? 's' : ''}: ${eliminatedNames.join(', ')}`
+            : 'Nadie recibió votos suficientes'}
+        </div>
+
+        <div style={{ marginTop: '10px', color: '#a7a9be' }}>
           <FaUsers style={{ marginRight: '8px' }} />
           {totalVotes} votos emitidos
         </div>
@@ -69,7 +74,7 @@ export const ResultsScreen = ({
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: index * 0.1 }}
             className="player-card"
-            style={{ 
+            style={{
               border: index === impostorIndex ? '2px solid #e94560' : 'none',
               background: index === impostorIndex ? 'rgba(233, 69, 96, 0.15)' : 'var(--card)'
             }}
@@ -82,14 +87,12 @@ export const ResultsScreen = ({
                   Impostor
                 </span>
               )}
-              <span style={{ 
-                marginLeft: '10px', 
-                color: '#a7a9be', 
-                fontSize: '14px',
-                fontStyle: 'italic'
-              }}>
-                "{descriptions[index] || '...'}"
-              </span>
+              {eliminated.includes(index) && (
+                <span className="badge" style={{ marginLeft: '10px', background: 'var(--warning)', color: 'var(--background)' }}>
+                  <FaSkull style={{ marginRight: '5px' }} />
+                  Eliminado
+                </span>
+              )}
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
               <span className="vote-count">{votes[index]}</span>
