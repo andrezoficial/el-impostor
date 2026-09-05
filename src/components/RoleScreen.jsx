@@ -12,9 +12,15 @@ export const RoleScreen = ({
   currentIndex 
 }) => {
   const [revealed, setRevealed] = useState(false);
+  const [description, setDescription] = useState('');
 
   const handleReveal = () => {
     setRevealed(true);
+  };
+
+  const handleNext = () => {
+    if (description.trim() === '') return;
+    onNext(description.trim());
   };
 
   return (
@@ -87,6 +93,14 @@ export const RoleScreen = ({
                       <div style={{ marginTop: '10px', color: '#f5c842', fontSize: '12px' }}>
                         💡 Da una descripción que encaje con la pista
                       </div>
+                      <input
+                        type="text"
+                        placeholder="Escribe tu descripción..."
+                        value={description}
+                        onChange={(e) => setDescription(e.target.value)}
+                        onKeyPress={(e) => e.key === 'Enter' && handleNext()}
+                        style={{ marginTop: '15px' }}
+                      />
                     </>
                   ) : (
                     <>
@@ -107,6 +121,14 @@ export const RoleScreen = ({
                       <div style={{ marginTop: '15px', color: '#a7a9be', fontSize: '14px' }}>
                         ✅ Da una descripción que ayude a identificar la palabra
                       </div>
+                      <input
+                        type="text"
+                        placeholder="Escribe tu descripción..."
+                        value={description}
+                        onChange={(e) => setDescription(e.target.value)}
+                        onKeyPress={(e) => e.key === 'Enter' && handleNext()}
+                        style={{ marginTop: '15px' }}
+                      />
                     </>
                   )}
                 </motion.div>
@@ -129,13 +151,19 @@ export const RoleScreen = ({
             <motion.button
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={onNext}
+              whileHover={{ scale: description.trim() ? 1.05 : 1 }}
+              whileTap={{ scale: description.trim() ? 0.95 : 1 }}
+              onClick={handleNext}
+              disabled={description.trim() === ''}
               className="button button-primary"
-              style={{ flex: '1', minWidth: '200px' }}
+              style={{
+                flex: '1',
+                minWidth: '200px',
+                opacity: description.trim() === '' ? 0.5 : 1,
+                cursor: description.trim() === '' ? 'not-allowed' : 'pointer'
+              }}
             >
-              {currentIndex === totalPlayers - 1 ? '🔎 Ver Resultados' : '👀 Siguiente Jugador'}
+              {currentIndex === totalPlayers - 1 ? '🔎 Ir a Votación' : '👀 Siguiente Jugador'}
             </motion.button>
           )}
         </div>

@@ -1,4 +1,4 @@
-import { useState, useCallback, useMemo } from 'react';
+import { useState, useCallback } from 'react';
 import { getRandomWord } from '../data/wordBank';
 
 export const useGame = () => {
@@ -9,6 +9,7 @@ export const useGame = () => {
   const [phase, setPhase] = useState('setup'); // setup | role | voting | results
   const [descriptions, setDescriptions] = useState([]);
   const [votes, setVotes] = useState([]);
+  const [currentVoterIndex, setCurrentVoterIndex] = useState(0);
 
   const startGame = useCallback((playerNames) => {
     if (playerNames.length < 3) {
@@ -22,6 +23,7 @@ export const useGame = () => {
     setCurrentWord(word);
     setImpostorIndex(impostor);
     setCurrentPlayerIndex(0);
+    setCurrentVoterIndex(0);
     setDescriptions(new Array(playerNames.length).fill(''));
     setVotes(new Array(playerNames.length).fill(0));
     setPhase('role');
@@ -31,6 +33,7 @@ export const useGame = () => {
     if (currentPlayerIndex < players.length - 1) {
       setCurrentPlayerIndex(prev => prev + 1);
     } else {
+      setCurrentVoterIndex(0);
       setPhase('voting');
     }
   }, [currentPlayerIndex, players.length]);
@@ -43,23 +46,33 @@ export const useGame = () => {
     });
   }, [currentPlayerIndex]);
 
-  const addVote = useCallback((playerIndex) => {
+  // Registra el voto del jugador actual (currentVoterIndex) contra el
+  // jugador acusado (accusedIndex) y avanza el turno de votación.
+  // Cuando el último jugador vota, la partida pasa automáticamente
+  // a la pantalla de resultados.
+  const castVote = useCallback((accusedIndex) => {
     setVotes(prev => {
       const newVotes = [...prev];
-      newVotes[playerIndex] = (newVotes[playerIndex] || 0) + 1;
+      newVotes[accusedIndex] = (newVotes[accusedIndex] || 0) + 1;
       return newVotes;
     });
-  }, []);
 
-  const finishVoting = useCallback(() => {
-    setPhase('results');
-  }, []);
+    setCurrentVoterIndex(prev => {
+      const next = prev + 1;
+      if (next >= players.length) {
+        setPhase('results');
+        return prev;
+      }
+      return next;
+    });
+  }, [players.length]);
 
   const resetGame = useCallback(() => {
     setPlayers([]);
     setCurrentWord(null);
     setImpostorIndex(-1);
     setCurrentPlayerIndex(0);
+    setCurrentVoterIndex(0);
     setPhase('setup');
     setDescriptions([]);
     setVotes([]);
@@ -96,14 +109,14 @@ export const useGame = () => {
     currentWord,
     impostorIndex,
     currentPlayerIndex,
+    currentVoterIndex,
     phase,
     descriptions,
     votes,
     startGame,
     nextPlayer,
     addDescription,
-    addVote,
-    finishVoting,
+    castVote,
     resetGame,
     getCurrentPlayer,
     isImpostor,

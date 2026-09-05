@@ -18,11 +18,15 @@ function App() {
       case 'role':
         return (
           <RoleScreen
+            key={`player-${game.currentPlayerIndex}`}
             player={game.getCurrentPlayer()}
             isImpostor={game.isImpostor()}
             word={game.currentWord?.word}
             clue={game.currentWord?.clue}
-            onNext={game.nextPlayer}
+            onNext={(description) => {
+              game.addDescription(description);
+              game.nextPlayer();
+            }}
             totalPlayers={game.players.length}
             currentIndex={game.currentPlayerIndex}
           />
@@ -31,11 +35,12 @@ function App() {
       case 'voting':
         return (
           <VotingScreen
+            key={`voter-${game.currentVoterIndex}`}
             players={game.players}
             descriptions={game.descriptions}
-            onVote={game.addVote}
-            onFinish={game.finishVoting}
-            currentVotes={game.votes}
+            onVote={game.castVote}
+            currentVoterIndex={game.currentVoterIndex}
+            voterName={game.players[game.currentVoterIndex]}
           />
         );
       
