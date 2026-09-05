@@ -7,7 +7,7 @@ export const useGame = () => {
   const [currentWord, setCurrentWord] = useState(null);
   const [impostorIndex, setImpostorIndex] = useState(-1);
   const [currentPlayerIndex, setCurrentPlayerIndex] = useState(0);
-  const [phase, setPhase] = useState('setup'); // setup | role | voting | results
+  const [phase, setPhase] = useState('setup');
   const [votes, setVotes] = useState([]);
   const [currentVoterIndex, setCurrentVoterIndex] = useState(0);
   const [eliminatedIndex, setEliminatedIndex] = useState(-1);
@@ -15,11 +15,11 @@ export const useGame = () => {
   const [lastImpostorName, setLastImpostorName] = useState(null);
 
   // Multi-round voting state
-  const [votingRound, setVotingRound] = useState(1);      // ronda actual (1, 2, 3)
-  const [maxVotingRounds, setMaxVotingRounds] = useState(1); // cuántas rondas máx
-  const [votingTied, setVotingTied] = useState(false);    // hubo empate en ronda previa
-  const [tiedPlayers, setTiedPlayers] = useState([]);     // índices empatados
-  const [allRoundsVotes, setAllRoundsVotes] = useState([]); // historial de rondas
+  const [votingRound, setVotingRound] = useState(1);
+  const [maxVotingRounds, setMaxVotingRounds] = useState(1);
+  const [votingTied, setVotingTied] = useState(false);
+  const [tiedPlayers, setTiedPlayers] = useState([]);
+  const [allRoundsVotes, setAllRoundsVotes] = useState([]);
 
   const pickImpostor = useCallback((playerNames, previousImpostorName) => {
     if (playerNames.length <= 1) return 0;
@@ -30,7 +30,6 @@ export const useGame = () => {
     return index;
   }, []);
 
-  // Calcula cuántas rondas de votación según número de jugadores
   const calcMaxRounds = (count) => {
     if (count >= 9) return 3;
     if (count >= 6) return 2;
@@ -81,7 +80,6 @@ export const useGame = () => {
     }
   }, [currentPlayerIndex, players.length]);
 
-  // Determina el resultado de una ronda de votación
   const resolveVotes = useCallback((newVotes, eligibleIndices = null) => {
     const indices = eligibleIndices !== null ? eligibleIndices : newVotes.map((_, i) => i);
     const maxV = Math.max(...indices.map(i => newVotes[i]));
@@ -100,21 +98,17 @@ export const useGame = () => {
         const { tied } = resolveVotes(newVotes);
 
         if (tied.length === 1) {
-          // Ganador claro
           setEliminatedIndex(tied[0]);
           setAllRoundsVotes(r => [...r, { votes: newVotes, round: votingRound }]);
           setPhase('results');
         } else if (votingRound < maxVotingRounds && tied.length > 1) {
-          // Empate → ronda adicional entre empatados
           setAllRoundsVotes(r => [...r, { votes: newVotes, round: votingRound }]);
           setVotingTied(true);
           setTiedPlayers(tied);
           setVotingRound(r => r + 1);
           setVotes(new Array(players.length).fill(0));
           setCurrentVoterIndex(0);
-          // No cambia phase (sigue en voting) → el VotingScreen detecta el nuevo round
         } else {
-          // Empate y ya no hay más rondas → sorteo entre empatados
           const winner = tied.length > 0
             ? tied[Math.floor(Math.random() * tied.length)]
             : -1;
