@@ -2,6 +2,7 @@ import React from 'react';
 import { useGame } from './hooks/useGame';
 import { Setup } from './components/Setup';
 import { RoleScreen } from './components/RoleScreen';
+import { FirstPlayerScreen } from './components/FirstPlayerScreen';
 import { VotingScreen } from './components/VotingScreen';
 import { ResultsScreen } from './components/ResultsScreen';
 import { ReplayScreen } from './components/ReplayScreen';
@@ -29,8 +30,14 @@ function App() {
             onNext={game.nextPlayer}
             totalPlayers={game.players.length}
             currentIndex={game.currentPlayerIndex}
-            firstPlayerIndex={game.firstPlayerIndex}
+          />
+        );
+
+      case 'firstPlayer':
+        return (
+          <FirstPlayerScreen
             firstPlayerName={game.players[game.firstPlayerIndex]}
+            onNext={game.startVoting}
           />
         );
 

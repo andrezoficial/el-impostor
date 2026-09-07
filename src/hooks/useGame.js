@@ -88,10 +88,14 @@ export const useGame = () => {
     if (currentPlayerIndex < players.length - 1) {
       setCurrentPlayerIndex(prev => prev + 1);
     } else {
-      setCurrentVoterIndex(0);
-      setPhase('voting');
+      setPhase('firstPlayer');
     }
   }, [currentPlayerIndex, players.length]);
+
+  const startVoting = useCallback(() => {
+    setCurrentVoterIndex(0);
+    setPhase('voting');
+  }, []);
 
   const resolveVotes = useCallback((newVotes, eligibleIndices = null) => {
     const indices = eligibleIndices !== null ? eligibleIndices : newVotes.map((_, i) => i);
@@ -196,6 +200,7 @@ export const useGame = () => {
     playAgainSamePlayers,
     playAgainWithCategory,
     nextPlayer,
+    startVoting,
     castVote,
     resetGame,
     getCurrentPlayer,

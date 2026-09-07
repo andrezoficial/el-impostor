@@ -11,17 +11,16 @@ export const RoleScreen = ({
   clue,
   onNext,
   totalPlayers,
-  currentIndex,
-  firstPlayerIndex,
-  firstPlayerName
+  currentIndex
 }) => {
   const [deviceReady, setDeviceReady] = useState(false);
   const [revealed, setRevealed] = useState(false);
 
   const handleReveal = () => {
     setRevealed(true);
-    if (isImpostor) sounds.revealImpostor();
-    else sounds.revealCrew();
+    // Mismo sonido para todos: si sonara distinto según el rol,
+    // los demás jugadores podrían adivinar quién es el impostor solo escuchando.
+    sounds.revealCrew();
   };
 
   if (!deviceReady) {
@@ -156,27 +155,6 @@ export const RoleScreen = ({
             </motion.button>
           )}
         </div>
-
-        {revealed && currentIndex === totalPlayers - 1 && (
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3 }}
-            style={{
-              marginTop: '20px',
-              padding: '14px 20px',
-              background: 'rgba(245, 200, 66, 0.15)',
-              border: '1px solid rgba(245, 200, 66, 0.4)',
-              borderRadius: '12px',
-              color: '#f5c842',
-              fontSize: '15px',
-              fontWeight: '600',
-              textAlign: 'center',
-            }}
-          >
-            🎲 Empieza <strong>{firstPlayerName}</strong>
-          </motion.div>
-        )}
 
         <div className="hint">
           <span className="hint-icon">🔒</span>
