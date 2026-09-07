@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaSkull, FaUsers, FaExclamationTriangle, FaFire } from 'react-icons/fa';
 import { PassDevice } from './PassDevice';
+import { sounds } from '../hooks/useSounds';
 
 export const VotingScreen = ({
   players,
@@ -39,6 +40,7 @@ export const VotingScreen = ({
   const confirmVote = () => {
     if (selected !== null && !voted) {
       setVoted(true);
+      sounds.vote();
       setTimeout(() => { onVote(selected); }, 1200);
     }
   };

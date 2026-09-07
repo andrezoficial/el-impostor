@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FaUsers, FaUserSecret, FaSkull, FaChevronDown, FaChevronUp } from 'react-icons/fa';
+import { FaUsers, FaUserSecret, FaSkull, FaChevronDown, FaChevronUp, FaShareAlt, FaCheck, FaCopy } from 'react-icons/fa';
+import { sounds } from '../hooks/useSounds';
+import { buildShareText, buildInviteText, shareOrCopy } from '../hooks/useShare';
 
 const confettiColors = ['#e94560', '#4ecdc4', '#f5c842', '#533483', '#fff'];
 
@@ -28,10 +30,42 @@ export const ResultsScreen = ({
   word, clue, onReset, onPlayAgain, allRoundsVotes,
 }) => {
   const [showHistory, setShowHistory] = useState(false);
+  const [shareStatus, setShareStatus] = useState(null); // null | 'copied' | 'shared'
+  const [inviteStatus, setInviteStatus] = useState(null);
+
   const crewWins = eliminatedIndex !== -1 && eliminatedIndex === impostorIndex;
   const totalVotes = votes.reduce((a, b) => a + b, 0);
   const eliminatedName = eliminatedIndex !== -1 ? players[eliminatedIndex] : null;
+  const impostorName = players[impostorIndex];
   const hadMultipleRounds = allRoundsVotes && allRoundsVotes.length > 1;
+
+  // Sonido al entrar en resultados
+  useEffect(() => {
+    const t = setTimeout(() => {
+      if (crewWins) sounds.crewWin();
+      else sounds.impostorWin();
+    }, 400);
+    return () => clearTimeout(t);
+  }, [crewWins]);
+
+  const handleShare = () => {
+    sounds.click();
+    const text = buildShareText({ players, word, impostorName, crewWins, eliminatedName });
+    shareOrCopy(text,
+      (type) => { setShareStatus(type); setTimeout(() => setShareStatus(null), 2500); },
+    );
+  };
+
+  const handleInvite = () => {
+    sounds.click();
+    const text = buildInviteText(players);
+    shareOrCopy(text,
+      (type) => { setInviteStatus(type); setTimeout(() => setInviteStatus(null), 2500); },
+    );
+  };
+
+  const statusLabel = (status) =>
+    status === 'shared' ? '¡Compartido!' : status === 'copied' ? '¡Copiado!' : null;
 
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.4 }} style={{ position: 'relative' }}>
@@ -41,6 +75,7 @@ export const ResultsScreen = ({
         🔎 Resultados
       </motion.h2>
 
+      {/* Resultado principal */}
       <motion.div
         initial={{ scale: 0.4, opacity: 0, rotateY: 90 }}
         animate={{ scale: 1, opacity: 1, rotateY: 0 }}
@@ -76,6 +111,7 @@ export const ResultsScreen = ({
         </motion.div>
       </motion.div>
 
+      {/* Votación */}
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }} style={{ margin: '20px 0' }}>
         <h3 style={{ marginBottom: '15px', color: '#a7a9be' }}>📊 Votación Final</h3>
         {players.map((player, index) => (
@@ -109,11 +145,12 @@ export const ResultsScreen = ({
         ))}
       </motion.div>
 
+      {/* Historial de rondas */}
       {hadMultipleRounds && (
         <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.6 }} style={{ marginBottom: 16 }}>
           <motion.button
             whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}
-            onClick={() => setShowHistory(h => !h)}
+            onClick={() => { sounds.click(); setShowHistory(h => !h); }}
             style={{ width: '100%', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.12)', borderRadius: 12, color: '#a7a9be', fontSize: 14, padding: '12px 16px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}
           >
             <span>📋 Historial de rondas ({allRoundsVotes.length})</span>
@@ -142,6 +179,7 @@ export const ResultsScreen = ({
         </motion.div>
       )}
 
+      {/* Palabra y pista */}
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.7 }} className="role-box" style={{ background: 'var(--card)', border: '2px solid #f5c842' }}>
         <div className="role-label">📝 La palabra era</div>
         <motion.div animate={{ scale: [1, 1.03, 1] }} transition={{ duration: 2, repeat: Infinity }} className="role-word">{word}</motion.div>
@@ -149,13 +187,59 @@ export const ResultsScreen = ({
         <div className="role-clue">{clue}</div>
       </motion.div>
 
-      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.8 }} style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', marginTop: '20px' }}>
+      {/* Botones de compartir */}
+      <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.85 }} style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', marginTop: '16px' }}>
+        <motion.button
+          whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.96 }}
+          onClick={handleShare}
+          style={{
+            flex: '1', minWidth: '150px',
+            display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
+            padding: '13px 18px', borderRadius: '12px', cursor: 'pointer', fontSize: '14px', fontWeight: '600',
+            background: shareStatus ? 'rgba(78,205,196,0.15)' : 'rgba(37,211,102,0.12)',
+            border: `2px solid ${shareStatus ? '#4ecdc4' : 'rgba(37,211,102,0.4)'}`,
+            color: shareStatus ? '#4ecdc4' : '#25d366',
+            transition: 'all 0.3s',
+          }}
+        >
+          {shareStatus ? <FaCheck /> : <FaShareAlt />}
+          {statusLabel(shareStatus) || '📤 Compartir resultado'}
+        </motion.button>
+
+        <motion.button
+          whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.96 }}
+          onClick={handleInvite}
+          style={{
+            flex: '1', minWidth: '150px',
+            display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
+            padding: '13px 18px', borderRadius: '12px', cursor: 'pointer', fontSize: '14px', fontWeight: '600',
+            background: inviteStatus ? 'rgba(78,205,196,0.15)' : 'rgba(83,52,131,0.2)',
+            border: `2px solid ${inviteStatus ? '#4ecdc4' : 'rgba(83,52,131,0.5)'}`,
+            color: inviteStatus ? '#4ecdc4' : '#a78bfa',
+            transition: 'all 0.3s',
+          }}
+        >
+          {inviteStatus ? <FaCheck /> : <FaCopy />}
+          {statusLabel(inviteStatus) || '🎮 Invitar a jugar'}
+        </motion.button>
+      </motion.div>
+
+      {/* Acciones principales */}
+      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.95 }} style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', marginTop: '12px' }}>
         {onPlayAgain && (
-          <motion.button whileHover={{ scale: 1.04, boxShadow: '0 8px 25px rgba(233,69,96,0.4)' }} whileTap={{ scale: 0.96 }} onClick={onPlayAgain} className="button button-primary" style={{ flex: '1', minWidth: '220px' }}>
+          <motion.button
+            whileHover={{ scale: 1.04, boxShadow: '0 8px 25px rgba(233,69,96,0.4)' }} whileTap={{ scale: 0.96 }}
+            onClick={() => { sounds.click(); onPlayAgain(); }}
+            className="button button-primary" style={{ flex: '1', minWidth: '220px' }}
+          >
             🔁 Otra Ronda (mismos jugadores)
           </motion.button>
         )}
-        <motion.button whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.96 }} onClick={onReset} className="button button-secondary" style={{ flex: '1', minWidth: '220px' }}>
+        <motion.button
+          whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.96 }}
+          onClick={() => { sounds.click(); onReset(); }}
+          className="button button-secondary" style={{ flex: '1', minWidth: '220px' }}
+        >
           🆕 Nueva Partida
         </motion.button>
       </motion.div>

@@ -13,6 +13,8 @@ export const useGame = () => {
   const [eliminatedIndex, setEliminatedIndex] = useState(-1);
   const [lastWord, setLastWord] = useState(null);
   const [lastImpostorName, setLastImpostorName] = useState(null);
+  const [firstPlayerIndex, setFirstPlayerIndex] = useState(0);
+  const [usedWords, setUsedWords] = useState([]);
 
   // Multi-round voting state
   const [votingRound, setVotingRound] = useState(1);
@@ -37,15 +39,19 @@ export const useGame = () => {
   };
 
   const beginRound = useCallback((playerNames, cat) => {
-    const word = getRandomWord(lastWord, cat);
+    const word = getRandomWord(usedWords, cat);
     const impostor = pickImpostor(playerNames, lastImpostorName);
     const rounds = calcMaxRounds(playerNames.length);
+
+    const firstPlayer = Math.floor(Math.random() * playerNames.length);
 
     setPlayers(playerNames);
     setCurrentWord(word);
     setLastWord(word.word);
+    setUsedWords(prev => [...prev, word.word]);
     setImpostorIndex(impostor);
     setLastImpostorName(playerNames[impostor]);
+    setFirstPlayerIndex(firstPlayer);
     setCurrentPlayerIndex(0);
     setCurrentVoterIndex(0);
     setVotes(new Array(playerNames.length).fill(0));
@@ -56,12 +62,13 @@ export const useGame = () => {
     setTiedPlayers([]);
     setAllRoundsVotes([]);
     setPhase('role');
-  }, [lastWord, lastImpostorName, pickImpostor]);
+  }, [usedWords, lastImpostorName, pickImpostor]);
 
   const startGame = useCallback((playerNames, selectedCategory = null) => {
     if (playerNames.length < 3) {
       throw new Error('Necesitas al menos 3 jugadores');
     }
+    setUsedWords([]);
     setCategory(selectedCategory);
     beginRound(playerNames, selectedCategory);
   }, [beginRound]);
@@ -70,6 +77,12 @@ export const useGame = () => {
     if (players.length < 3) return;
     beginRound(players, category);
   }, [players, category, beginRound]);
+
+  const playAgainWithCategory = useCallback((newCategory) => {
+    if (players.length < 3) return;
+    setCategory(newCategory);
+    beginRound(players, newCategory);
+  }, [players, beginRound]);
 
   const nextPlayer = useCallback(() => {
     if (currentPlayerIndex < players.length - 1) {
@@ -100,7 +113,7 @@ export const useGame = () => {
         if (tied.length === 1) {
           setEliminatedIndex(tied[0]);
           setAllRoundsVotes(r => [...r, { votes: newVotes, round: votingRound }]);
-          setPhase('results');
+          setPhase('reveal');
         } else if (votingRound < maxVotingRounds && tied.length > 1) {
           setAllRoundsVotes(r => [...r, { votes: newVotes, round: votingRound }]);
           setVotingTied(true);
@@ -114,7 +127,7 @@ export const useGame = () => {
             : -1;
           setEliminatedIndex(winner);
           setAllRoundsVotes(r => [...r, { votes: newVotes, round: votingRound }]);
-          setPhase('results');
+          setPhase('reveal');
         }
       }
 
@@ -140,6 +153,8 @@ export const useGame = () => {
     setEliminatedIndex(-1);
     setLastWord(null);
     setLastImpostorName(null);
+    setFirstPlayerIndex(0);
+    setUsedWords([]);
     setVotingRound(1);
     setMaxVotingRounds(1);
     setVotingTied(false);
@@ -165,6 +180,7 @@ export const useGame = () => {
     category,
     currentWord,
     impostorIndex,
+    firstPlayerIndex,
     currentPlayerIndex,
     currentVoterIndex,
     phase,
@@ -175,8 +191,10 @@ export const useGame = () => {
     votingTied,
     tiedPlayers,
     allRoundsVotes,
+    usedWords,
     startGame,
     playAgainSamePlayers,
+    playAgainWithCategory,
     nextPlayer,
     castVote,
     resetGame,

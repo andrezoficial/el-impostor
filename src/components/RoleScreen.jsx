@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaEye, FaUserSecret, FaCheck } from 'react-icons/fa';
 import { PassDevice } from './PassDevice';
+import { sounds } from '../hooks/useSounds';
 
 export const RoleScreen = ({
   player,
@@ -10,16 +11,17 @@ export const RoleScreen = ({
   clue,
   onNext,
   totalPlayers,
-  currentIndex
+  currentIndex,
+  firstPlayerIndex,
+  firstPlayerName
 }) => {
-  // El componente se vuelve a montar en cada cambio de jugador (App.jsx
-  // usa `key` con el índice), así que este estado arranca en false cada
-  // vez y obliga a confirmar antes de ver el rol.
   const [deviceReady, setDeviceReady] = useState(false);
   const [revealed, setRevealed] = useState(false);
 
   const handleReveal = () => {
     setRevealed(true);
+    if (isImpostor) sounds.revealImpostor();
+    else sounds.revealCrew();
   };
 
   if (!deviceReady) {
@@ -146,7 +148,7 @@ export const RoleScreen = ({
               animate={{ opacity: 1, scale: 1 }}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              onClick={onNext}
+              onClick={() => { sounds.click(); onNext(); }}
               className="button button-primary"
               style={{ flex: '1', minWidth: '200px' }}
             >
@@ -154,6 +156,27 @@ export const RoleScreen = ({
             </motion.button>
           )}
         </div>
+
+        {revealed && currentIndex === totalPlayers - 1 && (
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+            style={{
+              marginTop: '20px',
+              padding: '14px 20px',
+              background: 'rgba(245, 200, 66, 0.15)',
+              border: '1px solid rgba(245, 200, 66, 0.4)',
+              borderRadius: '12px',
+              color: '#f5c842',
+              fontSize: '15px',
+              fontWeight: '600',
+              textAlign: 'center',
+            }}
+          >
+            🎲 Empieza <strong>{firstPlayerName}</strong>
+          </motion.div>
+        )}
 
         <div className="hint">
           <span className="hint-icon">🔒</span>

@@ -1,0 +1,148 @@
+import React, { useState } from 'react';
+import { motion } from 'framer-motion';
+import { FaTags, FaPlay, FaHome } from 'react-icons/fa';
+import { getCategories, wordBank } from '../data/wordBank';
+
+const ALL_CATEGORIES = getCategories();
+
+export const ReplayScreen = ({ players, currentCategory, usedWords, onPlay, onReset }) => {
+  const [category, setCategory] = useState(currentCategory || 'Todas');
+
+  const getStats = (cat) => {
+    const pool = cat && cat !== 'Todas'
+      ? wordBank.filter(w => w.category === cat)
+      : wordBank;
+    const used = pool.filter(w => usedWords.includes(w.word)).length;
+    return { total: pool.length, used, remaining: pool.length - used };
+  };
+
+  const { total, used, remaining } = getStats(category);
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, scale: 0.95 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ duration: 0.4 }}
+    >
+      <div style={{ textAlign: 'center', marginBottom: '24px' }}>
+        <div style={{ fontSize: '3rem', marginBottom: '8px' }}>🔁</div>
+        <h2 style={{ margin: '0 0 6px', color: 'white' }}>¡Otra ronda!</h2>
+        <p style={{ color: '#a7a9be', margin: 0, fontSize: '14px' }}>
+          Mismos jugadores — elige categoría y juega
+        </p>
+      </div>
+
+      {/* Jugadores */}
+      <div className="role-box" style={{ marginBottom: '20px' }}>
+        <div className="role-label" style={{ marginBottom: '12px' }}>
+          👥 Jugadores ({players.length})
+        </div>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', justifyContent: 'center' }}>
+          {players.map((p, i) => (
+            <motion.span
+              key={i}
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: i * 0.05 }}
+              style={{
+                background: 'rgba(255,255,255,0.08)',
+                border: '1px solid rgba(255,255,255,0.15)',
+                borderRadius: '20px',
+                padding: '6px 14px',
+                color: 'white',
+                fontSize: '14px',
+                fontWeight: '600',
+              }}
+            >
+              {p}
+            </motion.span>
+          ))}
+        </div>
+      </div>
+
+      {/* Selector de categoría */}
+      <div style={{ marginBottom: '20px' }}>
+        <label
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px',
+            color: 'var(--text-secondary)',
+            fontSize: '14px',
+            marginBottom: '8px',
+          }}
+        >
+          <FaTags />
+          Categoría de palabras
+        </label>
+        <select
+          value={category}
+          onChange={(e) => setCategory(e.target.value)}
+          style={{
+            width: '100%',
+            padding: '14px 18px',
+            borderRadius: '12px',
+            border: '2px solid rgba(255, 255, 255, 0.1)',
+            background: 'var(--card)',
+            color: 'var(--text)',
+            fontSize: '16px',
+          }}
+        >
+          <option value="Todas">🎲 Todas las categorías</option>
+          {ALL_CATEGORIES.map((cat) => (
+            <option key={cat} value={cat}>{cat}</option>
+          ))}
+        </select>
+
+        {/* Indicador de palabras restantes */}
+        <motion.div
+          key={category}
+          initial={{ opacity: 0, y: -4 }}
+          animate={{ opacity: 1, y: 0 }}
+          style={{
+            marginTop: '8px',
+            padding: '8px 14px',
+            borderRadius: '8px',
+            background: remaining === 0
+              ? 'rgba(233, 69, 96, 0.12)'
+              : 'rgba(78, 205, 196, 0.1)',
+            border: `1px solid ${remaining === 0 ? 'rgba(233,69,96,0.3)' : 'rgba(78,205,196,0.25)'}`,
+            fontSize: '13px',
+            color: remaining === 0 ? '#e94560' : '#4ecdc4',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '6px',
+          }}
+        >
+          {remaining === 0
+            ? `⚠️ Ya se jugaron todas las ${total} palabras de esta categoría — se reiniciará el pool al jugar`
+            : `✅ ${remaining} de ${total} palabras sin usar esta sesión`}
+        </motion.div>
+      </div>
+
+      <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+        <motion.button
+          whileHover={{ scale: 1.04, boxShadow: '0 8px 25px rgba(233,69,96,0.4)' }}
+          whileTap={{ scale: 0.96 }}
+          onClick={() => onPlay(category)}
+          className="button button-primary"
+          style={{ flex: '1', minWidth: '200px' }}
+        >
+          <FaPlay style={{ marginRight: '8px' }} />
+          ¡Jugar!
+        </motion.button>
+
+        <motion.button
+          whileHover={{ scale: 1.04 }}
+          whileTap={{ scale: 0.96 }}
+          onClick={onReset}
+          className="button button-secondary"
+          style={{ flex: '1', minWidth: '200px' }}
+        >
+          <FaHome style={{ marginRight: '8px' }} />
+          Nueva Partida
+        </motion.button>
+      </div>
+    </motion.div>
+  );
+};

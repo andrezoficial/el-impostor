@@ -4,6 +4,8 @@ import { Setup } from './components/Setup';
 import { RoleScreen } from './components/RoleScreen';
 import { VotingScreen } from './components/VotingScreen';
 import { ResultsScreen } from './components/ResultsScreen';
+import { ReplayScreen } from './components/ReplayScreen';
+import { ImpostorReveal } from './components/ImpostorReveal';
 import { AnimatePresence, motion } from 'framer-motion';
 import { FaInstagram } from 'react-icons/fa';
 import './styles/global.css';
@@ -27,6 +29,8 @@ function App() {
             onNext={game.nextPlayer}
             totalPlayers={game.players.length}
             currentIndex={game.currentPlayerIndex}
+            firstPlayerIndex={game.firstPlayerIndex}
+            firstPlayerName={game.players[game.firstPlayerIndex]}
           />
         );
 
@@ -45,6 +49,16 @@ function App() {
           />
         );
 
+      case 'reveal':
+        return (
+          <ImpostorReveal
+            players={game.players}
+            eliminatedIndex={game.eliminatedIndex}
+            impostorIndex={game.impostorIndex}
+            onDone={() => game.setPhase('results')}
+          />
+        );
+
       case 'results':
         return (
           <ResultsScreen
@@ -55,8 +69,19 @@ function App() {
             word={game.currentWord?.word}
             clue={game.currentWord?.clue}
             onReset={game.resetGame}
-            onPlayAgain={game.playAgainSamePlayers}
+            onPlayAgain={() => game.setPhase('replay')}
             allRoundsVotes={game.allRoundsVotes}
+          />
+        );
+
+      case 'replay':
+        return (
+          <ReplayScreen
+            players={game.players}
+            currentCategory={game.category}
+            usedWords={game.usedWords}
+            onPlay={game.playAgainWithCategory}
+            onReset={game.resetGame}
           />
         );
 
