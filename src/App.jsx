@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { unlockAudio } from './hooks/useSounds';
 import { useGame } from './hooks/useGame';
 import { Setup } from './components/Setup';
 import { RoleScreen } from './components/RoleScreen';
@@ -13,6 +14,28 @@ import './styles/global.css';
 
 function App() {
   const game = useGame();
+
+  // Desbloquea el audio en el primer toque/clic en cualquier parte de la
+  // app. Esto es clave en móviles (especialmente iOS): el AudioContext debe
+  // "despertarse" dentro de un gesto real del usuario, y hacerlo lo antes
+  // posible evita que los sonidos programados con setTimeout (countdown,
+  // revelación, victoria) queden silenciados más adelante.
+  useEffect(() => {
+    const handler = () => {
+      unlockAudio();
+      window.removeEventListener('pointerdown', handler);
+      window.removeEventListener('touchend', handler);
+      window.removeEventListener('click', handler);
+    };
+    window.addEventListener('pointerdown', handler, { once: true });
+    window.addEventListener('touchend', handler, { once: true });
+    window.addEventListener('click', handler, { once: true });
+    return () => {
+      window.removeEventListener('pointerdown', handler);
+      window.removeEventListener('touchend', handler);
+      window.removeEventListener('click', handler);
+    };
+  }, []);
 
   const renderScreen = () => {
     switch (game.phase) {

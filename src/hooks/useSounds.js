@@ -1,20 +1,46 @@
 // Efectos de sonido con Web Audio API pura — sin dependencias externas.
 // Todos los sonidos están sintetizados en el navegador.
 
-const getCtx = (() => {
-  let ctx = null;
-  return () => {
-    if (!ctx) ctx = new (window.AudioContext || window.webkitAudioContext)();
-    // Reanudar si el navegador lo suspendió por política de autoplay
+let _ctx = null;
+
+function getCtx() {
+  if (!_ctx) _ctx = new (window.AudioContext || window.webkitAudioContext)();
+  return _ctx;
+}
+
+// En móviles (sobre todo iOS/Safari) el AudioContext nace "suspended" y solo
+// puede reanudarse de forma fiable dentro del mismo gesto de usuario
+// (click/touchend). Muchos de nuestros sonidos se disparan más tarde, desde
+// un setTimeout (countdown, reveal, victoria), momento en el que YA NO
+// contamos como "gesto de usuario" para el navegador. Por eso agregamos un
+// desbloqueo explícito: en el primer toque/clic de toda la app, creamos el
+// contexto, lo reanudamos y reproducimos un buffer silencioso. Esto "activa"
+// el audio para el resto de la sesión, incluidos los sonidos programados.
+let _unlocked = false;
+
+export function unlockAudio() {
+  if (_unlocked) return;
+  try {
+    const ctx = getCtx();
+    const buffer = ctx.createBuffer(1, 1, 22050);
+    const source = ctx.createBufferSource();
+    source.buffer = buffer;
+    source.connect(ctx.destination);
+    source.start(0);
     if (ctx.state === 'suspended') ctx.resume();
-    return ctx;
-  };
-})();
+    _unlocked = true;
+  } catch (_) {
+    // Si falla, lo reintentaremos en el próximo gesto.
+  }
+}
 
 // Utilidad: toca una oscilación con envelope
 function playTone({ frequency = 440, type = 'sine', duration = 0.2, gain = 0.3, detune = 0, delay = 0 } = {}) {
   try {
     const ctx = getCtx();
+    // Si por alguna razón sigue suspendido (p. ej. el desbloqueo inicial
+    // falló), lo intentamos reanudar de nuevo antes de programar el sonido.
+    if (ctx.state === 'suspended') ctx.resume();
     const osc = ctx.createOscillator();
     const gainNode = ctx.createGain();
 
