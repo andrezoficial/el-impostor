@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { FaSkull, FaUsers, FaExclamationTriangle, FaFire } from 'react-icons/fa';
 import { PassDevice } from './PassDevice';
 import { sounds } from '../hooks/useSounds';
+import { useLanguage } from '../i18n/LanguageContext';
 
 export const VotingScreen = ({
   players,
@@ -14,6 +15,7 @@ export const VotingScreen = ({
   votingTied,
   tiedPlayers,
 }) => {
+  const { t } = useLanguage();
   const [deviceReady, setDeviceReady] = useState(false);
   const [selected, setSelected] = useState(null);
   const [voted, setVoted] = useState(false);
@@ -25,7 +27,7 @@ export const VotingScreen = ({
     return (
       <PassDevice
         name={voterName}
-        subtitle="Es tu turno de votar"
+        subtitle={t('voting.passSubtitle')}
         onReady={() => setDeviceReady(true)}
       />
     );
@@ -63,7 +65,7 @@ export const VotingScreen = ({
           transition={{ type: 'spring', stiffness: 200 }}
           style={{ marginBottom: '6px' }}
         >
-          🗳️ Votación
+          {t('voting.title')}
         </motion.h2>
 
         {maxVotingRounds > 1 && (
@@ -110,10 +112,10 @@ export const VotingScreen = ({
               </motion.div>
               <div>
                 <div style={{ color: 'var(--warning)', fontWeight: 700, fontSize: 14 }}>
-                  ¡Empate! Ronda de desempate #{votingRound}
+                  {t('voting.tieRunoff', votingRound)}
                 </div>
                 <div style={{ color: '#a7a9be', fontSize: 12 }}>
-                  Solo puedes votar a: {tiedPlayers.map(i => players[i]).join(', ')}
+                  {t('voting.onlyVoteFor', tiedPlayers.map(i => players[i]).join(', '))}
                 </div>
               </div>
             </motion.div>
@@ -121,10 +123,10 @@ export const VotingScreen = ({
         </AnimatePresence>
 
         <p style={{ color: '#a7a9be', marginBottom: '4px', fontSize: 14 }}>
-          <FaUsers style={{ marginRight: '6px' }} />¿A quién quieren eliminar?
+          <FaUsers style={{ marginRight: '6px' }} />{t('voting.whoToEliminate')}
         </p>
         <p style={{ color: 'white', fontWeight: 'bold', marginBottom: '16px' }}>
-          Turno de votar: {voterName}
+          {t('voting.votingTurn', voterName)}
         </p>
       </div>
 
@@ -154,14 +156,14 @@ export const VotingScreen = ({
             >
               <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                 <span className="name">{player}</span>
-                {isSelf && <span style={{ color: '#a7a9be', fontSize: 12 }}>(tú)</span>}
+                {isSelf && <span style={{ color: '#a7a9be', fontSize: 12 }}>{t('common.you')}</span>}
                 {isInRunoffGroup && !isSelf && (
                   <motion.span
                     animate={{ opacity: [1, 0.5, 1] }}
                     transition={{ duration: 1.2, repeat: Infinity }}
                     style={{ fontSize: 11, color: 'var(--warning)', fontWeight: 600, background: 'rgba(245,200,66,0.15)', padding: '2px 8px', borderRadius: 20 }}
                   >
-                    <FaFire style={{ marginRight: 3 }} />Empatado
+                    <FaFire style={{ marginRight: 3 }} />{t('voting.tied')}
                   </motion.span>
                 )}
               </div>
@@ -179,7 +181,7 @@ export const VotingScreen = ({
         {selected !== null && !voted && (
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }}>
             <motion.button whileHover={{ scale: 1.04, boxShadow: '0 8px 25px rgba(233,69,96,0.45)' }} whileTap={{ scale: 0.96 }} onClick={confirmVote} className="button button-primary">
-              <FaSkull style={{ marginRight: '8px' }} />Eliminar a {players[selected]}
+              <FaSkull style={{ marginRight: '8px' }} />{t('voting.eliminate', players[selected])}
             </motion.button>
           </motion.div>
         )}
@@ -194,10 +196,10 @@ export const VotingScreen = ({
           >
             <div style={{ background: 'rgba(78,205,196,0.1)', padding: '16px', borderRadius: '14px', border: '2px solid #4ecdc4' }}>
               <motion.div animate={{ scale: [1, 1.15, 1] }} transition={{ duration: 0.6, repeat: 2 }} style={{ color: '#4ecdc4', fontSize: '20px', fontWeight: 'bold' }}>
-                ✅ ¡Voto registrado!
+                {t('voting.voteRegistered')}
               </motion.div>
               <div style={{ color: '#a7a9be', fontSize: '14px', marginTop: '6px' }}>
-                {currentVoterIndex === totalPlayers - 1 ? 'Calculando resultados...' : 'Pasa el dispositivo al siguiente jugador...'}
+                {currentVoterIndex === totalPlayers - 1 ? t('voting.calculating') : t('voting.passToNext')}
               </div>
             </div>
           </motion.div>
@@ -209,7 +211,7 @@ export const VotingScreen = ({
       </div>
 
       <div className="hint">
-        <span className="hint-icon">🔒</span>Vota en privado, no muestres tu elección a los demás
+        <span className="hint-icon">🔒</span>{t('voting.hint')}
       </div>
     </motion.div>
   );

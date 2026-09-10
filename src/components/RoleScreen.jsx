@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { FaEye, FaUserSecret, FaCheck } from 'react-icons/fa';
 import { PassDevice } from './PassDevice';
 import { sounds } from '../hooks/useSounds';
+import { useLanguage } from '../i18n/LanguageContext';
 
 export const RoleScreen = ({
   player,
@@ -13,6 +14,7 @@ export const RoleScreen = ({
   totalPlayers,
   currentIndex
 }) => {
+  const { t } = useLanguage();
   const [deviceReady, setDeviceReady] = useState(false);
   const [revealed, setRevealed] = useState(false);
 
@@ -27,7 +29,7 @@ export const RoleScreen = ({
     return (
       <PassDevice
         name={player}
-        subtitle={`Jugador ${currentIndex + 1} de ${totalPlayers}`}
+        subtitle={t('role.subtitle', currentIndex + 1, totalPlayers)}
         onReady={() => setDeviceReady(true)}
       />
     );
@@ -47,13 +49,13 @@ export const RoleScreen = ({
             transition={{ type: "spring", stiffness: 200 }}
           >
             <div className="role-label">
-              {isImpostor ? '🕵️ Eres el' : '👤 Eres'}
+              {isImpostor ? t('role.youAreThe') : t('role.youAre')}
             </div>
             <h2 style={{ fontSize: '2rem', margin: '10px 0', color: 'white' }}>
               {player}
             </h2>
             <div style={{ fontSize: '14px', color: '#a7a9be' }}>
-              Jugador {currentIndex + 1} de {totalPlayers}
+              {t('role.subtitle', currentIndex + 1, totalPlayers)}
             </div>
           </motion.div>
 
@@ -72,7 +74,7 @@ export const RoleScreen = ({
                   style={{ maxWidth: '300px', margin: '0 auto' }}
                 >
                   <FaEye style={{ marginRight: '8px' }} />
-                  Revelar Rol
+                  {t('role.revealRole')}
                 </motion.button>
               ) : (
                 <motion.div
@@ -85,10 +87,10 @@ export const RoleScreen = ({
                     <>
                       <div className="role-label" style={{ color: '#e94560', fontSize: '18px' }}>
                         <FaUserSecret style={{ marginRight: '8px' }} />
-                        IMPOSTOR
+                        {t('role.impostorLabel')}
                       </div>
                       <div style={{ marginTop: '20px' }}>
-                        <div className="role-label">🔍 Tu pista es:</div>
+                        <div className="role-label">{t('role.yourClueIs')}</div>
                         <motion.div
                           animate={{ scale: [1, 1.05, 1] }}
                           transition={{ duration: 2, repeat: Infinity }}
@@ -98,20 +100,20 @@ export const RoleScreen = ({
                         </motion.div>
                       </div>
                       <div style={{ marginTop: '15px', color: '#a7a9be', fontSize: '14px' }}>
-                        ⚠️ No sabes la palabra exacta, solo esta pista
+                        {t('role.impostorHint1')}
                       </div>
                       <div style={{ marginTop: '10px', color: '#f5c842', fontSize: '12px' }}>
-                        💡 Cuando hables en voz alta, disimula sin decir algo obvio
+                        {t('role.impostorHint2')}
                       </div>
                     </>
                   ) : (
                     <>
                       <div className="role-label" style={{ color: '#4ecdc4', fontSize: '18px' }}>
                         <FaCheck style={{ marginRight: '8px' }} />
-                        TRIPULANTE
+                        {t('role.crewLabel')}
                       </div>
                       <div style={{ marginTop: '20px' }}>
-                        <div className="role-label">📝 La palabra es:</div>
+                        <div className="role-label">{t('role.theWordIs')}</div>
                         <motion.div
                           animate={{ scale: [1, 1.02, 1] }}
                           transition={{ duration: 1.5, repeat: Infinity }}
@@ -121,7 +123,7 @@ export const RoleScreen = ({
                         </motion.div>
                       </div>
                       <div style={{ marginTop: '15px', color: '#a7a9be', fontSize: '14px' }}>
-                        ✅ Cuando sea tu turno, di una palabra o frase relacionada en voz alta
+                        {t('role.crewHint')}
                       </div>
                     </>
                   )}
@@ -151,14 +153,14 @@ export const RoleScreen = ({
               className="button button-primary"
               style={{ flex: '1', minWidth: '200px' }}
             >
-              {currentIndex === totalPlayers - 1 ? '🔎 Ir a Votación' : '👀 Siguiente Jugador'}
+              {currentIndex === totalPlayers - 1 ? t('role.goToVoting') : t('role.nextPlayer')}
             </motion.button>
           )}
         </div>
 
         <div className="hint">
           <span className="hint-icon">🔒</span>
-          Asegúrate de que nadie más vea la pantalla
+          {t('role.hint')}
         </div>
       </div>
     </motion.div>

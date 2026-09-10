@@ -1,37 +1,37 @@
 // Utilidad para compartir resultados del juego.
 // En móvil usa navigator.share (share sheet nativo).
 // En desktop hace fallback a copiar al portapapeles.
+// Recibe la función `t` (de useLanguage) para generar el texto en el
+// idioma activo.
 
-export const buildShareText = ({ players, word, impostorName, crewWins, eliminatedName }) => {
-  const result = crewWins
-    ? `🎉 ¡Los Tripulantes ganaron! Atraparon al impostor.`
-    : `😈 ¡El Impostor ganó! Nadie lo descubrió.`;
+export const buildShareText = ({ players, word, impostorName, crewWins, eliminatedName, t }) => {
+  const result = crewWins ? t('share.crewWonText') : t('share.impostorWonText');
 
   const lines = [
-    `🕵️ *El Impostor* — Resultado de la ronda`,
+    t('share.resultTitle'),
     ``,
     result,
     ``,
-    `🔍 Impostor: *${impostorName}*`,
-    `📝 Palabra: *${word}*`,
-    eliminatedName ? `☠️ Eliminado: ${eliminatedName}` : null,
+    t('share.impostorLine', impostorName),
+    t('share.wordLine', word),
+    eliminatedName ? t('share.eliminatedLine', eliminatedName) : null,
     ``,
-    `👥 Jugadores: ${players.join(', ')}`,
+    t('share.playersLine', players.join(', ')),
     ``,
-    `¿Juegan una ronda? 👉 https://el-impostor-delta-woad.vercel.app/`,
+    t('share.playPrompt'),
   ].filter(Boolean).join('\n');
 
   return lines;
 };
 
-export const buildInviteText = (players) => {
+export const buildInviteText = (players, t) => {
   return [
-    `🕵️ *¡Juguemos El Impostor!*`,
+    t('share.inviteTitle'),
     ``,
-    `Un juego de deducción social para ${players.length} jugadores.`,
-    `Uno de ustedes es el impostor — ¿pueden descubrirlo?`,
+    t('share.inviteBody', players.length),
+    t('share.inviteQuestion'),
     ``,
-    `👉 https://el-impostor-delta-woad.vercel.app/`,
+    t('share.inviteLink'),
   ].join('\n');
 };
 

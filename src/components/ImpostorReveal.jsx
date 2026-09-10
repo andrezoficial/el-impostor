@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { sounds } from '../hooks/useSounds';
+import { useLanguage } from '../i18n/LanguageContext';
 
 // Pantalla dramática que aparece antes de ResultsScreen.
 // Hace un countdown 3-2-1 y luego revela quién era el impostor.
 export const ImpostorReveal = ({ players, eliminatedIndex, impostorIndex, onDone }) => {
+  const { t } = useLanguage();
   const [phase, setPhase] = useState('countdown'); // 'countdown' | 'reveal' | 'done'
   const [count, setCount] = useState(3);
 
@@ -82,7 +84,7 @@ export const ImpostorReveal = ({ players, eliminatedIndex, impostorIndex, onDone
             style={{ textAlign: 'center' }}
           >
             <div style={{ fontSize: '5rem', color: '#a7a9be', marginBottom: '16px' }}>
-              🔎 ¿Quién fue?
+              {t('reveal.whoWasIt')}
             </div>
             <motion.div
               animate={{ color: ['#e94560', '#f5c842', '#4ecdc4'] }}
@@ -116,7 +118,7 @@ export const ImpostorReveal = ({ players, eliminatedIndex, impostorIndex, onDone
               transition={{ delay: 0.3 }}
               style={{ color: '#a7a9be', fontSize: '16px', marginBottom: '8px' }}
             >
-              El impostor era...
+              {t('reveal.impostorWas')}
             </motion.div>
 
             <motion.div
@@ -152,12 +154,12 @@ export const ImpostorReveal = ({ players, eliminatedIndex, impostorIndex, onDone
                 color: isCorrect ? '#4ecdc4' : '#e94560',
               }}>
                 {isCorrect
-                  ? '¡Los Tripulantes lo atraparon!'
-                  : '¡El Impostor escapó!'}
+                  ? t('reveal.crewCaught')
+                  : t('reveal.impostorEscaped')}
               </div>
               {eliminatedName && eliminatedName !== impostorName && (
                 <div style={{ color: '#a7a9be', fontSize: '13px', marginTop: '8px' }}>
-                  Eliminaron a {eliminatedName} por error
+                  {t('reveal.eliminatedByMistake', eliminatedName)}
                 </div>
               )}
             </motion.div>
@@ -180,7 +182,7 @@ export const ImpostorReveal = ({ players, eliminatedIndex, impostorIndex, onDone
                 cursor: 'pointer',
               }}
             >
-              Ver resultados completos →
+              {t('reveal.seeFullResults')}
             </motion.button>
           </motion.div>
         )}

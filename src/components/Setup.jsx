@@ -2,12 +2,14 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaTrash, FaUserPlus, FaTags } from 'react-icons/fa';
 import { getCategories } from '../data/wordBank';
+import { useLanguage } from '../i18n/LanguageContext';
 
 const ALL_CATEGORIES = getCategories();
 
 export const Setup = ({ onStart }) => {
+  const { t } = useLanguage();
   const [players, setPlayers] = useState(['', '', '', '']);
-  const [category, setCategory] = useState('Todas');
+  const [category, setCategory] = useState('all');
   const [error, setError] = useState('');
 
   const handleAddPlayer = () => {
@@ -35,14 +37,14 @@ export const Setup = ({ onStart }) => {
       .filter(name => name !== '');
 
     if (validPlayers.length < 3) {
-      setError('¡Necesitas al menos 3 jugadores!');
+      setError(t('setup.errorMinPlayers'));
       return;
     }
 
     const namesLower = validPlayers.map(name => name.toLowerCase());
     const hasDuplicates = new Set(namesLower).size !== namesLower.length;
     if (hasDuplicates) {
-      setError('¡No puede haber dos jugadores con el mismo nombre!');
+      setError(t('setup.errorDuplicateNames'));
       return;
     }
 
@@ -56,8 +58,8 @@ export const Setup = ({ onStart }) => {
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
     >
-      <h1 className="title">🕵️ El Impostor</h1>
-      <p className="subtitle">Ingresa los nombres de los jugadores</p>
+      <h1 className="title">{t('setup.title')}</h1>
+      <p className="subtitle">{t('setup.subtitle')}</p>
       
       <div className="input-group">
         <AnimatePresence>
@@ -72,7 +74,7 @@ export const Setup = ({ onStart }) => {
             >
               <input
                 type="text"
-                placeholder={`Jugador ${index + 1}`}
+                placeholder={t('setup.playerPlaceholder', index + 1)}
                 value={player}
                 onChange={(e) => handlePlayerChange(index, e.target.value)}
                 onKeyPress={(e) => e.key === 'Enter' && handleSubmit()}
@@ -109,7 +111,7 @@ export const Setup = ({ onStart }) => {
           style={{ marginBottom: '15px' }}
         >
           <FaUserPlus style={{ marginRight: '8px' }} />
-          Agregar Jugador ({players.length}/12)
+          {t('setup.addPlayer', players.length)}
         </motion.button>
       )}
 
@@ -139,7 +141,7 @@ export const Setup = ({ onStart }) => {
           }}
         >
           <FaTags />
-          Categoría de palabras
+          {t('setup.categoryLabel')}
         </label>
         <select
           id="category-select"
@@ -155,10 +157,10 @@ export const Setup = ({ onStart }) => {
             fontSize: '16px'
           }}
         >
-          <option value="Todas">🎲 Todas las categorías</option>
+          <option value="all">{t('common.allCategoriesLabel')}</option>
           {ALL_CATEGORIES.map((cat) => (
             <option key={cat} value={cat}>
-              {cat}
+              {t(`categories.${cat}`)}
             </option>
           ))}
         </select>
@@ -170,12 +172,12 @@ export const Setup = ({ onStart }) => {
         onClick={handleSubmit}
         className="button button-primary"
       >
-        🎯 Iniciar Juego
+        {t('setup.startGame')}
       </motion.button>
 
       <div className="hint">
         <span className="hint-icon">💡</span>
-        Mínimo 3 jugadores, máximo 12
+        {t('setup.hint')}
       </div>
     </motion.div>
   );

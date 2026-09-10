@@ -2,10 +2,12 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { FaDice } from 'react-icons/fa';
 import { sounds } from '../hooks/useSounds';
+import { useLanguage } from '../i18n/LanguageContext';
 
 // Pantalla pública (todos pueden verla) que anuncia quién empieza
 // la ronda, después de que todos ya vieron su rol y antes de votar.
 export const FirstPlayerScreen = ({ firstPlayerName, onNext }) => {
+  const { t } = useLanguage();
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.9 }}
@@ -21,9 +23,9 @@ export const FirstPlayerScreen = ({ firstPlayerName, onNext }) => {
         🎲
       </motion.div>
 
-      <div className="role-label">Todos ya vieron su rol</div>
+      <div className="role-label">{t('firstPlayer.everyoneSawRole')}</div>
       <h2 style={{ fontSize: '1.3rem', margin: '10px 0', color: 'var(--text-secondary)' }}>
-        Empieza a dar su pista:
+        {t('firstPlayer.startsClue')}
       </h2>
 
       <motion.div
@@ -53,7 +55,7 @@ export const FirstPlayerScreen = ({ firstPlayerName, onNext }) => {
         style={{ maxWidth: '320px', margin: '25px auto 0' }}
       >
         <FaDice style={{ marginRight: '8px' }} />
-        Empezar votación
+        {t('firstPlayer.startVoting')}
       </motion.button>
     </motion.div>
   );

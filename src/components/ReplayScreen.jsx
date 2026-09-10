@@ -2,21 +2,23 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { FaTags, FaPlay, FaHome } from 'react-icons/fa';
 import { getCategories, wordBank } from '../data/wordBank';
+import { useLanguage } from '../i18n/LanguageContext';
 
 const ALL_CATEGORIES = getCategories();
 
 export const ReplayScreen = ({ players, currentCategory, usedWords, onPlay, onReset }) => {
-  const [category, setCategory] = useState(currentCategory || 'Todas');
+  const { t } = useLanguage();
+  const [category, setCategory] = useState(currentCategory || 'all');
 
   const getStats = (cat) => {
-    const pool = cat && cat !== 'Todas'
+    const pool = cat && cat !== 'all'
       ? wordBank.filter(w => w.category === cat)
       : wordBank;
-    const used = pool.filter(w => usedWords.includes(w.word)).length;
+    const used = pool.filter(w => usedWords.includes(w.id)).length;
     return { total: pool.length, used, remaining: pool.length - used };
   };
 
-  const { total, used, remaining } = getStats(category);
+  const { total, remaining } = getStats(category);
 
   return (
     <motion.div
@@ -26,16 +28,16 @@ export const ReplayScreen = ({ players, currentCategory, usedWords, onPlay, onRe
     >
       <div style={{ textAlign: 'center', marginBottom: '24px' }}>
         <div style={{ fontSize: '3rem', marginBottom: '8px' }}>🔁</div>
-        <h2 style={{ margin: '0 0 6px', color: 'white' }}>¡Otra ronda!</h2>
+        <h2 style={{ margin: '0 0 6px', color: 'white' }}>{t('replay.anotherRound')}</h2>
         <p style={{ color: '#a7a9be', margin: 0, fontSize: '14px' }}>
-          Mismos jugadores — elige categoría y juega
+          {t('replay.subtitle')}
         </p>
       </div>
 
       {/* Jugadores */}
       <div className="role-box" style={{ marginBottom: '20px' }}>
         <div className="role-label" style={{ marginBottom: '12px' }}>
-          👥 Jugadores ({players.length})
+          {t('replay.players', players.length)}
         </div>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', justifyContent: 'center' }}>
           {players.map((p, i) => (
@@ -73,7 +75,7 @@ export const ReplayScreen = ({ players, currentCategory, usedWords, onPlay, onRe
           }}
         >
           <FaTags />
-          Categoría de palabras
+          {t('replay.categoryLabel')}
         </label>
         <select
           value={category}
@@ -88,9 +90,9 @@ export const ReplayScreen = ({ players, currentCategory, usedWords, onPlay, onRe
             fontSize: '16px',
           }}
         >
-          <option value="Todas">🎲 Todas las categorías</option>
+          <option value="all">{t('common.allCategoriesLabel')}</option>
           {ALL_CATEGORIES.map((cat) => (
-            <option key={cat} value={cat}>{cat}</option>
+            <option key={cat} value={cat}>{t(`categories.${cat}`)}</option>
           ))}
         </select>
 
@@ -115,8 +117,8 @@ export const ReplayScreen = ({ players, currentCategory, usedWords, onPlay, onRe
           }}
         >
           {remaining === 0
-            ? `⚠️ Ya se jugaron todas las ${total} palabras de esta categoría — se reiniciará el pool al jugar`
-            : `✅ ${remaining} de ${total} palabras sin usar esta sesión`}
+            ? t('replay.allUsedUp', total)
+            : t('replay.remainingWords', remaining, total)}
         </motion.div>
       </div>
 
@@ -129,7 +131,7 @@ export const ReplayScreen = ({ players, currentCategory, usedWords, onPlay, onRe
           style={{ flex: '1', minWidth: '200px' }}
         >
           <FaPlay style={{ marginRight: '8px' }} />
-          ¡Jugar!
+          {t('replay.play')}
         </motion.button>
 
         <motion.button
@@ -140,7 +142,7 @@ export const ReplayScreen = ({ players, currentCategory, usedWords, onPlay, onRe
           style={{ flex: '1', minWidth: '200px' }}
         >
           <FaHome style={{ marginRight: '8px' }} />
-          Nueva Partida
+          {t('replay.newGame')}
         </motion.button>
       </div>
     </motion.div>

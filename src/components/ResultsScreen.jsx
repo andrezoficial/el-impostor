@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { FaUsers, FaUserSecret, FaSkull, FaChevronDown, FaChevronUp, FaShareAlt, FaCheck, FaCopy } from 'react-icons/fa';
 import { sounds } from '../hooks/useSounds';
 import { buildShareText, buildInviteText, shareOrCopy } from '../hooks/useShare';
+import { useLanguage } from '../i18n/LanguageContext';
 
 const confettiColors = ['#e94560', '#4ecdc4', '#f5c842', '#533483', '#fff'];
 
@@ -29,6 +30,7 @@ export const ResultsScreen = ({
   players, votes, eliminatedIndex, impostorIndex,
   word, clue, onReset, onPlayAgain, allRoundsVotes,
 }) => {
+  const { t, lang } = useLanguage();
   const [showHistory, setShowHistory] = useState(false);
   const [shareStatus, setShareStatus] = useState(null); // null | 'copied' | 'shared'
   const [inviteStatus, setInviteStatus] = useState(null);
@@ -50,7 +52,7 @@ export const ResultsScreen = ({
 
   const handleShare = () => {
     sounds.click();
-    const text = buildShareText({ players, word, impostorName, crewWins, eliminatedName });
+    const text = buildShareText({ players, word, impostorName, crewWins, eliminatedName, t });
     shareOrCopy(text,
       (type) => { setShareStatus(type); setTimeout(() => setShareStatus(null), 2500); },
     );
@@ -58,21 +60,21 @@ export const ResultsScreen = ({
 
   const handleInvite = () => {
     sounds.click();
-    const text = buildInviteText(players);
+    const text = buildInviteText(players, t);
     shareOrCopy(text,
       (type) => { setInviteStatus(type); setTimeout(() => setInviteStatus(null), 2500); },
     );
   };
 
   const statusLabel = (status) =>
-    status === 'shared' ? '¡Compartido!' : status === 'copied' ? '¡Copiado!' : null;
+    status === 'shared' ? t('results.shared') : status === 'copied' ? t('results.copied') : null;
 
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.4 }} style={{ position: 'relative' }}>
       {crewWins && <Confetti />}
 
       <motion.h2 initial={{ y: -20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} style={{ textAlign: 'center', marginBottom: '10px' }}>
-        🔎 Resultados
+        {t('results.title')}
       </motion.h2>
 
       {/* Resultado principal */}
@@ -92,20 +94,20 @@ export const ResultsScreen = ({
         </motion.div>
 
         <motion.h2 initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 }} style={{ color: crewWins ? '#4ecdc4' : '#e94560' }}>
-          {crewWins ? '¡Los Tripulantes Ganaron!' : '¡El Impostor Ganó!'}
+          {crewWins ? t('results.crewWon') : t('results.impostorWon')}
         </motion.h2>
 
         <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.7 }} style={{ marginTop: '15px', color: 'white' }}>
           <FaSkull style={{ marginRight: '8px' }} />
-          {eliminatedName ? `Eliminado: ${eliminatedName}` : 'Nadie recibió votos suficientes'}
+          {eliminatedName ? t('results.eliminated', eliminatedName) : t('results.noOneEliminated')}
         </motion.div>
 
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.9 }} style={{ marginTop: '10px', color: '#a7a9be' }}>
           <FaUsers style={{ marginRight: '8px' }} />
-          {totalVotes} votos emitidos
+          {t('results.votesCast', totalVotes)}
           {hadMultipleRounds && (
             <span style={{ marginLeft: 8, fontSize: 12, color: 'var(--warning)' }}>
-              ({allRoundsVotes.length} rondas de votación)
+              {t('results.votingRounds', allRoundsVotes.length)}
             </span>
           )}
         </motion.div>
@@ -113,7 +115,7 @@ export const ResultsScreen = ({
 
       {/* Votación */}
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }} style={{ margin: '20px 0' }}>
-        <h3 style={{ marginBottom: '15px', color: '#a7a9be' }}>📊 Votación Final</h3>
+        <h3 style={{ marginBottom: '15px', color: '#a7a9be' }}>{t('results.finalVoting')}</h3>
         {players.map((player, index) => (
           <motion.div
             key={index}
@@ -126,12 +128,12 @@ export const ResultsScreen = ({
               <span className="name">{player}</span>
               {index === impostorIndex && (
                 <motion.span initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: 0.8 + index * 0.08, type: 'spring' }} className="badge badge-impostor" style={{ marginLeft: '6px' }}>
-                  <FaUserSecret style={{ marginRight: '4px' }} />Impostor
+                  <FaUserSecret style={{ marginRight: '4px' }} />{t('results.impostorBadge')}
                 </motion.span>
               )}
               {eliminatedIndex === index && (
                 <motion.span initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: 0.9 + index * 0.08, type: 'spring' }} className="badge" style={{ background: 'var(--warning)', color: 'var(--background)' }}>
-                  <FaSkull style={{ marginRight: '4px' }} />Eliminado
+                  <FaSkull style={{ marginRight: '4px' }} />{t('results.eliminatedBadge')}
                 </motion.span>
               )}
             </div>
@@ -153,7 +155,7 @@ export const ResultsScreen = ({
             onClick={() => { sounds.click(); setShowHistory(h => !h); }}
             style={{ width: '100%', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.12)', borderRadius: 12, color: '#a7a9be', fontSize: 14, padding: '12px 16px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}
           >
-            <span>📋 Historial de rondas ({allRoundsVotes.length})</span>
+            <span>{t('results.roundHistory', allRoundsVotes.length)}</span>
             {showHistory ? <FaChevronUp /> : <FaChevronDown />}
           </motion.button>
 
@@ -163,12 +165,12 @@ export const ResultsScreen = ({
                 {allRoundsVotes.map(({ votes: rv, round }) => (
                   <div key={round} style={{ background: 'var(--card)', borderRadius: 10, padding: '12px 16px', marginTop: 8, border: '1px solid rgba(255,255,255,0.07)' }}>
                     <div style={{ color: 'var(--warning)', fontWeight: 700, fontSize: 13, marginBottom: 8 }}>
-                      Ronda {round}{round === 1 ? ' (inicial)' : ' (desempate)'}
+                      {t('results.round', round)}{round === 1 ? t('results.roundInitial') : t('results.roundRunoff')}
                     </div>
                     {players.map((p, i) => rv[i] > 0 && (
                       <div key={i} style={{ display: 'flex', justifyContent: 'space-between', color: '#a7a9be', fontSize: 13, padding: '3px 0' }}>
                         <span>{p}</span>
-                        <span style={{ fontWeight: 600, color: 'white' }}>{rv[i]} voto{rv[i] !== 1 ? 's' : ''}</span>
+                        <span style={{ fontWeight: 600, color: 'white' }}>{t('results.votesLabel', rv[i])}</span>
                       </div>
                     ))}
                   </div>
@@ -181,9 +183,9 @@ export const ResultsScreen = ({
 
       {/* Palabra y pista */}
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.7 }} className="role-box" style={{ background: 'var(--card)', border: '2px solid #f5c842' }}>
-        <div className="role-label">📝 La palabra era</div>
+        <div className="role-label">{t('results.theWordWas')}</div>
         <motion.div animate={{ scale: [1, 1.03, 1] }} transition={{ duration: 2, repeat: Infinity }} className="role-word">{word}</motion.div>
-        <div className="role-label" style={{ marginTop: '10px' }}>🔍 La pista era</div>
+        <div className="role-label" style={{ marginTop: '10px' }}>{t('results.theClueWas')}</div>
         <div className="role-clue">{clue}</div>
       </motion.div>
 
@@ -203,7 +205,7 @@ export const ResultsScreen = ({
           }}
         >
           {shareStatus ? <FaCheck /> : <FaShareAlt />}
-          {statusLabel(shareStatus) || '📤 Compartir resultado'}
+          {statusLabel(shareStatus) || t('results.shareResult')}
         </motion.button>
 
         <motion.button
@@ -220,7 +222,7 @@ export const ResultsScreen = ({
           }}
         >
           {inviteStatus ? <FaCheck /> : <FaCopy />}
-          {statusLabel(inviteStatus) || '🎮 Invitar a jugar'}
+          {statusLabel(inviteStatus) || t('results.inviteToPlay')}
         </motion.button>
       </motion.div>
 
@@ -232,7 +234,7 @@ export const ResultsScreen = ({
             onClick={() => { sounds.click(); onPlayAgain(); }}
             className="button button-primary" style={{ flex: '1', minWidth: '220px' }}
           >
-            🔁 Otra Ronda (mismos jugadores)
+            {t('results.playAgain')}
           </motion.button>
         )}
         <motion.button
@@ -240,7 +242,7 @@ export const ResultsScreen = ({
           onClick={() => { sounds.click(); onReset(); }}
           className="button button-secondary" style={{ flex: '1', minWidth: '220px' }}
         >
-          🆕 Nueva Partida
+          {t('results.newGame')}
         </motion.button>
       </motion.div>
     </motion.div>

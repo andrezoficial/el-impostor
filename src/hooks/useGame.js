@@ -47,8 +47,8 @@ export const useGame = () => {
 
     setPlayers(playerNames);
     setCurrentWord(word);
-    setLastWord(word.word);
-    setUsedWords(prev => [...prev, word.word]);
+    setLastWord(word.id);
+    setUsedWords(prev => [...prev, word.id]);
     setImpostorIndex(impostor);
     setLastImpostorName(playerNames[impostor]);
     setFirstPlayerIndex(firstPlayer);

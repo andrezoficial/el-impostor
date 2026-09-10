@@ -1,11 +1,13 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { FaHandPointRight, FaLock } from 'react-icons/fa';
+import { useLanguage } from '../i18n/LanguageContext';
 
 // Pantalla intermedia que se muestra antes de revelar el rol de cada
 // jugador o antes de que cada jugador vote, para darle tiempo a pasar
 // el dispositivo sin que el jugador anterior vea información ajena.
 export const PassDevice = ({ name, subtitle, buttonLabel, onReady }) => {
+  const { t } = useLanguage();
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -22,7 +24,7 @@ export const PassDevice = ({ name, subtitle, buttonLabel, onReady }) => {
         📱
       </motion.div>
 
-      <div className="role-label">Pasa el dispositivo a</div>
+      <div className="role-label">{t('passDevice.passTo')}</div>
       <h2 style={{ fontSize: '2rem', margin: '10px 0', color: 'white' }}>
         {name}
       </h2>
@@ -41,12 +43,12 @@ export const PassDevice = ({ name, subtitle, buttonLabel, onReady }) => {
         style={{ maxWidth: '320px', margin: '25px auto 0' }}
       >
         <FaHandPointRight style={{ marginRight: '8px' }} />
-        {buttonLabel || `Soy ${name}, continuar`}
+        {buttonLabel || t('passDevice.defaultButton', name)}
       </motion.button>
 
       <div className="hint">
         <FaLock className="hint-icon" style={{ marginRight: '6px' }} />
-        Los demás no deberían ver la pantalla ahora
+        {t('passDevice.hint')}
       </div>
     </motion.div>
   );

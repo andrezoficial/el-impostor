@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { unlockAudio } from './hooks/useSounds';
 import { useGame } from './hooks/useGame';
+import { useLanguage } from './i18n/LanguageContext';
 import { Setup } from './components/Setup';
 import { RoleScreen } from './components/RoleScreen';
 import { FirstPlayerScreen } from './components/FirstPlayerScreen';
@@ -12,8 +13,49 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { FaInstagram } from 'react-icons/fa';
 import './styles/global.css';
 
+// Selector de idioma: un pequeño toggle ES/EN. Se muestra sobre todo en
+// la pantalla de inicio (setup), pero queda disponible en todo momento
+// por si el usuario quiere cambiarlo a mitad de partida.
+const LanguageSwitcher = () => {
+  const { lang, setLang } = useLanguage();
+  return (
+    <div
+      style={{
+        display: 'flex',
+        justifyContent: 'center',
+        gap: '8px',
+        marginBottom: '16px',
+      }}
+    >
+      {[
+        { code: 'es', label: '🇪🇸 Español' },
+        { code: 'en', label: '🇬🇧 English' },
+      ].map(({ code, label }) => (
+        <button
+          key={code}
+          onClick={() => setLang(code)}
+          style={{
+            padding: '6px 14px',
+            borderRadius: '20px',
+            fontSize: '13px',
+            fontWeight: 600,
+            cursor: 'pointer',
+            border: lang === code ? '2px solid var(--primary)' : '2px solid rgba(255,255,255,0.15)',
+            background: lang === code ? 'rgba(233, 69, 96, 0.15)' : 'transparent',
+            color: lang === code ? 'white' : 'var(--text-secondary)',
+            transition: 'all 0.2s ease',
+          }}
+        >
+          {label}
+        </button>
+      ))}
+    </div>
+  );
+};
+
 function App() {
   const game = useGame();
+  const { t, lang } = useLanguage();
 
   // Desbloquea el audio en el primer toque/clic en cualquier parte de la
   // app. Esto es clave en móviles (especialmente iOS): el AudioContext debe
@@ -37,6 +79,9 @@ function App() {
     };
   }, []);
 
+  // Texto de la palabra/pista actual, localizado al idioma activo.
+  const localizedWord = game.currentWord ? game.currentWord[lang] : null;
+
   const renderScreen = () => {
     switch (game.phase) {
       case 'setup':
@@ -48,8 +93,8 @@ function App() {
             key={`player-${game.currentPlayerIndex}`}
             player={game.getCurrentPlayer()}
             isImpostor={game.isImpostor()}
-            word={game.currentWord?.word}
-            clue={game.currentWord?.clue}
+            word={localizedWord?.word}
+            clue={localizedWord?.clue}
             onNext={game.nextPlayer}
             totalPlayers={game.players.length}
             currentIndex={game.currentPlayerIndex}
@@ -96,8 +141,8 @@ function App() {
             votes={game.votes}
             eliminatedIndex={game.eliminatedIndex}
             impostorIndex={game.impostorIndex}
-            word={game.currentWord?.word}
-            clue={game.currentWord?.clue}
+            word={localizedWord?.word}
+            clue={localizedWord?.clue}
             onReset={game.resetGame}
             onPlayAgain={() => game.setPhase('replay')}
             allRoundsVotes={game.allRoundsVotes}
@@ -123,6 +168,7 @@ function App() {
   return (
     <div className="app-wrapper">
       <div className="container">
+        {game.phase === 'setup' && <LanguageSwitcher />}
         <AnimatePresence mode="wait">
           <motion.div
             key={game.phase}
@@ -137,7 +183,7 @@ function App() {
       </div>
 
       <footer className="app-footer">
-        Creado por <strong>Andrés Suárez Moreno</strong>
+        {t('app.createdBy')} <strong>Andrés Suárez Moreno</strong>
         {' · '}
         <a
           href="https://instagram.com/andres.suarez.moreno"
