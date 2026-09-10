@@ -6,6 +6,7 @@ const urlsToCache = [
   '/favicon.ico',
   '/logo192.png',
   '/logo512.png',
+  '/logo512-maskable.png',
 ];
 
 self.addEventListener('install', (event) => {

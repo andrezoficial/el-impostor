@@ -19,7 +19,7 @@
       "purpose": "any"
     },
     {
-      "src": "logo512.png",
+      "src": "logo512-maskable.png",
       "type": "image/png",
       "sizes": "512x512",
       "purpose": "maskable"
@@ -29,6 +29,6 @@
   "id": "/",
   "display": "standalone",
   "orientation": "portrait",
-  "theme_color": "#0f0e17",
-  "background_color": "#0f0e17"
+  "theme_color": "#17254a",
+  "background_color": "#17254a"
 }
