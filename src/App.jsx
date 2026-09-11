@@ -127,6 +127,7 @@ function App() {
       case 'reveal':
         return (
           <ImpostorReveal
+            impostorIndices={game.impostorIndices}
             players={game.players}
             eliminatedIndex={game.eliminatedIndex}
             impostorIndex={game.impostorIndex}
@@ -141,6 +142,7 @@ function App() {
             votes={game.votes}
             eliminatedIndex={game.eliminatedIndex}
             impostorIndex={game.impostorIndex}
+            impostorIndices={game.impostorIndices}
             word={localizedWord?.word}
             clue={localizedWord?.clue}
             onReset={game.resetGame}

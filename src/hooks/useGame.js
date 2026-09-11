@@ -5,16 +5,17 @@ export const useGame = () => {
   const [players, setPlayers] = useState([]);
   const [category, setCategory] = useState(null);
   const [currentWord, setCurrentWord] = useState(null);
-  const [impostorIndex, setImpostorIndex] = useState(-1);
+  const [impostorIndices, setImpostorIndices] = useState([]);
   const [currentPlayerIndex, setCurrentPlayerIndex] = useState(0);
   const [phase, setPhase] = useState('setup');
   const [votes, setVotes] = useState([]);
   const [currentVoterIndex, setCurrentVoterIndex] = useState(0);
   const [eliminatedIndex, setEliminatedIndex] = useState(-1);
   const [lastWord, setLastWord] = useState(null);
-  const [lastImpostorName, setLastImpostorName] = useState(null);
+  const [lastImpostorNames, setLastImpostorNames] = useState([]);
   const [firstPlayerIndex, setFirstPlayerIndex] = useState(0);
   const [usedWords, setUsedWords] = useState([]);
+  const [numImpostors, setNumImpostors] = useState(1);
 
   // Multi-round voting state
   const [votingRound, setVotingRound] = useState(1);
@@ -23,13 +24,23 @@ export const useGame = () => {
   const [tiedPlayers, setTiedPlayers] = useState([]);
   const [allRoundsVotes, setAllRoundsVotes] = useState([]);
 
-  const pickImpostor = useCallback((playerNames, previousImpostorName) => {
-    if (playerNames.length <= 1) return 0;
-    let index;
-    do {
-      index = Math.floor(Math.random() * playerNames.length);
-    } while (playerNames.length > 1 && playerNames[index] === previousImpostorName);
-    return index;
+  const pickImpostors = useCallback((playerNames, count, previousImpostorNames) => {
+    const safeCount = Math.min(count, Math.floor(playerNames.length / 2));
+    const indices = [];
+    const available = playerNames.map((_, i) => i);
+
+    // Try to avoid repeating all previous impostors if possible
+    const preferred = available.filter(i => !previousImpostorNames.includes(playerNames[i]));
+    const pool = preferred.length >= safeCount ? preferred : available;
+
+    while (indices.length < safeCount) {
+      const remaining = pool.filter(i => !indices.includes(i));
+      if (remaining.length === 0) break;
+      const pick = remaining[Math.floor(Math.random() * remaining.length)];
+      indices.push(pick);
+    }
+
+    return indices.sort((a, b) => a - b);
   }, []);
 
   const calcMaxRounds = (count) => {
@@ -38,19 +49,18 @@ export const useGame = () => {
     return 1;
   };
 
-  const beginRound = useCallback((playerNames, cat) => {
+  const beginRound = useCallback((playerNames, cat, impostorCount) => {
     const word = getRandomWord(usedWords, cat);
-    const impostor = pickImpostor(playerNames, lastImpostorName);
+    const impostors = pickImpostors(playerNames, impostorCount, lastImpostorNames);
     const rounds = calcMaxRounds(playerNames.length);
-
     const firstPlayer = Math.floor(Math.random() * playerNames.length);
 
     setPlayers(playerNames);
     setCurrentWord(word);
     setLastWord(word.id);
     setUsedWords(prev => [...prev, word.id]);
-    setImpostorIndex(impostor);
-    setLastImpostorName(playerNames[impostor]);
+    setImpostorIndices(impostors);
+    setLastImpostorNames(impostors.map(i => playerNames[i]));
     setFirstPlayerIndex(firstPlayer);
     setCurrentPlayerIndex(0);
     setCurrentVoterIndex(0);
@@ -62,27 +72,28 @@ export const useGame = () => {
     setTiedPlayers([]);
     setAllRoundsVotes([]);
     setPhase('role');
-  }, [usedWords, lastImpostorName, pickImpostor]);
+  }, [usedWords, lastImpostorNames, pickImpostors]);
 
-  const startGame = useCallback((playerNames, selectedCategory = null) => {
+  const startGame = useCallback((playerNames, selectedCategory = null, impostorCount = 1) => {
     if (playerNames.length < 3) {
       throw new Error('Necesitas al menos 3 jugadores');
     }
     setUsedWords([]);
     setCategory(selectedCategory);
-    beginRound(playerNames, selectedCategory);
+    setNumImpostors(impostorCount);
+    beginRound(playerNames, selectedCategory, impostorCount);
   }, [beginRound]);
 
   const playAgainSamePlayers = useCallback(() => {
     if (players.length < 3) return;
-    beginRound(players, category);
-  }, [players, category, beginRound]);
+    beginRound(players, category, numImpostors);
+  }, [players, category, numImpostors, beginRound]);
 
   const playAgainWithCategory = useCallback((newCategory) => {
     if (players.length < 3) return;
     setCategory(newCategory);
-    beginRound(players, newCategory);
-  }, [players, beginRound]);
+    beginRound(players, newCategory, numImpostors);
+  }, [players, numImpostors, beginRound]);
 
   const nextPlayer = useCallback(() => {
     if (currentPlayerIndex < players.length - 1) {
@@ -149,16 +160,17 @@ export const useGame = () => {
     setPlayers([]);
     setCategory(null);
     setCurrentWord(null);
-    setImpostorIndex(-1);
+    setImpostorIndices([]);
     setCurrentPlayerIndex(0);
     setCurrentVoterIndex(0);
     setPhase('setup');
     setVotes([]);
     setEliminatedIndex(-1);
     setLastWord(null);
-    setLastImpostorName(null);
+    setLastImpostorNames([]);
     setFirstPlayerIndex(0);
     setUsedWords([]);
+    setNumImpostors(1);
     setVotingRound(1);
     setMaxVotingRounds(1);
     setVotingTied(false);
@@ -171,19 +183,24 @@ export const useGame = () => {
   }, [players, currentPlayerIndex]);
 
   const isImpostor = useCallback(() => {
-    return currentPlayerIndex === impostorIndex;
-  }, [currentPlayerIndex, impostorIndex]);
+    return impostorIndices.includes(currentPlayerIndex);
+  }, [currentPlayerIndex, impostorIndices]);
 
   const getWinner = useCallback(() => {
     if (eliminatedIndex === -1) return null;
-    return eliminatedIndex === impostorIndex ? 'crew' : 'impostor';
-  }, [eliminatedIndex, impostorIndex]);
+    return impostorIndices.includes(eliminatedIndex) ? 'crew' : 'impostor';
+  }, [eliminatedIndex, impostorIndices]);
+
+  // Legacy: first impostor index for backward compat with components that use it
+  const impostorIndex = impostorIndices[0] ?? -1;
 
   return {
     players,
     category,
     currentWord,
-    impostorIndex,
+    impostorIndex,       // legacy – primer impostor
+    impostorIndices,     // nuevo – todos los impostores
+    numImpostors,
     firstPlayerIndex,
     currentPlayerIndex,
     currentVoterIndex,

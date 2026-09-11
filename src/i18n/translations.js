@@ -22,6 +22,8 @@ export const translations = {
       categoryLabel: 'Categoría de palabras',
       startGame: '🎯 Iniciar Juego',
       hint: 'Mínimo 3 jugadores, máximo 12',
+      impostorCountLabel: '🕵️ Número de impostores',
+      impostorCountHint: (max) => `Máximo ${max} impostor${max === 1 ? '' : 'es'} para esta partida`,
     },
     passDevice: {
       passTo: 'Pasa el dispositivo a',
@@ -66,6 +68,7 @@ export const translations = {
     reveal: {
       whoWasIt: '🔎 ¿Quién fue?',
       impostorWas: 'El impostor era...',
+      impostorsWere: 'Los impostores eran...',
       crewCaught: '¡Los Tripulantes lo atraparon!',
       impostorEscaped: '¡El Impostor escapó!',
       eliminatedByMistake: (name) => `Eliminaron a ${name} por error`,
@@ -95,6 +98,7 @@ export const translations = {
       inviteToPlay: '🎮 Invitar a jugar',
       playAgain: '🔁 Otra Ronda (mismos jugadores)',
       newGame: '🆕 Nueva Partida',
+      impostorsLabel: (names) => `🕵️ Impostor${names.includes(',') ? 'es' : ''}: ${names}`,
     },
     replay: {
       anotherRound: '¡Otra ronda!',
@@ -107,10 +111,14 @@ export const translations = {
       newGame: 'Nueva Partida',
     },
     share: {
-      crewWonText: '🎉 ¡Los Tripulantes ganaron! Atraparon al impostor.',
-      impostorWonText: '😈 ¡El Impostor ganó! Nadie lo descubrió.',
+      crewWonText: (multiple) => multiple
+        ? '🎉 ¡Los Tripulantes ganaron! Atraparon a uno de los impostores.'
+        : '🎉 ¡Los Tripulantes ganaron! Atraparon al impostor.',
+      impostorWonText: (multiple) => multiple
+        ? '😈 ¡Los Impostores ganaron! Nadie los descubrió.'
+        : '😈 ¡El Impostor ganó! Nadie lo descubrió.',
       resultTitle: '🕵️ *El Impostor* — Resultado de la ronda',
-      impostorLine: (name) => `🔍 Impostor: *${name}*`,
+      impostorLine: (names, multiple) => `🔍 Impostor${multiple ? 'es' : ''}: *${names}*`,
       wordLine: (word) => `📝 Palabra: *${word}*`,
       eliminatedLine: (name) => `☠️ Eliminado: ${name}`,
       playersLine: (names) => `👥 Jugadores: ${names}`,
@@ -158,6 +166,8 @@ export const translations = {
       categoryLabel: 'Word category',
       startGame: '🎯 Start Game',
       hint: 'Minimum 3 players, maximum 12',
+      impostorCountLabel: '🕵️ Number of impostors',
+      impostorCountHint: (max) => `Maximum ${max} impostor${max === 1 ? '' : 's'} for this game`,
     },
     passDevice: {
       passTo: 'Pass the device to',
@@ -202,6 +212,7 @@ export const translations = {
     reveal: {
       whoWasIt: '🔎 Who was it?',
       impostorWas: 'The impostor was...',
+      impostorsWere: 'The impostors were...',
       crewCaught: 'The Crewmates caught them!',
       impostorEscaped: 'The Impostor got away!',
       eliminatedByMistake: (name) => `${name} was eliminated by mistake`,
@@ -231,6 +242,7 @@ export const translations = {
       inviteToPlay: '🎮 Invite to play',
       playAgain: '🔁 Another Round (same players)',
       newGame: '🆕 New Game',
+      impostorsLabel: (names) => `🕵️ Impostor${names.includes(',') ? 's' : ''}: ${names}`,
     },
     replay: {
       anotherRound: 'Another round!',
@@ -243,10 +255,14 @@ export const translations = {
       newGame: 'New Game',
     },
     share: {
-      crewWonText: '🎉 The Crewmates won! They caught the impostor.',
-      impostorWonText: '😈 The Impostor won! No one figured it out.',
+      crewWonText: (multiple) => multiple
+        ? '🎉 The Crewmates won! They caught one of the impostors.'
+        : '🎉 The Crewmates won! They caught the impostor.',
+      impostorWonText: (multiple) => multiple
+        ? '😈 The Impostors won! No one figured them out.'
+        : '😈 The Impostor won! No one figured it out.',
       resultTitle: '🕵️ *The Impostor* — Round result',
-      impostorLine: (name) => `🔍 Impostor: *${name}*`,
+      impostorLine: (names, multiple) => `🔍 Impostor${multiple ? 's' : ''}: *${names}*`,
       wordLine: (word) => `📝 Word: *${word}*`,
       eliminatedLine: (name) => `☠️ Eliminated: ${name}`,
       playersLine: (names) => `👥 Players: ${names}`,

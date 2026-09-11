@@ -27,7 +27,7 @@ const Confetti = () => (
 );
 
 export const ResultsScreen = ({
-  players, votes, eliminatedIndex, impostorIndex,
+  players, votes, eliminatedIndex, impostorIndex, impostorIndices,
   word, clue, onReset, onPlayAgain, allRoundsVotes,
 }) => {
   const { t, lang } = useLanguage();
@@ -35,10 +35,17 @@ export const ResultsScreen = ({
   const [shareStatus, setShareStatus] = useState(null); // null | 'copied' | 'shared'
   const [inviteStatus, setInviteStatus] = useState(null);
 
-  const crewWins = eliminatedIndex !== -1 && eliminatedIndex === impostorIndex;
+  // Soporta tanto el prop nuevo (impostorIndices, varios) como el legado
+  // (impostorIndex, uno solo), por si algún componente aún lo pasa así.
+  const allImpostorIndices = impostorIndices && impostorIndices.length > 0
+    ? impostorIndices
+    : (impostorIndex !== undefined && impostorIndex !== -1 ? [impostorIndex] : []);
+
+  const crewWins = eliminatedIndex !== -1 && allImpostorIndices.includes(eliminatedIndex);
   const totalVotes = votes.reduce((a, b) => a + b, 0);
   const eliminatedName = eliminatedIndex !== -1 ? players[eliminatedIndex] : null;
-  const impostorName = players[impostorIndex];
+  const impostorNames = allImpostorIndices.map(i => players[i]).filter(Boolean);
+  const impostorNamesStr = impostorNames.join(', ');
   const hadMultipleRounds = allRoundsVotes && allRoundsVotes.length > 1;
 
   // Sonido al entrar en resultados
@@ -52,7 +59,7 @@ export const ResultsScreen = ({
 
   const handleShare = () => {
     sounds.click();
-    const text = buildShareText({ players, word, impostorName, crewWins, eliminatedName, t });
+    const text = buildShareText({ players, word, impostorNames, crewWins, eliminatedName, t });
     shareOrCopy(text,
       (type) => { setShareStatus(type); setTimeout(() => setShareStatus(null), 2500); },
     );
@@ -102,6 +109,12 @@ export const ResultsScreen = ({
           {eliminatedName ? t('results.eliminated', eliminatedName) : t('results.noOneEliminated')}
         </motion.div>
 
+        {impostorNamesStr && (
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.8 }} style={{ marginTop: '8px', color: '#e94560', fontSize: '14px', fontWeight: 600 }}>
+            {t('results.impostorsLabel', impostorNamesStr)}
+          </motion.div>
+        )}
+
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.9 }} style={{ marginTop: '10px', color: '#a7a9be' }}>
           <FaUsers style={{ marginRight: '8px' }} />
           {t('results.votesCast', totalVotes)}
@@ -122,11 +135,11 @@ export const ResultsScreen = ({
             initial={{ opacity: 0, x: -30 }} animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.5 + index * 0.08, type: 'spring', stiffness: 200 }}
             className="player-card"
-            style={{ border: index === impostorIndex ? '2px solid #e94560' : '2px solid transparent', background: index === impostorIndex ? 'rgba(233,69,96,0.15)' : 'var(--card)' }}
+            style={{ border: allImpostorIndices.includes(index) ? '2px solid #e94560' : '2px solid transparent', background: allImpostorIndices.includes(index) ? 'rgba(233,69,96,0.15)' : 'var(--card)' }}
           >
             <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
               <span className="name">{player}</span>
-              {index === impostorIndex && (
+              {allImpostorIndices.includes(index) && (
                 <motion.span initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: 0.8 + index * 0.08, type: 'spring' }} className="badge badge-impostor" style={{ marginLeft: '6px' }}>
                   <FaUserSecret style={{ marginRight: '4px' }} />{t('results.impostorBadge')}
                 </motion.span>

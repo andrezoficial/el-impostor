@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FaTrash, FaUserPlus, FaTags } from 'react-icons/fa';
+import { FaTrash, FaUserPlus, FaTags, FaUserSecret } from 'react-icons/fa';
 import { getCategories } from '../data/wordBank';
 import { useLanguage } from '../i18n/LanguageContext';
 
@@ -10,6 +10,7 @@ export const Setup = ({ onStart }) => {
   const { t } = useLanguage();
   const [players, setPlayers] = useState(['', '', '', '']);
   const [category, setCategory] = useState('all');
+  const [numImpostors, setNumImpostors] = useState(1);
   const [error, setError] = useState('');
 
   const handleAddPlayer = () => {
@@ -31,6 +32,15 @@ export const Setup = ({ onStart }) => {
     setPlayers(newPlayers);
   };
 
+  // Max impostors = floor(players/2), min 1
+  const validPlayerCount = players.filter(p => p.trim() !== '').length;
+  const maxImpostors = Math.max(1, Math.floor(validPlayerCount / 2));
+
+  const handleImpostorChange = (val) => {
+    const n = Math.max(1, Math.min(val, maxImpostors));
+    setNumImpostors(n);
+  };
+
   const handleSubmit = () => {
     const validPlayers = players
       .map(name => name.trim())
@@ -48,8 +58,10 @@ export const Setup = ({ onStart }) => {
       return;
     }
 
+    const safeImpostors = Math.min(numImpostors, Math.floor(validPlayers.length / 2));
+
     setError('');
-    onStart(validPlayers, category);
+    onStart(validPlayers, category, safeImpostors);
   };
 
   return (
@@ -127,6 +139,65 @@ export const Setup = ({ onStart }) => {
           </motion.p>
         )}
       </AnimatePresence>
+
+      {/* Impostor count selector */}
+      <div style={{ marginBottom: '20px' }}>
+        <label
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px',
+            color: 'var(--text-secondary)',
+            fontSize: '14px',
+            marginBottom: '10px'
+          }}
+        >
+          <FaUserSecret style={{ color: '#e94560' }} />
+          {t('setup.impostorCountLabel')}
+        </label>
+        <div style={{ display: 'flex', gap: '10px', justifyContent: 'center' }}>
+          {[1, 2, 3].map(n => {
+            const disabled = n > maxImpostors;
+            const selected = numImpostors === n;
+            return (
+              <motion.button
+                key={n}
+                whileHover={!disabled ? { scale: 1.08 } : {}}
+                whileTap={!disabled ? { scale: 0.94 } : {}}
+                onClick={() => !disabled && handleImpostorChange(n)}
+                style={{
+                  flex: 1,
+                  padding: '14px 0',
+                  borderRadius: '12px',
+                  border: selected
+                    ? '2px solid #e94560'
+                    : '2px solid rgba(255,255,255,0.1)',
+                  background: selected
+                    ? 'rgba(233, 69, 96, 0.18)'
+                    : 'var(--card)',
+                  color: disabled ? 'rgba(255,255,255,0.2)' : selected ? '#e94560' : 'var(--text)',
+                  fontSize: '16px',
+                  fontWeight: selected ? 700 : 400,
+                  cursor: disabled ? 'not-allowed' : 'pointer',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  gap: '4px',
+                  transition: 'all 0.2s',
+                }}
+              >
+                <span style={{ fontSize: '22px' }}>
+                  {'🕵️'.repeat(n)}
+                </span>
+                <span>{n}</span>
+              </motion.button>
+            );
+          })}
+        </div>
+        <p style={{ color: 'var(--text-secondary)', fontSize: '12px', textAlign: 'center', marginTop: '8px' }}>
+          {t('setup.impostorCountHint', maxImpostors)}
+        </p>
+      </div>
 
       <div style={{ marginBottom: '20px' }}>
         <label

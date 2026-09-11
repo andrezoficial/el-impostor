@@ -4,20 +4,25 @@ import { sounds } from '../hooks/useSounds';
 import { useLanguage } from '../i18n/LanguageContext';
 
 // Pantalla dramática que aparece antes de ResultsScreen.
-// Hace un countdown 3-2-1 y luego revela quién era el impostor.
-export const ImpostorReveal = ({ players, eliminatedIndex, impostorIndex, onDone }) => {
+// Hace un countdown 3-2-1 y luego revela quién era el/los impostor(es).
+export const ImpostorReveal = ({ players, eliminatedIndex, impostorIndex, impostorIndices, onDone }) => {
   const { t } = useLanguage();
   const [phase, setPhase] = useState('countdown'); // 'countdown' | 'reveal' | 'done'
   const [count, setCount] = useState(3);
 
+  // Support both old (single) and new (multiple) impostor props
+  const allImpostorIndices = impostorIndices && impostorIndices.length > 0
+    ? impostorIndices
+    : (impostorIndex !== undefined && impostorIndex !== -1 ? [impostorIndex] : []);
+
   const eliminatedName = eliminatedIndex !== -1 ? players[eliminatedIndex] : null;
-  const isCorrect = eliminatedIndex === impostorIndex;
-  const impostorName = players[impostorIndex];
+  const isCorrect = eliminatedIndex !== -1 && allImpostorIndices.includes(eliminatedIndex);
+  const impostorNames = allImpostorIndices.map(i => players[i]).filter(Boolean);
+  const multipleImpostors = impostorNames.length > 1;
 
   useEffect(() => {
     if (phase !== 'countdown') return;
 
-    // Ticks del countdown
     sounds.tick();
 
     if (count > 1) {
@@ -27,7 +32,6 @@ export const ImpostorReveal = ({ players, eliminatedIndex, impostorIndex, onDone
       }, 900);
       return () => clearTimeout(t);
     } else {
-      // Último tick → pasar a reveal
       const t = setTimeout(() => {
         sounds.tickFinal();
         setPhase('reveal');
@@ -43,7 +47,6 @@ export const ImpostorReveal = ({ players, eliminatedIndex, impostorIndex, onDone
     }
   }, [count, phase, isCorrect]);
 
-  // Auto-avanzar tras la revelación
   useEffect(() => {
     if (phase !== 'reveal') return;
     const t = setTimeout(onDone, 4500);
@@ -102,14 +105,14 @@ export const ImpostorReveal = ({ players, eliminatedIndex, impostorIndex, onDone
             initial={{ scale: 0, rotateY: 180, opacity: 0 }}
             animate={{ scale: 1, rotateY: 0, opacity: 1 }}
             transition={{ type: 'spring', stiffness: 200, damping: 18 }}
-            style={{ textAlign: 'center', padding: '0 20px', maxWidth: 400 }}
+            style={{ textAlign: 'center', padding: '0 20px', maxWidth: 420 }}
           >
             <motion.div
               animate={{ scale: [1, 1.15, 1], rotate: [0, -5, 5, 0] }}
               transition={{ duration: 2, repeat: Infinity }}
-              style={{ fontSize: '5rem', marginBottom: '12px' }}
+              style={{ fontSize: multipleImpostors ? '3rem' : '5rem', marginBottom: '12px' }}
             >
-              🕵️
+              {'🕵️'.repeat(impostorNames.length)}
             </motion.div>
 
             <motion.div
@@ -118,22 +121,29 @@ export const ImpostorReveal = ({ players, eliminatedIndex, impostorIndex, onDone
               transition={{ delay: 0.3 }}
               style={{ color: '#a7a9be', fontSize: '16px', marginBottom: '8px' }}
             >
-              {t('reveal.impostorWas')}
+              {multipleImpostors ? t('reveal.impostorsWere') : t('reveal.impostorWas')}
             </motion.div>
 
-            <motion.div
-              initial={{ opacity: 0, scale: 0.5 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.5, type: 'spring', stiffness: 250 }}
-              style={{
-                fontSize: '3rem', fontWeight: 900,
-                color: '#e94560',
-                textShadow: '0 0 30px rgba(233,69,96,0.6)',
-                marginBottom: '20px',
-              }}
-            >
-              {impostorName}
-            </motion.div>
+            {/* Names */}
+            <div style={{ marginBottom: '20px' }}>
+              {impostorNames.map((name, idx) => (
+                <motion.div
+                  key={name}
+                  initial={{ opacity: 0, scale: 0.5 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 0.4 + idx * 0.2, type: 'spring', stiffness: 250 }}
+                  style={{
+                    fontSize: multipleImpostors ? '2rem' : '3rem',
+                    fontWeight: 900,
+                    color: '#e94560',
+                    textShadow: '0 0 30px rgba(233,69,96,0.6)',
+                    lineHeight: 1.2,
+                  }}
+                >
+                  {name}
+                </motion.div>
+              ))}
+            </div>
 
             <motion.div
               initial={{ opacity: 0, y: 10 }}
@@ -157,7 +167,7 @@ export const ImpostorReveal = ({ players, eliminatedIndex, impostorIndex, onDone
                   ? t('reveal.crewCaught')
                   : t('reveal.impostorEscaped')}
               </div>
-              {eliminatedName && eliminatedName !== impostorName && (
+              {eliminatedName && !allImpostorIndices.includes(eliminatedIndex) && (
                 <div style={{ color: '#a7a9be', fontSize: '13px', marginTop: '8px' }}>
                   {t('reveal.eliminatedByMistake', eliminatedName)}
                 </div>

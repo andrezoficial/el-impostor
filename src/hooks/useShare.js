@@ -4,15 +4,18 @@
 // Recibe la función `t` (de useLanguage) para generar el texto en el
 // idioma activo.
 
-export const buildShareText = ({ players, word, impostorName, crewWins, eliminatedName, t }) => {
-  const result = crewWins ? t('share.crewWonText') : t('share.impostorWonText');
+export const buildShareText = ({ players, word, impostorNames, crewWins, eliminatedName, t }) => {
+  const names = impostorNames || [];
+  const multiple = names.length > 1;
+  const namesStr = names.join(', ');
+  const result = crewWins ? t('share.crewWonText', multiple) : t('share.impostorWonText', multiple);
 
   const lines = [
     t('share.resultTitle'),
     ``,
     result,
     ``,
-    t('share.impostorLine', impostorName),
+    t('share.impostorLine', namesStr, multiple),
     t('share.wordLine', word),
     eliminatedName ? t('share.eliminatedLine', eliminatedName) : null,
     ``,
