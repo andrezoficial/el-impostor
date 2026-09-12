@@ -5,7 +5,7 @@ import { sounds } from '../hooks/useSounds';
 import { buildShareText, buildInviteText, shareOrCopy } from '../hooks/useShare';
 import { useLanguage } from '../i18n/LanguageContext';
 
-const confettiColors = ['#a3311c', '#b6902f', '#d9a544', '#5c4429', '#fff'];
+const confettiColors = ['#a3311c', '#8a9d52', '#d9a544', '#5c4429', '#fff'];
 
 const Confetti = () => (
   <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', overflow: 'hidden' }}>
@@ -90,7 +90,7 @@ export const ResultsScreen = ({
         animate={{ scale: 1, opacity: 1, rotateY: 0 }}
         transition={{ type: 'spring', stiffness: 180, delay: 0.2 }}
         className="role-box"
-        style={{ borderColor: crewWins ? '#b6902f' : '#a3311c', background: crewWins ? 'rgba(182, 144, 47,0.1)' : 'rgba(163, 49, 28,0.1)' }}
+        style={{ borderColor: crewWins ? '#8a9d52' : '#a3311c', background: crewWins ? 'rgba(138, 157, 82,0.1)' : 'rgba(163, 49, 28,0.1)' }}
       >
         <motion.div
           animate={crewWins ? { scale: [1, 1.3, 1], rotate: [0, 15, -15, 0] } : { scale: [1, 1.1, 1], y: [0, -8, 0] }}
@@ -100,7 +100,7 @@ export const ResultsScreen = ({
           {crewWins ? '🎉' : '😈'}
         </motion.div>
 
-        <motion.h2 initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 }} style={{ color: crewWins ? '#b6902f' : '#a3311c' }}>
+        <motion.h2 initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 }} style={{ color: crewWins ? '#8a9d52' : '#a3311c' }}>
           {crewWins ? t('results.crewWon') : t('results.impostorWon')}
         </motion.h2>
 
@@ -211,9 +211,9 @@ export const ResultsScreen = ({
             flex: '1', minWidth: '150px',
             display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
             padding: '13px 18px', borderRadius: '12px', cursor: 'pointer', fontSize: '14px', fontWeight: '600',
-            background: shareStatus ? 'rgba(182, 144, 47,0.15)' : 'rgba(37,211,102,0.12)',
-            border: `2px solid ${shareStatus ? '#b6902f' : 'rgba(37,211,102,0.4)'}`,
-            color: shareStatus ? '#b6902f' : '#25d366',
+            background: shareStatus ? 'rgba(138, 157, 82,0.15)' : 'rgba(37,211,102,0.12)',
+            border: `2px solid ${shareStatus ? '#8a9d52' : 'rgba(37,211,102,0.4)'}`,
+            color: shareStatus ? '#8a9d52' : '#25d366',
             transition: 'all 0.3s',
           }}
         >
@@ -228,9 +228,9 @@ export const ResultsScreen = ({
             flex: '1', minWidth: '150px',
             display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
             padding: '13px 18px', borderRadius: '12px', cursor: 'pointer', fontSize: '14px', fontWeight: '600',
-            background: inviteStatus ? 'rgba(182, 144, 47,0.15)' : 'rgba(92, 68, 41,0.2)',
-            border: `2px solid ${inviteStatus ? '#b6902f' : 'rgba(92, 68, 41,0.5)'}`,
-            color: inviteStatus ? '#b6902f' : '#cbaa7e',
+            background: inviteStatus ? 'rgba(138, 157, 82,0.15)' : 'rgba(92, 68, 41,0.2)',
+            border: `2px solid ${inviteStatus ? '#8a9d52' : 'rgba(92, 68, 41,0.5)'}`,
+            color: inviteStatus ? '#8a9d52' : '#cbaa7e',
             transition: 'all 0.3s',
           }}
         >

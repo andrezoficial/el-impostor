@@ -1,7 +1,16 @@
 import React from 'react';
 
-// Set de iconos propios, trazo lineal (no relleno), para reemplazar los
-// iconos por defecto de Font Awesome y reforzar el tema "expediente".
+// Set de iconos propios, trazo grueso e imperfecto, para reforzar el tema
+// "expediente / sello de goma" en vez de leerse como un kit vectorial
+// genérico. Reglas del set:
+//   - Trazo grueso (2.5) y extremos cuadrados: nada de puntas redondeadas
+//     "prolijas" tipo Material Design.
+//   - Las formas geométricas puras (rect, circle grandes) llevan una
+//     rotación leve y deliberada -nunca perfectamente alineadas al eje-
+//     como si el sello se hubiera apoyado un poco torcido.
+//   - Nada de <filter>/blur: coherente con --shadow (offset duro, sin
+//     difuminado) y con .badge / .title, que ya usan el mismo recurso de
+//     inclinación leve.
 // Todos heredan color con currentColor y aceptan `style`/`size`.
 
 const base = (size) => ({
@@ -10,8 +19,8 @@ const base = (size) => ({
   viewBox: '0 0 24 24',
   fill: 'none',
   stroke: 'currentColor',
-  strokeWidth: 1.8,
-  strokeLinecap: 'round',
+  strokeWidth: 2.5,
+  strokeLinecap: 'square',
   strokeLinejoin: 'round',
 });
 
@@ -42,15 +51,19 @@ export const IconHand = ({ size = 16, style }) => (
   <svg {...base(size)} style={style}>
     <path d="M3 12h13" />
     <path d="M11 7l5 5-5 5" />
-    <rect x="17" y="9.5" width="4" height="5" rx="1" />
+    <g transform="rotate(-4 19 12)">
+      <rect x="17" y="9.5" width="4" height="5" rx="1" />
+    </g>
   </svg>
 );
 
 export const IconLock = ({ size = 16, style }) => (
   <svg {...base(size)} style={style}>
-    <rect x="5" y="11" width="14" height="9" rx="1.5" />
+    <g transform="rotate(-2 12 15)">
+      <rect x="5" y="11" width="14" height="9" rx="1.5" />
+    </g>
     <path d="M8 11V7.5a4 4 0 018 0V11" />
-    <circle cx="12" cy="15.2" r="1.2" fill="currentColor" stroke="none" />
+    <circle cx="12" cy="15.2" r="1.3" fill="currentColor" stroke="none" />
   </svg>
 );
 
@@ -73,19 +86,23 @@ export const IconUserPlus = ({ size = 16, style }) => (
 
 export const IconTags = ({ size = 16, style }) => (
   <svg {...base(size)} style={style}>
-    <path d="M3 4h7l11 11-7 7L3 11z" />
-    <circle cx="8" cy="9" r="1.4" fill="currentColor" stroke="none" />
+    <g transform="rotate(-3 12 12)">
+      <path d="M3 4h7l11 11-7 7L3 11z" />
+      <circle cx="8" cy="9" r="1.4" fill="currentColor" stroke="none" />
+    </g>
   </svg>
 );
 
 export const IconDice = ({ size = 16, style }) => (
   <svg {...base(size)} style={style}>
-    <rect x="3.5" y="3.5" width="17" height="17" rx="2.5" />
-    <circle cx="8.2" cy="8.2" r="1.1" fill="currentColor" stroke="none" />
-    <circle cx="15.8" cy="8.2" r="1.1" fill="currentColor" stroke="none" />
-    <circle cx="12" cy="12" r="1.1" fill="currentColor" stroke="none" />
-    <circle cx="8.2" cy="15.8" r="1.1" fill="currentColor" stroke="none" />
-    <circle cx="15.8" cy="15.8" r="1.1" fill="currentColor" stroke="none" />
+    <g transform="rotate(1.5 12 12)">
+      <rect x="3.5" y="3.5" width="17" height="17" rx="2" />
+    </g>
+    <circle cx="8.2" cy="8.2" r="1.2" fill="currentColor" stroke="none" />
+    <circle cx="15.8" cy="8.2" r="1.2" fill="currentColor" stroke="none" />
+    <circle cx="12" cy="12" r="1.2" fill="currentColor" stroke="none" />
+    <circle cx="8.2" cy="15.8" r="1.2" fill="currentColor" stroke="none" />
+    <circle cx="15.8" cy="15.8" r="1.2" fill="currentColor" stroke="none" />
   </svg>
 );
 
@@ -109,9 +126,11 @@ export const IconUsers = ({ size = 16, style }) => (
 
 export const IconWarning = ({ size = 16, style, color }) => (
   <svg {...base(size)} style={{ color, ...style }}>
-    <path d="M12 3.5L22 20H2z" />
-    <path d="M12 9.5v5" />
-    <circle cx="12" cy="17" r=".9" fill="currentColor" stroke="none" />
+    <g transform="rotate(-2 12 12)">
+      <path d="M12 3.5L22 20H2z" />
+      <path d="M12 9.5v5" />
+      <circle cx="12" cy="17" r=".9" fill="currentColor" stroke="none" />
+    </g>
   </svg>
 );
 
@@ -124,7 +143,9 @@ export const IconFire = ({ size = 16, style }) => (
 
 export const IconPlay = ({ size = 16, style }) => (
   <svg {...base(size)} style={style}>
-    <path d="M6 4.5v15l13-7.5z" />
+    <g transform="rotate(-3 12 12)">
+      <path d="M6 4.5v15l13-7.5z" />
+    </g>
   </svg>
 );
 
@@ -159,7 +180,9 @@ export const IconShare = ({ size = 16, style }) => (
 
 export const IconCopy = ({ size = 16, style }) => (
   <svg {...base(size)} style={style}>
-    <rect x="9" y="9" width="11" height="11" rx="1.5" />
+    <g transform="rotate(1.5 14.5 14.5)">
+      <rect x="9" y="9" width="11" height="11" rx="1.5" />
+    </g>
     <path d="M6.5 15H5.5A1.5 1.5 0 014 13.5v-8A1.5 1.5 0 015.5 4h8A1.5 1.5 0 0115 5.5v1" />
   </svg>
 );
@@ -177,16 +200,29 @@ export const IconPaperclip = ({ size = 16, style }) => (
   </svg>
 );
 
+// Reemplaza al glifo de Instagram de react-icons (vector "de fábrica"
+// ajeno al resto del set) por una versión propia en el mismo lenguaje de
+// trazo grueso y leve inclinación.
+export const IconInstagram = ({ size = 16, style }) => (
+  <svg {...base(size)} style={style}>
+    <g transform="rotate(-2 12 12)">
+      <rect x="3.5" y="3.5" width="17" height="17" rx="5" />
+      <circle cx="12" cy="12" r="4.2" />
+      <circle cx="17" cy="7" r="1" fill="currentColor" stroke="none" />
+    </g>
+  </svg>
+);
+
 // Motivo de marca: sello circular tipo "expediente confidencial",
 // usado como elemento decorativo (ver .stamp-decor en global.css).
 export const StampSeal = ({ size = 140, style }) => (
   <svg width={size} height={size} viewBox="0 0 100 100" style={style}>
-    <circle cx="50" cy="50" r="46" fill="none" stroke="currentColor" strokeWidth="2" />
+    <circle cx="50" cy="50" r="46" fill="none" stroke="currentColor" strokeWidth="2.2" />
     <circle cx="50" cy="50" r="38" fill="none" stroke="currentColor" strokeWidth="1" strokeDasharray="2 3" />
     <path id="stamp-arc" fill="none" d="M 20 50 A 30 30 0 0 1 80 50" />
     <text fontSize="8" letterSpacing="2" fill="currentColor" fontFamily="'Special Elite', monospace">
       <textPath href="#stamp-arc" startOffset="50%" textAnchor="middle">CASO CONFIDENCIAL</textPath>
     </text>
-    <path d="M35 55l10 10 20-22" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" opacity="0.5" />
+    <path d="M35 55l10 10 20-22" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="square" strokeLinejoin="round" opacity="0.5" />
   </svg>
 );

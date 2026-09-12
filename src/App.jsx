@@ -10,8 +10,7 @@ import { ResultsScreen } from './components/ResultsScreen';
 import { ReplayScreen } from './components/ReplayScreen';
 import { ImpostorReveal } from './components/ImpostorReveal';
 import { AnimatePresence, motion } from 'framer-motion';
-import { FaInstagram } from 'react-icons/fa';
-import { StampSeal, IconPaperclip } from './components/icons';
+import { StampSeal, IconPaperclip, IconInstagram } from './components/icons';
 import './styles/global.css';
 
 // Selector de idioma: un pequeño toggle ES/EN. Se muestra sobre todo en
@@ -170,7 +169,7 @@ function App() {
 
   return (
     <div className="app-wrapper">
-      <div className="container">
+      <div className="container corner-fold">
         <StampSeal size={130} style={{ position: 'absolute', bottom: '10px', left: '10px', color: 'var(--secondary)', opacity: 0.1, pointerEvents: 'none' }} />
 
         {/* La "foto" del expediente: el ícono de la app, clipeado a la
@@ -180,17 +179,29 @@ function App() {
           <IconPaperclip size={30} style={{ position: 'absolute', top: '-13px', left: '-6px', color: '#b9bcc2', transform: 'rotate(-12deg)', filter: 'drop-shadow(1px 2px 1px rgba(0,0,0,0.4))' }} />
         </div>
         {game.phase === 'setup' && <LanguageSwitcher />}
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={game.phase}
-            initial={{ opacity: 0, scale: 0.96 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 1.04 }}
-            transition={{ duration: 0.3 }}
-          >
-            {renderScreen()}
-          </motion.div>
-        </AnimatePresence>
+        <div style={{ perspective: '1400px' }}>
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={game.phase}
+              initial={{ opacity: 0, rotateY: -28, x: -22 }}
+              animate={{
+                opacity: 1,
+                rotateY: 0,
+                x: 0,
+                boxShadow: [
+                  '0px 0px 0px rgba(0,0,0,0)',
+                  '16px 0px 22px -8px rgba(0,0,0,0.4)',
+                  '0px 0px 0px rgba(0,0,0,0)',
+                ],
+              }}
+              exit={{ opacity: 0, rotateY: 28, x: 22 }}
+              transition={{ duration: 0.4, ease: 'easeOut' }}
+              style={{ transformOrigin: 'left center', transformStyle: 'preserve-3d' }}
+            >
+              {renderScreen()}
+            </motion.div>
+          </AnimatePresence>
+        </div>
       </div>
 
       <footer className="app-footer">
@@ -202,7 +213,7 @@ function App() {
           rel="noopener noreferrer"
           className="app-footer-link"
         >
-          <FaInstagram style={{ marginRight: '4px', verticalAlign: 'middle' }} />
+          <IconInstagram size={14} style={{ marginRight: '4px', verticalAlign: 'middle' }} />
           @andres.suarez.moreno
         </a>
       </footer>

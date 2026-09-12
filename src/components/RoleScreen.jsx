@@ -22,7 +22,9 @@ export const RoleScreen = ({
     setRevealed(true);
     // Mismo sonido para todos: si sonara distinto según el rol,
     // los demás jugadores podrían adivinar quién es el impostor solo escuchando.
-    sounds.revealCrew();
+    // El "thud" de sello es neutral respecto al rol, así que sirve igual
+    // para ambos casos sin filtrar nada por el oído.
+    sounds.stamp();
   };
 
   if (!deviceReady) {
@@ -42,7 +44,23 @@ export const RoleScreen = ({
       transition={{ duration: 0.5 }}
     >
       <div style={{ textAlign: 'center' }}>
-        <div className="role-box">
+        <motion.div
+          className="role-box"
+          animate={
+            revealed
+              ? {
+                  x: [0, -3, 3, -1, 0],
+                  boxShadow: [
+                    '0px 0px 0px rgba(0,0,0,0)',
+                    '9px 9px 0px rgba(0,0,0,0.5)',
+                    '2px 2px 0px rgba(0,0,0,0.2)',
+                    '0px 0px 0px rgba(0,0,0,0)',
+                  ],
+                }
+              : { x: 0 }
+          }
+          transition={{ duration: 0.45, ease: 'easeOut', times: [0, 0.18, 0.5, 1] }}
+        >
           <motion.div
             initial={{ scale: 0.5, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
@@ -79,10 +97,10 @@ export const RoleScreen = ({
               ) : (
                 <motion.div
                   key="role"
-                  initial={{ opacity: 0, scale: 1.6, rotate: -10 }}
-                  animate={{ opacity: 1, scale: 1, rotate: -2 }}
+                  initial={{ opacity: 0, scale: 2.1, y: -55, rotate: -12 }}
+                  animate={{ opacity: 1, scale: 1, y: 0, rotate: -2 }}
                   exit={{ opacity: 0, y: -20 }}
-                  transition={{ type: 'spring', stiffness: 260, damping: 14 }}
+                  transition={{ duration: 0.42, ease: [0.34, 1.56, 0.64, 1] }}
                 >
                   {isImpostor ? (
                     <>
@@ -109,7 +127,7 @@ export const RoleScreen = ({
                     </>
                   ) : (
                     <>
-                      <div className="role-label" style={{ color: '#b6902f', fontSize: '18px' }}>
+                      <div className="role-label" style={{ color: '#8a9d52', fontSize: '18px' }}>
                         <IconCheck style={{ marginRight: '8px' }} />
                         {t('role.crewLabel')}
                       </div>
@@ -132,7 +150,7 @@ export const RoleScreen = ({
               )}
             </AnimatePresence>
           </div>
-        </div>
+        </motion.div>
 
         <div className="progress-bar">
           <motion.div

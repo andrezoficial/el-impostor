@@ -9,7 +9,7 @@
   --card-raised: #322a21;
   --text: #f2ead8;
   --text-secondary: #a89a7d;
-  --success: #b6902f;
+  --success: #8a9d52;
   --warning: #d9a544;
   --line: rgba(242, 234, 216, 0.14);
   --ink-shadow: rgba(0, 0, 0, 0.4);
@@ -41,11 +41,32 @@ body {
 }
 
 .app-wrapper {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
   width: 100%;
   max-width: 600px;
+}
+
+/* Mancha de café asomando por debajo del expediente: dos anillos radiales
+   muy tenues sobre el escritorio, como si alguien hubiera apoyado la taza
+   ahí antes de abrir la carpeta. Va detrás de la carpeta (z-index -1) para
+   que solo se asome por el borde, nunca sobre el contenido. */
+.app-wrapper::after {
+  content: '';
+  position: absolute;
+  bottom: 46px;
+  left: -20px;
+  width: 84px;
+  height: 84px;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 50% 50%, transparent 54%, rgba(140, 84, 33, 0.18) 57%, rgba(140, 84, 33, 0.24) 61%, transparent 65%),
+    radial-gradient(circle at 42% 46%, rgba(140, 84, 33, 0.08) 0%, transparent 58%);
+  transform: rotate(-9deg);
+  pointer-events: none;
+  z-index: -1;
 }
 
 /* La "carpeta de expediente": una pestaña de manila que sobresale por
@@ -107,6 +128,26 @@ body {
   height: 100%;
   object-fit: cover;
   filter: sepia(0.3) saturate(0.85) contrast(1.05);
+}
+
+/* Esquina de papel doblada, como si el expediente se hubiera hojeado
+   muchas veces. El triángulo simula el reverso de la hoja asomando. */
+.corner-fold {
+  position: relative;
+}
+
+.corner-fold::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 0 0 20px 20px;
+  border-color: transparent transparent var(--card-raised) transparent;
+  filter: drop-shadow(-1.5px -1.5px 2px rgba(0, 0, 0, 0.45));
+  z-index: 1;
 }
 
 .app-footer {
@@ -258,6 +299,19 @@ body {
   position: relative;
 }
 
+.role-box::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 0 0 18px 18px;
+  border-color: transparent transparent var(--card-raised) transparent;
+  filter: drop-shadow(-1.5px -1.5px 2px rgba(0, 0, 0, 0.4));
+}
+
 .role-box::before {
   content: '';
   position: absolute;
@@ -322,8 +376,9 @@ body {
 
 /* Tarjetas de jugador como fichas de un índice de testigos. */
 .player-card {
+  position: relative;
   background: var(--card);
-  padding: 15px 20px;
+  padding: 15px 20px 15px 26px;
   border-radius: var(--radius-sm);
   margin: 8px 0;
   display: flex;
@@ -338,6 +393,41 @@ body {
 .player-card:hover {
   border-left: 3px solid var(--primary);
   background: rgba(163, 49, 28, 0.08);
+}
+
+/* Hilo rojo de investigación: un tramo punteado que sube y baja de cada
+   ficha, encajando con el margen de la siguiente para formar una sola
+   línea continua, y una chincheta clavada donde el hilo la atraviesa. */
+.player-card::before {
+  content: '';
+  position: absolute;
+  top: -8px;
+  bottom: -8px;
+  left: 13px;
+  width: 0;
+  border-left: 2px dashed rgba(163, 49, 28, 0.4);
+  z-index: 0;
+  pointer-events: none;
+}
+
+.player-card::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 13px;
+  width: 9px;
+  height: 9px;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #e6604a, var(--primary) 55%, #6e1c0e 100%);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.55);
+  z-index: 1;
+}
+
+.player-card .name,
+.player-card .vote-count {
+  position: relative;
+  z-index: 1;
 }
 
 .player-card.selected {

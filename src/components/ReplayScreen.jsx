@@ -107,10 +107,10 @@ export const ReplayScreen = ({ players, currentCategory, usedWords, onPlay, onRe
             borderRadius: '8px',
             background: remaining === 0
               ? 'rgba(163, 49, 28, 0.12)'
-              : 'rgba(182, 144, 47, 0.1)',
-            border: `1px solid ${remaining === 0 ? 'rgba(163, 49, 28,0.3)' : 'rgba(182, 144, 47,0.25)'}`,
+              : 'rgba(138, 157, 82, 0.1)',
+            border: `1px solid ${remaining === 0 ? 'rgba(163, 49, 28,0.3)' : 'rgba(138, 157, 82,0.25)'}`,
             fontSize: '13px',
-            color: remaining === 0 ? '#a3311c' : '#b6902f',
+            color: remaining === 0 ? '#a3311c' : '#8a9d52',
             display: 'flex',
             alignItems: 'center',
             gap: '6px',

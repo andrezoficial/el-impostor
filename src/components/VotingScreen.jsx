@@ -84,7 +84,7 @@ export const VotingScreen = ({
                   width: 28, height: 28, borderRadius: '50%',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                   fontSize: 12, fontWeight: 700,
-                  background: i + 1 < votingRound ? 'rgba(182, 144, 47,0.3)' : i + 1 === votingRound ? 'var(--primary)' : 'rgba(255,255,255,0.08)',
+                  background: i + 1 < votingRound ? 'rgba(138, 157, 82,0.3)' : i + 1 === votingRound ? 'var(--primary)' : 'rgba(255,255,255,0.08)',
                   border: i + 1 === votingRound ? '2px solid var(--primary)' : '2px solid rgba(255,255,255,0.15)',
                   color: 'white',
                 }}
@@ -194,8 +194,8 @@ export const VotingScreen = ({
             transition={{ type: 'spring', stiffness: 250 }}
             style={{ textAlign: 'center', marginTop: '16px' }}
           >
-            <div style={{ background: 'rgba(182, 144, 47,0.1)', padding: '16px', borderRadius: '14px', border: '2px solid #b6902f' }}>
-              <motion.div animate={{ scale: [1, 1.15, 1] }} transition={{ duration: 0.6, repeat: 2 }} style={{ color: '#b6902f', fontSize: '20px', fontWeight: 'bold' }}>
+            <div style={{ background: 'rgba(138, 157, 82,0.1)', padding: '16px', borderRadius: '14px', border: '2px solid #8a9d52' }}>
+              <motion.div animate={{ scale: [1, 1.15, 1] }} transition={{ duration: 0.6, repeat: 2 }} style={{ color: '#8a9d52', fontSize: '20px', fontWeight: 'bold' }}>
                 {t('voting.voteRegistered')}
               </motion.div>
               <div style={{ color: '#a89a7d', fontSize: '14px', marginTop: '6px' }}>

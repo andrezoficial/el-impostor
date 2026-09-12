@@ -72,7 +72,7 @@ export const ImpostorReveal = ({ players, eliminatedIndex, impostorIndex, impost
           style={{
             position: 'absolute',
             width: 6, height: 6, borderRadius: '50%',
-            background: i % 3 === 0 ? '#a3311c' : i % 3 === 1 ? '#d9a544' : '#b6902f',
+            background: i % 3 === 0 ? '#a3311c' : i % 3 === 1 ? '#d9a544' : '#8a9d52',
           }}
         />
       ))}
@@ -91,7 +91,7 @@ export const ImpostorReveal = ({ players, eliminatedIndex, impostorIndex, impost
               {t('reveal.whoWasIt')}
             </div>
             <motion.div
-              animate={{ color: ['#a3311c', '#d9a544', '#b6902f'] }}
+              animate={{ color: ['#a3311c', '#d9a544', '#8a9d52'] }}
               transition={{ duration: 0.9, repeat: Infinity }}
               style={{ fontSize: '9rem', fontWeight: 900, lineHeight: 1 }}
             >
@@ -155,8 +155,8 @@ export const ImpostorReveal = ({ players, eliminatedIndex, impostorIndex, impost
               style={{
                 padding: '16px 24px',
                 borderRadius: '16px',
-                background: isCorrect ? 'rgba(182, 144, 47,0.15)' : 'rgba(163, 49, 28,0.15)',
-                border: `2px solid ${isCorrect ? '#b6902f' : '#a3311c'}`,
+                background: isCorrect ? 'rgba(138, 157, 82,0.15)' : 'rgba(163, 49, 28,0.15)',
+                border: `2px solid ${isCorrect ? '#8a9d52' : '#a3311c'}`,
               }}
             >
               <div style={{ fontSize: '2.5rem', marginBottom: '8px' }}>
@@ -164,7 +164,7 @@ export const ImpostorReveal = ({ players, eliminatedIndex, impostorIndex, impost
               </div>
               <div style={{
                 fontSize: '1.2rem', fontWeight: 700,
-                color: isCorrect ? '#b6902f' : '#a3311c',
+                color: isCorrect ? '#8a9d52' : '#a3311c',
               }}>
                 {isCorrect
                   ? t('reveal.crewCaught')
