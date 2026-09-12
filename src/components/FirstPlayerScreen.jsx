@@ -35,10 +35,10 @@ export const FirstPlayerScreen = ({ firstPlayerName, onNext }) => {
         style={{
           margin: '20px auto',
           padding: '14px 24px',
-          background: 'rgba(245, 200, 66, 0.15)',
-          border: '1px solid rgba(245, 200, 66, 0.4)',
+          background: 'rgba(217, 165, 68, 0.15)',
+          border: '1px solid rgba(217, 165, 68, 0.4)',
           borderRadius: '12px',
-          color: '#e8b74b',
+          color: '#d9a544',
           fontSize: '22px',
           fontWeight: '700',
           maxWidth: '320px',

@@ -100,7 +100,7 @@ export const Setup = ({ onStart }) => {
                   style={{
                     background: 'transparent',
                     border: 'none',
-                    color: '#c1440e',
+                    color: '#a3311c',
                     cursor: 'pointer',
                     fontSize: '18px',
                     padding: '8px'
@@ -133,7 +133,7 @@ export const Setup = ({ onStart }) => {
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
-            style={{ color: '#c1440e', marginBottom: '15px', textAlign: 'center' }}
+            style={{ color: '#a3311c', marginBottom: '15px', textAlign: 'center' }}
           >
             ⚠️ {error}
           </motion.p>
@@ -152,7 +152,7 @@ export const Setup = ({ onStart }) => {
             marginBottom: '10px'
           }}
         >
-          <IconSecret style={{ color: '#c1440e' }} />
+          <IconSecret style={{ color: '#a3311c' }} />
           {t('setup.impostorCountLabel')}
         </label>
         <div style={{ display: 'flex', gap: '10px', justifyContent: 'center' }}>
@@ -170,12 +170,12 @@ export const Setup = ({ onStart }) => {
                   padding: '14px 0',
                   borderRadius: '12px',
                   border: selected
-                    ? '2px solid #c1440e'
+                    ? '2px solid #a3311c'
                     : '2px solid rgba(255,255,255,0.1)',
                   background: selected
-                    ? 'rgba(193, 68, 14, 0.18)'
+                    ? 'rgba(163, 49, 28, 0.18)'
                     : 'var(--card)',
-                  color: disabled ? 'rgba(255,255,255,0.2)' : selected ? '#c1440e' : 'var(--text)',
+                  color: disabled ? 'rgba(255,255,255,0.2)' : selected ? '#a3311c' : 'var(--text)',
                   fontSize: '16px',
                   fontWeight: selected ? 700 : 400,
                   cursor: disabled ? 'not-allowed' : 'pointer',

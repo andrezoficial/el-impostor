@@ -29,7 +29,7 @@ export const ReplayScreen = ({ players, currentCategory, usedWords, onPlay, onRe
       <div style={{ textAlign: 'center', marginBottom: '24px' }}>
         <div style={{ fontSize: '3rem', marginBottom: '8px' }}>🔁</div>
         <h2 style={{ margin: '0 0 6px', color: 'white' }}>{t('replay.anotherRound')}</h2>
-        <p style={{ color: '#a39e93', margin: 0, fontSize: '14px' }}>
+        <p style={{ color: '#a89a7d', margin: 0, fontSize: '14px' }}>
           {t('replay.subtitle')}
         </p>
       </div>
@@ -106,11 +106,11 @@ export const ReplayScreen = ({ players, currentCategory, usedWords, onPlay, onRe
             padding: '8px 14px',
             borderRadius: '8px',
             background: remaining === 0
-              ? 'rgba(193, 68, 14, 0.12)'
-              : 'rgba(201, 162, 39, 0.1)',
-            border: `1px solid ${remaining === 0 ? 'rgba(193, 68, 14,0.3)' : 'rgba(201, 162, 39,0.25)'}`,
+              ? 'rgba(163, 49, 28, 0.12)'
+              : 'rgba(182, 144, 47, 0.1)',
+            border: `1px solid ${remaining === 0 ? 'rgba(163, 49, 28,0.3)' : 'rgba(182, 144, 47,0.25)'}`,
             fontSize: '13px',
-            color: remaining === 0 ? '#c1440e' : '#c9a227',
+            color: remaining === 0 ? '#a3311c' : '#b6902f',
             display: 'flex',
             alignItems: 'center',
             gap: '6px',

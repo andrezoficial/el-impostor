@@ -5,7 +5,7 @@ import { sounds } from '../hooks/useSounds';
 import { buildShareText, buildInviteText, shareOrCopy } from '../hooks/useShare';
 import { useLanguage } from '../i18n/LanguageContext';
 
-const confettiColors = ['#c1440e', '#c9a227', '#e8b74b', '#6b4226', '#fff'];
+const confettiColors = ['#a3311c', '#b6902f', '#d9a544', '#5c4429', '#fff'];
 
 const Confetti = () => (
   <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', overflow: 'hidden' }}>
@@ -90,7 +90,7 @@ export const ResultsScreen = ({
         animate={{ scale: 1, opacity: 1, rotateY: 0 }}
         transition={{ type: 'spring', stiffness: 180, delay: 0.2 }}
         className="role-box"
-        style={{ borderColor: crewWins ? '#c9a227' : '#c1440e', background: crewWins ? 'rgba(201, 162, 39,0.1)' : 'rgba(193, 68, 14,0.1)' }}
+        style={{ borderColor: crewWins ? '#b6902f' : '#a3311c', background: crewWins ? 'rgba(182, 144, 47,0.1)' : 'rgba(163, 49, 28,0.1)' }}
       >
         <motion.div
           animate={crewWins ? { scale: [1, 1.3, 1], rotate: [0, 15, -15, 0] } : { scale: [1, 1.1, 1], y: [0, -8, 0] }}
@@ -100,7 +100,7 @@ export const ResultsScreen = ({
           {crewWins ? '🎉' : '😈'}
         </motion.div>
 
-        <motion.h2 initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 }} style={{ color: crewWins ? '#c9a227' : '#c1440e' }}>
+        <motion.h2 initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 }} style={{ color: crewWins ? '#b6902f' : '#a3311c' }}>
           {crewWins ? t('results.crewWon') : t('results.impostorWon')}
         </motion.h2>
 
@@ -110,12 +110,12 @@ export const ResultsScreen = ({
         </motion.div>
 
         {impostorNamesStr && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.8 }} style={{ marginTop: '8px', color: '#c1440e', fontSize: '14px', fontWeight: 600 }}>
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.8 }} style={{ marginTop: '8px', color: '#a3311c', fontSize: '14px', fontWeight: 600 }}>
             {t('results.impostorsLabel', impostorNamesStr)}
           </motion.div>
         )}
 
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.9 }} style={{ marginTop: '10px', color: '#a39e93' }}>
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.9 }} style={{ marginTop: '10px', color: '#a89a7d' }}>
           <IconUsers style={{ marginRight: '8px' }} />
           {t('results.votesCast', totalVotes)}
           {hadMultipleRounds && (
@@ -128,14 +128,14 @@ export const ResultsScreen = ({
 
       {/* Votación */}
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }} style={{ margin: '20px 0' }}>
-        <h3 style={{ marginBottom: '15px', color: '#a39e93' }}>{t('results.finalVoting')}</h3>
+        <h3 style={{ marginBottom: '15px', color: '#a89a7d' }}>{t('results.finalVoting')}</h3>
         {players.map((player, index) => (
           <motion.div
             key={index}
             initial={{ opacity: 0, x: -30 }} animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.5 + index * 0.08, type: 'spring', stiffness: 200 }}
             className="player-card"
-            style={{ border: allImpostorIndices.includes(index) ? '2px solid #c1440e' : '2px solid transparent', background: allImpostorIndices.includes(index) ? 'rgba(193, 68, 14,0.15)' : 'var(--card)' }}
+            style={{ border: allImpostorIndices.includes(index) ? '2px solid #a3311c' : '2px solid transparent', background: allImpostorIndices.includes(index) ? 'rgba(163, 49, 28,0.15)' : 'var(--card)' }}
           >
             <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
               <span className="name">{player}</span>
@@ -166,7 +166,7 @@ export const ResultsScreen = ({
           <motion.button
             whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}
             onClick={() => { sounds.click(); setShowHistory(h => !h); }}
-            style={{ width: '100%', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.12)', borderRadius: 12, color: '#a39e93', fontSize: 14, padding: '12px 16px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}
+            style={{ width: '100%', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.12)', borderRadius: 12, color: '#a89a7d', fontSize: 14, padding: '12px 16px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}
           >
             <span>{t('results.roundHistory', allRoundsVotes.length)}</span>
             {showHistory ? <IconChevronUp /> : <IconChevronDown />}
@@ -181,7 +181,7 @@ export const ResultsScreen = ({
                       {t('results.round', round)}{round === 1 ? t('results.roundInitial') : t('results.roundRunoff')}
                     </div>
                     {players.map((p, i) => rv[i] > 0 && (
-                      <div key={i} style={{ display: 'flex', justifyContent: 'space-between', color: '#a39e93', fontSize: 13, padding: '3px 0' }}>
+                      <div key={i} style={{ display: 'flex', justifyContent: 'space-between', color: '#a89a7d', fontSize: 13, padding: '3px 0' }}>
                         <span>{p}</span>
                         <span style={{ fontWeight: 600, color: 'white' }}>{t('results.votesLabel', rv[i])}</span>
                       </div>
@@ -195,7 +195,7 @@ export const ResultsScreen = ({
       )}
 
       {/* Palabra y pista */}
-      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.7 }} className="role-box" style={{ background: 'var(--card)', border: '2px solid #e8b74b' }}>
+      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.7 }} className="role-box" style={{ background: 'var(--card)', border: '2px solid #d9a544' }}>
         <div className="role-label">{t('results.theWordWas')}</div>
         <motion.div animate={{ scale: [1, 1.03, 1] }} transition={{ duration: 2, repeat: Infinity }} className="role-word">{word}</motion.div>
         <div className="role-label" style={{ marginTop: '10px' }}>{t('results.theClueWas')}</div>
@@ -211,9 +211,9 @@ export const ResultsScreen = ({
             flex: '1', minWidth: '150px',
             display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
             padding: '13px 18px', borderRadius: '12px', cursor: 'pointer', fontSize: '14px', fontWeight: '600',
-            background: shareStatus ? 'rgba(201, 162, 39,0.15)' : 'rgba(37,211,102,0.12)',
-            border: `2px solid ${shareStatus ? '#c9a227' : 'rgba(37,211,102,0.4)'}`,
-            color: shareStatus ? '#c9a227' : '#25d366',
+            background: shareStatus ? 'rgba(182, 144, 47,0.15)' : 'rgba(37,211,102,0.12)',
+            border: `2px solid ${shareStatus ? '#b6902f' : 'rgba(37,211,102,0.4)'}`,
+            color: shareStatus ? '#b6902f' : '#25d366',
             transition: 'all 0.3s',
           }}
         >
@@ -228,9 +228,9 @@ export const ResultsScreen = ({
             flex: '1', minWidth: '150px',
             display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
             padding: '13px 18px', borderRadius: '12px', cursor: 'pointer', fontSize: '14px', fontWeight: '600',
-            background: inviteStatus ? 'rgba(201, 162, 39,0.15)' : 'rgba(107, 66, 38,0.2)',
-            border: `2px solid ${inviteStatus ? '#c9a227' : 'rgba(107, 66, 38,0.5)'}`,
-            color: inviteStatus ? '#c9a227' : '#c9946b',
+            background: inviteStatus ? 'rgba(182, 144, 47,0.15)' : 'rgba(92, 68, 41,0.2)',
+            border: `2px solid ${inviteStatus ? '#b6902f' : 'rgba(92, 68, 41,0.5)'}`,
+            color: inviteStatus ? '#b6902f' : '#cbaa7e',
             transition: 'all 0.3s',
           }}
         >

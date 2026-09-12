@@ -84,7 +84,7 @@ export const VotingScreen = ({
                   width: 28, height: 28, borderRadius: '50%',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                   fontSize: 12, fontWeight: 700,
-                  background: i + 1 < votingRound ? 'rgba(201, 162, 39,0.3)' : i + 1 === votingRound ? 'var(--primary)' : 'rgba(255,255,255,0.08)',
+                  background: i + 1 < votingRound ? 'rgba(182, 144, 47,0.3)' : i + 1 === votingRound ? 'var(--primary)' : 'rgba(255,255,255,0.08)',
                   border: i + 1 === votingRound ? '2px solid var(--primary)' : '2px solid rgba(255,255,255,0.15)',
                   color: 'white',
                 }}
@@ -102,7 +102,7 @@ export const VotingScreen = ({
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.8 }}
               style={{
-                background: 'rgba(245,200,66,0.15)', border: '2px solid var(--warning)',
+                background: 'rgba(217, 165, 68,0.15)', border: '2px solid var(--warning)',
                 borderRadius: 12, padding: '10px 16px', marginBottom: 12,
                 display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
               }}
@@ -114,7 +114,7 @@ export const VotingScreen = ({
                 <div style={{ color: 'var(--warning)', fontWeight: 700, fontSize: 14 }}>
                   {t('voting.tieRunoff', votingRound)}
                 </div>
-                <div style={{ color: '#a39e93', fontSize: 12 }}>
+                <div style={{ color: '#a89a7d', fontSize: 12 }}>
                   {t('voting.onlyVoteFor', tiedPlayers.map(i => players[i]).join(', '))}
                 </div>
               </div>
@@ -122,7 +122,7 @@ export const VotingScreen = ({
           )}
         </AnimatePresence>
 
-        <p style={{ color: '#a39e93', marginBottom: '4px', fontSize: 14 }}>
+        <p style={{ color: '#a89a7d', marginBottom: '4px', fontSize: 14 }}>
           <IconUsers style={{ marginRight: '6px' }} />{t('voting.whoToEliminate')}
         </p>
         <p style={{ color: 'white', fontWeight: 'bold', marginBottom: '16px' }}>
@@ -150,18 +150,18 @@ export const VotingScreen = ({
               style={{
                 opacity: (!eligible || (voted && !isSelected)) ? 0.35 : 1,
                 cursor: eligible && !voted ? 'pointer' : 'default',
-                border: isInRunoffGroup && !isSelf ? '2px solid rgba(245,200,66,0.5)' : isSelected ? '2px solid var(--primary)' : '2px solid transparent',
+                border: isInRunoffGroup && !isSelf ? '2px solid rgba(217, 165, 68,0.5)' : isSelected ? '2px solid var(--primary)' : '2px solid transparent',
                 transition: 'all 0.25s ease',
               }}
             >
               <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                 <span className="name">{player}</span>
-                {isSelf && <span style={{ color: '#a39e93', fontSize: 12 }}>{t('common.you')}</span>}
+                {isSelf && <span style={{ color: '#a89a7d', fontSize: 12 }}>{t('common.you')}</span>}
                 {isInRunoffGroup && !isSelf && (
                   <motion.span
                     animate={{ opacity: [1, 0.5, 1] }}
                     transition={{ duration: 1.2, repeat: Infinity }}
-                    style={{ fontSize: 11, color: 'var(--warning)', fontWeight: 600, background: 'rgba(245,200,66,0.15)', padding: '2px 8px', borderRadius: 20 }}
+                    style={{ fontSize: 11, color: 'var(--warning)', fontWeight: 600, background: 'rgba(217, 165, 68,0.15)', padding: '2px 8px', borderRadius: 20 }}
                   >
                     <IconFire style={{ marginRight: 3 }} />{t('voting.tied')}
                   </motion.span>
@@ -194,11 +194,11 @@ export const VotingScreen = ({
             transition={{ type: 'spring', stiffness: 250 }}
             style={{ textAlign: 'center', marginTop: '16px' }}
           >
-            <div style={{ background: 'rgba(201, 162, 39,0.1)', padding: '16px', borderRadius: '14px', border: '2px solid #c9a227' }}>
-              <motion.div animate={{ scale: [1, 1.15, 1] }} transition={{ duration: 0.6, repeat: 2 }} style={{ color: '#c9a227', fontSize: '20px', fontWeight: 'bold' }}>
+            <div style={{ background: 'rgba(182, 144, 47,0.1)', padding: '16px', borderRadius: '14px', border: '2px solid #b6902f' }}>
+              <motion.div animate={{ scale: [1, 1.15, 1] }} transition={{ duration: 0.6, repeat: 2 }} style={{ color: '#b6902f', fontSize: '20px', fontWeight: 'bold' }}>
                 {t('voting.voteRegistered')}
               </motion.div>
-              <div style={{ color: '#a39e93', fontSize: '14px', marginTop: '6px' }}>
+              <div style={{ color: '#a89a7d', fontSize: '14px', marginTop: '6px' }}>
                 {currentVoterIndex === totalPlayers - 1 ? t('voting.calculating') : t('voting.passToNext')}
               </div>
             </div>

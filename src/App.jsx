@@ -42,7 +42,7 @@ const LanguageSwitcher = () => {
             fontWeight: 600,
             cursor: 'pointer',
             border: lang === code ? '2px solid var(--primary)' : '2px solid rgba(255,255,255,0.15)',
-            background: lang === code ? 'rgba(193, 68, 14, 0.15)' : 'transparent',
+            background: lang === code ? 'rgba(163, 49, 28, 0.15)' : 'transparent',
             color: lang === code ? 'white' : 'var(--text-secondary)',
             transition: 'all 0.2s ease',
           }}
@@ -171,7 +171,7 @@ function App() {
   return (
     <div className="app-wrapper">
       <div className="container">
-        <StampSeal size={160} style={{ position: 'absolute', top: '-30px', right: '-30px', color: 'var(--secondary)', opacity: 0.12, pointerEvents: 'none' }} />
+        <StampSeal size={150} style={{ position: 'absolute', top: '14px', right: '14px', color: 'var(--secondary)', opacity: 0.14, pointerEvents: 'none' }} />
         {game.phase === 'setup' && <LanguageSwitcher />}
         <AnimatePresence mode="wait">
           <motion.div
