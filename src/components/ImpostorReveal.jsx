@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import ReactDOM from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { sounds } from '../hooks/useSounds';
 import { useLanguage } from '../i18n/LanguageContext';
@@ -54,7 +55,12 @@ export const ImpostorReveal = ({ players, eliminatedIndex, impostorIndex, impost
     return () => clearTimeout(t);
   }, [phase, onDone]);
 
-  return (
+  // Usamos un portal para pintar esta pantalla directo en <body>, fuera
+  // del árbol de App.jsx. Así evitamos que un ancestro con "perspective"
+  // o "transform" (como el envoltorio animado de Framer Motion) se
+  // convierta en el contenedor de este elemento "position: fixed" y lo
+  // deje con altura 0 (invisible) en vez de cubrir toda la pantalla.
+  return ReactDOM.createPortal(
     <div style={{
       position: 'fixed', inset: 0, zIndex: 1000,
       display: 'flex', flexDirection: 'column',
@@ -200,6 +206,7 @@ export const ImpostorReveal = ({ players, eliminatedIndex, impostorIndex, impost
           </motion.div>
         )}
       </AnimatePresence>
-    </div>
+    </div>,
+    document.body
   );
 };
