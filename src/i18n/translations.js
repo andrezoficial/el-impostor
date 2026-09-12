@@ -144,6 +144,7 @@ export const translations = {
       celebrations: 'Celebraciones',
       home: 'Hogar',
       fiction: 'Ficción',
+      powers: 'Superpoderes',
     },
   },
 
@@ -288,6 +289,7 @@ export const translations = {
       celebrations: 'Celebrations',
       home: 'Home',
       fiction: 'Fiction',
+      powers: 'Superpowers',
     },
   },
 };
