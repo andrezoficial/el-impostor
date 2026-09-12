@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FaTrash, FaUserPlus, FaTags, FaUserSecret } from 'react-icons/fa';
+import { IconTrash, IconUserPlus, IconTags, IconSecret, IconIdea } from './icons';
 import { getCategories } from '../data/wordBank';
 import { useLanguage } from '../i18n/LanguageContext';
 
@@ -106,7 +106,7 @@ export const Setup = ({ onStart }) => {
                     padding: '8px'
                   }}
                 >
-                  <FaTrash />
+                  <IconTrash />
                 </motion.button>
               )}
             </motion.div>
@@ -122,7 +122,7 @@ export const Setup = ({ onStart }) => {
           className="button button-secondary"
           style={{ marginBottom: '15px' }}
         >
-          <FaUserPlus style={{ marginRight: '8px' }} />
+          <IconUserPlus style={{ marginRight: '8px' }} />
           {t('setup.addPlayer', players.length)}
         </motion.button>
       )}
@@ -152,7 +152,7 @@ export const Setup = ({ onStart }) => {
             marginBottom: '10px'
           }}
         >
-          <FaUserSecret style={{ color: '#c1440e' }} />
+          <IconSecret style={{ color: '#c1440e' }} />
           {t('setup.impostorCountLabel')}
         </label>
         <div style={{ display: 'flex', gap: '10px', justifyContent: 'center' }}>
@@ -186,8 +186,10 @@ export const Setup = ({ onStart }) => {
                   transition: 'all 0.2s',
                 }}
               >
-                <span style={{ fontSize: '22px' }}>
-                  {'🕵️'.repeat(n)}
+                <span style={{ display: 'flex', gap: '2px' }}>
+                  {Array.from({ length: n }).map((_, i) => (
+                    <IconSecret key={i} size={18} />
+                  ))}
                 </span>
                 <span>{n}</span>
               </motion.button>
@@ -211,7 +213,7 @@ export const Setup = ({ onStart }) => {
             marginBottom: '8px'
           }}
         >
-          <FaTags />
+          <IconTags />
           {t('setup.categoryLabel')}
         </label>
         <select
@@ -238,7 +240,7 @@ export const Setup = ({ onStart }) => {
       </div>
 
       <motion.button
-        whileHover={{ scale: 1.03, boxShadow: '0 8px 25px rgba(193, 68, 14, 0.4)' }}
+        whileHover={{ scale: 1.03, boxShadow: '6px 6px 0 rgba(0,0,0,0.35)' }}
         whileTap={{ scale: 0.97 }}
         onClick={handleSubmit}
         className="button button-primary"
@@ -247,7 +249,7 @@ export const Setup = ({ onStart }) => {
       </motion.button>
 
       <div className="hint">
-        <span className="hint-icon">💡</span>
+        <IconIdea className="hint-icon" size={13} style={{ marginRight: '6px', verticalAlign: '-2px' }} />
         {t('setup.hint')}
       </div>
     </motion.div>

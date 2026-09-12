@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { FaTags, FaPlay, FaHome } from 'react-icons/fa';
+import { IconTags, IconPlay, IconHome } from './icons';
 import { getCategories, wordBank } from '../data/wordBank';
 import { useLanguage } from '../i18n/LanguageContext';
 
@@ -74,7 +74,7 @@ export const ReplayScreen = ({ players, currentCategory, usedWords, onPlay, onRe
             marginBottom: '8px',
           }}
         >
-          <FaTags />
+          <IconTags />
           {t('replay.categoryLabel')}
         </label>
         <select
@@ -124,13 +124,13 @@ export const ReplayScreen = ({ players, currentCategory, usedWords, onPlay, onRe
 
       <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
         <motion.button
-          whileHover={{ scale: 1.04, boxShadow: '0 8px 25px rgba(193, 68, 14,0.4)' }}
+          whileHover={{ scale: 1.04, boxShadow: '6px 6px 0 rgba(0,0,0,0.35)' }}
           whileTap={{ scale: 0.96 }}
           onClick={() => onPlay(category)}
           className="button button-primary"
           style={{ flex: '1', minWidth: '200px' }}
         >
-          <FaPlay style={{ marginRight: '8px' }} />
+          <IconPlay style={{ marginRight: '8px' }} />
           {t('replay.play')}
         </motion.button>
 
@@ -141,7 +141,7 @@ export const ReplayScreen = ({ players, currentCategory, usedWords, onPlay, onRe
           className="button button-secondary"
           style={{ flex: '1', minWidth: '200px' }}
         >
-          <FaHome style={{ marginRight: '8px' }} />
+          <IconHome style={{ marginRight: '8px' }} />
           {t('replay.newGame')}
         </motion.button>
       </div>

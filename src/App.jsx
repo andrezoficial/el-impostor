@@ -11,6 +11,7 @@ import { ReplayScreen } from './components/ReplayScreen';
 import { ImpostorReveal } from './components/ImpostorReveal';
 import { AnimatePresence, motion } from 'framer-motion';
 import { FaInstagram } from 'react-icons/fa';
+import { StampSeal } from './components/icons';
 import './styles/global.css';
 
 // Selector de idioma: un pequeño toggle ES/EN. Se muestra sobre todo en
@@ -170,6 +171,7 @@ function App() {
   return (
     <div className="app-wrapper">
       <div className="container">
+        <StampSeal size={160} style={{ position: 'absolute', top: '-30px', right: '-30px', color: 'var(--secondary)', opacity: 0.12, pointerEvents: 'none' }} />
         {game.phase === 'setup' && <LanguageSwitcher />}
         <AnimatePresence mode="wait">
           <motion.div

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FaEye, FaUserSecret, FaCheck } from 'react-icons/fa';
+import { IconEye, IconSecret, IconCheck, IconLock } from './icons';
 import { PassDevice } from './PassDevice';
 import { sounds } from '../hooks/useSounds';
 import { useLanguage } from '../i18n/LanguageContext';
@@ -73,20 +73,21 @@ export const RoleScreen = ({
                   className="button button-primary"
                   style={{ maxWidth: '300px', margin: '0 auto' }}
                 >
-                  <FaEye style={{ marginRight: '8px' }} />
+                  <IconEye style={{ marginRight: '8px' }} />
                   {t('role.revealRole')}
                 </motion.button>
               ) : (
                 <motion.div
                   key="role"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
+                  initial={{ opacity: 0, scale: 1.6, rotate: -10 }}
+                  animate={{ opacity: 1, scale: 1, rotate: -2 }}
                   exit={{ opacity: 0, y: -20 }}
+                  transition={{ type: 'spring', stiffness: 260, damping: 14 }}
                 >
                   {isImpostor ? (
                     <>
                       <div className="role-label" style={{ color: '#c1440e', fontSize: '18px' }}>
-                        <FaUserSecret style={{ marginRight: '8px' }} />
+                        <IconSecret style={{ marginRight: '8px' }} />
                         {t('role.impostorLabel')}
                       </div>
                       <div style={{ marginTop: '20px' }}>
@@ -109,7 +110,7 @@ export const RoleScreen = ({
                   ) : (
                     <>
                       <div className="role-label" style={{ color: '#c9a227', fontSize: '18px' }}>
-                        <FaCheck style={{ marginRight: '8px' }} />
+                        <IconCheck style={{ marginRight: '8px' }} />
                         {t('role.crewLabel')}
                       </div>
                       <div style={{ marginTop: '20px' }}>
@@ -159,7 +160,7 @@ export const RoleScreen = ({
         </div>
 
         <div className="hint">
-          <span className="hint-icon">🔒</span>
+          <IconLock size={13} style={{ marginRight: '6px', verticalAlign: '-2px' }} />
           {t('role.hint')}
         </div>
       </div>

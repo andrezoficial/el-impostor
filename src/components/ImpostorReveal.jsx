@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { sounds } from '../hooks/useSounds';
 import { useLanguage } from '../i18n/LanguageContext';
+import { IconSecret } from './icons';
 
 // Pantalla dramática que aparece antes de ResultsScreen.
 // Hace un countdown 3-2-1 y luego revela quién era el/los impostor(es).
@@ -110,9 +111,11 @@ export const ImpostorReveal = ({ players, eliminatedIndex, impostorIndex, impost
             <motion.div
               animate={{ scale: [1, 1.15, 1], rotate: [0, -5, 5, 0] }}
               transition={{ duration: 2, repeat: Infinity }}
-              style={{ fontSize: multipleImpostors ? '3rem' : '5rem', marginBottom: '12px' }}
+              style={{ marginBottom: '12px', display: 'flex', justifyContent: 'center', gap: '6px' }}
             >
-              {'🕵️'.repeat(impostorNames.length)}
+              {impostorNames.map((_, i) => (
+                <IconSecret key={i} size={multipleImpostors ? 40 : 64} />
+              ))}
             </motion.div>
 
             <motion.div
@@ -136,7 +139,7 @@ export const ImpostorReveal = ({ players, eliminatedIndex, impostorIndex, impost
                     fontSize: multipleImpostors ? '2rem' : '3rem',
                     fontWeight: 900,
                     color: '#c1440e',
-                    textShadow: '0 0 30px rgba(193, 68, 14,0.6)',
+                    textShadow: '3px 3px 0 rgba(0,0,0,0.4)',
                     lineHeight: 1.2,
                   }}
                 >

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FaUsers, FaUserSecret, FaSkull, FaChevronDown, FaChevronUp, FaShareAlt, FaCheck, FaCopy } from 'react-icons/fa';
+import { IconUsers, IconSecret, IconSkull, IconChevronDown, IconChevronUp, IconShare, IconCheck, IconCopy } from './icons';
 import { sounds } from '../hooks/useSounds';
 import { buildShareText, buildInviteText, shareOrCopy } from '../hooks/useShare';
 import { useLanguage } from '../i18n/LanguageContext';
@@ -105,7 +105,7 @@ export const ResultsScreen = ({
         </motion.h2>
 
         <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.7 }} style={{ marginTop: '15px', color: 'white' }}>
-          <FaSkull style={{ marginRight: '8px' }} />
+          <IconSkull style={{ marginRight: '8px' }} />
           {eliminatedName ? t('results.eliminated', eliminatedName) : t('results.noOneEliminated')}
         </motion.div>
 
@@ -116,7 +116,7 @@ export const ResultsScreen = ({
         )}
 
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.9 }} style={{ marginTop: '10px', color: '#a39e93' }}>
-          <FaUsers style={{ marginRight: '8px' }} />
+          <IconUsers style={{ marginRight: '8px' }} />
           {t('results.votesCast', totalVotes)}
           {hadMultipleRounds && (
             <span style={{ marginLeft: 8, fontSize: 12, color: 'var(--warning)' }}>
@@ -141,12 +141,12 @@ export const ResultsScreen = ({
               <span className="name">{player}</span>
               {allImpostorIndices.includes(index) && (
                 <motion.span initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: 0.8 + index * 0.08, type: 'spring' }} className="badge badge-impostor" style={{ marginLeft: '6px' }}>
-                  <FaUserSecret style={{ marginRight: '4px' }} />{t('results.impostorBadge')}
+                  <IconSecret style={{ marginRight: '4px' }} />{t('results.impostorBadge')}
                 </motion.span>
               )}
               {eliminatedIndex === index && (
                 <motion.span initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: 0.9 + index * 0.08, type: 'spring' }} className="badge" style={{ background: 'var(--warning)', color: 'var(--background)' }}>
-                  <FaSkull style={{ marginRight: '4px' }} />{t('results.eliminatedBadge')}
+                  <IconSkull style={{ marginRight: '4px' }} />{t('results.eliminatedBadge')}
                 </motion.span>
               )}
             </div>
@@ -169,7 +169,7 @@ export const ResultsScreen = ({
             style={{ width: '100%', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.12)', borderRadius: 12, color: '#a39e93', fontSize: 14, padding: '12px 16px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}
           >
             <span>{t('results.roundHistory', allRoundsVotes.length)}</span>
-            {showHistory ? <FaChevronUp /> : <FaChevronDown />}
+            {showHistory ? <IconChevronUp /> : <IconChevronDown />}
           </motion.button>
 
           <AnimatePresence>
@@ -217,7 +217,7 @@ export const ResultsScreen = ({
             transition: 'all 0.3s',
           }}
         >
-          {shareStatus ? <FaCheck /> : <FaShareAlt />}
+          {shareStatus ? <IconCheck /> : <IconShare />}
           {statusLabel(shareStatus) || t('results.shareResult')}
         </motion.button>
 
@@ -234,7 +234,7 @@ export const ResultsScreen = ({
             transition: 'all 0.3s',
           }}
         >
-          {inviteStatus ? <FaCheck /> : <FaCopy />}
+          {inviteStatus ? <IconCheck /> : <IconCopy />}
           {statusLabel(inviteStatus) || t('results.inviteToPlay')}
         </motion.button>
       </motion.div>
@@ -243,7 +243,7 @@ export const ResultsScreen = ({
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.95 }} style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', marginTop: '12px' }}>
         {onPlayAgain && (
           <motion.button
-            whileHover={{ scale: 1.04, boxShadow: '0 8px 25px rgba(193, 68, 14,0.4)' }} whileTap={{ scale: 0.96 }}
+            whileHover={{ scale: 1.04, boxShadow: '6px 6px 0 rgba(0,0,0,0.35)' }} whileTap={{ scale: 0.96 }}
             onClick={() => { sounds.click(); onPlayAgain(); }}
             className="button button-primary" style={{ flex: '1', minWidth: '220px' }}
           >

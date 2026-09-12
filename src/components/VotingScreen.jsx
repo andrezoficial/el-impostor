@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FaSkull, FaUsers, FaExclamationTriangle, FaFire } from 'react-icons/fa';
+import { IconSkull, IconUsers, IconWarning, IconFire, IconLock } from './icons';
 import { PassDevice } from './PassDevice';
 import { sounds } from '../hooks/useSounds';
 import { useLanguage } from '../i18n/LanguageContext';
@@ -108,7 +108,7 @@ export const VotingScreen = ({
               }}
             >
               <motion.div animate={{ rotate: [0, -10, 10, 0] }} transition={{ duration: 0.5, repeat: Infinity, repeatDelay: 1 }}>
-                <FaExclamationTriangle color="var(--warning)" />
+                <IconWarning color="var(--warning)" />
               </motion.div>
               <div>
                 <div style={{ color: 'var(--warning)', fontWeight: 700, fontSize: 14 }}>
@@ -123,7 +123,7 @@ export const VotingScreen = ({
         </AnimatePresence>
 
         <p style={{ color: '#a39e93', marginBottom: '4px', fontSize: 14 }}>
-          <FaUsers style={{ marginRight: '6px' }} />{t('voting.whoToEliminate')}
+          <IconUsers style={{ marginRight: '6px' }} />{t('voting.whoToEliminate')}
         </p>
         <p style={{ color: 'white', fontWeight: 'bold', marginBottom: '16px' }}>
           {t('voting.votingTurn', voterName)}
@@ -163,7 +163,7 @@ export const VotingScreen = ({
                     transition={{ duration: 1.2, repeat: Infinity }}
                     style={{ fontSize: 11, color: 'var(--warning)', fontWeight: 600, background: 'rgba(245,200,66,0.15)', padding: '2px 8px', borderRadius: 20 }}
                   >
-                    <FaFire style={{ marginRight: 3 }} />{t('voting.tied')}
+                    <IconFire style={{ marginRight: 3 }} />{t('voting.tied')}
                   </motion.span>
                 )}
               </div>
@@ -180,8 +180,8 @@ export const VotingScreen = ({
       <AnimatePresence>
         {selected !== null && !voted && (
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }}>
-            <motion.button whileHover={{ scale: 1.04, boxShadow: '0 8px 25px rgba(193, 68, 14,0.45)' }} whileTap={{ scale: 0.96 }} onClick={confirmVote} className="button button-primary">
-              <FaSkull style={{ marginRight: '8px' }} />{t('voting.eliminate', players[selected])}
+            <motion.button whileHover={{ scale: 1.04, boxShadow: '6px 6px 0 rgba(0,0,0,0.35)' }} whileTap={{ scale: 0.96 }} onClick={confirmVote} className="button button-primary">
+              <IconSkull style={{ marginRight: '8px' }} />{t('voting.eliminate', players[selected])}
             </motion.button>
           </motion.div>
         )}
@@ -211,7 +211,7 @@ export const VotingScreen = ({
       </div>
 
       <div className="hint">
-        <span className="hint-icon">🔒</span>{t('voting.hint')}
+        <span className="hint-icon"><IconLock size={13} style={{ verticalAlign: '-2px' }} /></span>{t('voting.hint')}
       </div>
     </motion.div>
   );

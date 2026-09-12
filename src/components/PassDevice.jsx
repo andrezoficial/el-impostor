@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { FaHandPointRight, FaLock } from 'react-icons/fa';
+import { IconHand, IconLock } from './icons';
 import { useLanguage } from '../i18n/LanguageContext';
 
 // Pantalla intermedia que se muestra antes de revelar el rol de cada
@@ -42,12 +42,12 @@ export const PassDevice = ({ name, subtitle, buttonLabel, onReady }) => {
         className="button button-primary"
         style={{ maxWidth: '320px', margin: '25px auto 0' }}
       >
-        <FaHandPointRight style={{ marginRight: '8px' }} />
+        <IconHand style={{ marginRight: '8px' }} />
         {buttonLabel || t('passDevice.defaultButton', name)}
       </motion.button>
 
       <div className="hint">
-        <FaLock className="hint-icon" style={{ marginRight: '6px' }} />
+        <IconLock className="hint-icon" style={{ marginRight: '6px' }} />
         {t('passDevice.hint')}
       </div>
     </motion.div>

@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { FaDice } from 'react-icons/fa';
+import { IconDice } from './icons';
 import { sounds } from '../hooks/useSounds';
 import { useLanguage } from '../i18n/LanguageContext';
 
@@ -18,9 +18,9 @@ export const FirstPlayerScreen = ({ firstPlayerName, onNext }) => {
       <motion.div
         animate={{ rotate: [0, 15, -15, 0] }}
         transition={{ duration: 1.4, repeat: Infinity }}
-        style={{ fontSize: '3rem', marginBottom: '20px' }}
+        style={{ marginBottom: '20px', display: 'flex', justifyContent: 'center' }}
       >
-        🎲
+        <IconDice size={48} />
       </motion.div>
 
       <div className="role-label">{t('firstPlayer.everyoneSawRole')}</div>
@@ -54,7 +54,7 @@ export const FirstPlayerScreen = ({ firstPlayerName, onNext }) => {
         className="button button-primary"
         style={{ maxWidth: '320px', margin: '25px auto 0' }}
       >
-        <FaDice style={{ marginRight: '8px' }} />
+        <IconDice style={{ marginRight: '8px' }} />
         {t('firstPlayer.startVoting')}
       </motion.button>
     </motion.div>
