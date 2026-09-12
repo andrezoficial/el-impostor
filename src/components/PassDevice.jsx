@@ -25,7 +25,7 @@ export const PassDevice = ({ name, subtitle, buttonLabel, onReady }) => {
       </motion.div>
 
       <div className="role-label">{t('passDevice.passTo')}</div>
-      <h2 style={{ fontSize: '2rem', margin: '10px 0', color: 'white' }}>
+      <h2 style={{ fontSize: 'var(--text-heading)', margin: '10px 0', color: 'white' }}>
         {name}
       </h2>
 

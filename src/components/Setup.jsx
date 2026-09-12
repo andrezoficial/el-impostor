@@ -102,7 +102,7 @@ export const Setup = ({ onStart }) => {
                     border: 'none',
                     color: '#a3311c',
                     cursor: 'pointer',
-                    fontSize: '18px',
+                    fontSize: 'var(--text-lg)',
                     padding: '8px'
                   }}
                 >
@@ -148,7 +148,7 @@ export const Setup = ({ onStart }) => {
             alignItems: 'center',
             gap: '8px',
             color: 'var(--text-secondary)',
-            fontSize: '14px',
+            fontSize: 'var(--text-sm)',
             marginBottom: '10px'
           }}
         >
@@ -176,7 +176,7 @@ export const Setup = ({ onStart }) => {
                     ? 'rgba(163, 49, 28, 0.18)'
                     : 'var(--card)',
                   color: disabled ? 'rgba(255,255,255,0.2)' : selected ? '#a3311c' : 'var(--text)',
-                  fontSize: '16px',
+                  fontSize: 'var(--text-md)',
                   fontWeight: selected ? 700 : 400,
                   cursor: disabled ? 'not-allowed' : 'pointer',
                   display: 'flex',
@@ -196,7 +196,7 @@ export const Setup = ({ onStart }) => {
             );
           })}
         </div>
-        <p style={{ color: 'var(--text-secondary)', fontSize: '12px', textAlign: 'center', marginTop: '8px' }}>
+        <p style={{ color: 'var(--text-secondary)', fontSize: 'var(--text-xs)', textAlign: 'center', marginTop: '8px' }}>
           {t('setup.impostorCountHint', maxImpostors)}
         </p>
       </div>
@@ -209,7 +209,7 @@ export const Setup = ({ onStart }) => {
             alignItems: 'center',
             gap: '8px',
             color: 'var(--text-secondary)',
-            fontSize: '14px',
+            fontSize: 'var(--text-sm)',
             marginBottom: '8px'
           }}
         >
@@ -227,7 +227,7 @@ export const Setup = ({ onStart }) => {
             border: '2px solid rgba(255, 255, 255, 0.1)',
             background: 'var(--card)',
             color: 'var(--text)',
-            fontSize: '16px'
+            fontSize: 'var(--text-md)'
           }}
         >
           <option value="all">{t('common.allCategoriesLabel')}</option>

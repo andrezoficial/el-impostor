@@ -110,7 +110,7 @@ export const ResultsScreen = ({
         </motion.div>
 
         {impostorNamesStr && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.8 }} style={{ marginTop: '8px', color: '#a3311c', fontSize: '14px', fontWeight: 600 }}>
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.8 }} style={{ marginTop: '8px', color: '#a3311c', fontSize: 'var(--text-sm)', fontWeight: 600 }}>
             {t('results.impostorsLabel', impostorNamesStr)}
           </motion.div>
         )}
@@ -119,7 +119,7 @@ export const ResultsScreen = ({
           <IconUsers style={{ marginRight: '8px' }} />
           {t('results.votesCast', totalVotes)}
           {hadMultipleRounds && (
-            <span style={{ marginLeft: 8, fontSize: 12, color: 'var(--warning)' }}>
+            <span style={{ marginLeft: 8, fontSize: 'var(--text-xs)', color: 'var(--warning)' }}>
               {t('results.votingRounds', allRoundsVotes.length)}
             </span>
           )}
@@ -154,7 +154,7 @@ export const ResultsScreen = ({
               <motion.span initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: 0.6 + index * 0.08, type: 'spring' }} className="vote-count">
                 {votes[index]}
               </motion.span>
-              {eliminatedIndex === index && <span style={{ fontSize: '18px' }}>🏆</span>}
+              {eliminatedIndex === index && <span style={{ fontSize: 'var(--text-lg)' }}>🏆</span>}
             </div>
           </motion.div>
         ))}
@@ -166,7 +166,7 @@ export const ResultsScreen = ({
           <motion.button
             whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}
             onClick={() => { sounds.click(); setShowHistory(h => !h); }}
-            style={{ width: '100%', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.12)', borderRadius: 12, color: '#a89a7d', fontSize: 14, padding: '12px 16px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}
+            style={{ width: '100%', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.12)', borderRadius: 12, color: '#a89a7d', fontSize: 'var(--text-sm)', padding: '12px 16px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}
           >
             <span>{t('results.roundHistory', allRoundsVotes.length)}</span>
             {showHistory ? <IconChevronUp /> : <IconChevronDown />}
@@ -177,11 +177,11 @@ export const ResultsScreen = ({
               <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} style={{ overflow: 'hidden' }}>
                 {allRoundsVotes.map(({ votes: rv, round }) => (
                   <div key={round} style={{ background: 'var(--card)', borderRadius: 10, padding: '12px 16px', marginTop: 8, border: '1px solid rgba(255,255,255,0.07)' }}>
-                    <div style={{ color: 'var(--warning)', fontWeight: 700, fontSize: 13, marginBottom: 8 }}>
+                    <div style={{ color: 'var(--warning)', fontWeight: 700, fontSize: 'var(--text-xs)', marginBottom: 8 }}>
                       {t('results.round', round)}{round === 1 ? t('results.roundInitial') : t('results.roundRunoff')}
                     </div>
                     {players.map((p, i) => rv[i] > 0 && (
-                      <div key={i} style={{ display: 'flex', justifyContent: 'space-between', color: '#a89a7d', fontSize: 13, padding: '3px 0' }}>
+                      <div key={i} style={{ display: 'flex', justifyContent: 'space-between', color: '#a89a7d', fontSize: 'var(--text-xs)', padding: '3px 0' }}>
                         <span>{p}</span>
                         <span style={{ fontWeight: 600, color: 'white' }}>{t('results.votesLabel', rv[i])}</span>
                       </div>
@@ -210,7 +210,7 @@ export const ResultsScreen = ({
           style={{
             flex: '1', minWidth: '150px',
             display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
-            padding: '13px 18px', borderRadius: '12px', cursor: 'pointer', fontSize: '14px', fontWeight: '600',
+            padding: '13px 18px', borderRadius: '12px', cursor: 'pointer', fontSize: 'var(--text-sm)', fontWeight: '600',
             background: shareStatus ? 'rgba(138, 157, 82,0.15)' : 'rgba(37,211,102,0.12)',
             border: `2px solid ${shareStatus ? '#8a9d52' : 'rgba(37,211,102,0.4)'}`,
             color: shareStatus ? '#8a9d52' : '#25d366',
@@ -227,7 +227,7 @@ export const ResultsScreen = ({
           style={{
             flex: '1', minWidth: '150px',
             display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
-            padding: '13px 18px', borderRadius: '12px', cursor: 'pointer', fontSize: '14px', fontWeight: '600',
+            padding: '13px 18px', borderRadius: '12px', cursor: 'pointer', fontSize: 'var(--text-sm)', fontWeight: '600',
             background: inviteStatus ? 'rgba(138, 157, 82,0.15)' : 'rgba(92, 68, 41,0.2)',
             border: `2px solid ${inviteStatus ? '#8a9d52' : 'rgba(92, 68, 41,0.5)'}`,
             color: inviteStatus ? '#8a9d52' : '#cbaa7e',

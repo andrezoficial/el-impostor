@@ -35,11 +35,12 @@ export const translations = {
       youAreThe: '🕵️ Eres el',
       youAre: '👤 Eres',
       revealRole: 'Revelar Rol',
+      scratchHint: 'Desliza el dedo sobre la barra para revelar (o solo toca)',
       impostorLabel: 'IMPOSTOR',
       yourClueIs: '🔍 Tu pista es:',
       impostorHint1: '⚠️ No sabes la palabra exacta, solo esta pista',
       impostorHint2: '💡 Cuando hables en voz alta, disimula sin decir algo obvio',
-      crewLabel: 'TRIPULANTE',
+      crewLabel: 'INOCENTE',
       theWordIs: '📝 La palabra es:',
       crewHint: '✅ Cuando sea tu turno, di una palabra o frase relacionada en voz alta',
       goToVoting: '🔎 Ir a Votación',
@@ -69,7 +70,7 @@ export const translations = {
       whoWasIt: '🔎 ¿Quién fue?',
       impostorWas: 'El impostor era...',
       impostorsWere: 'Los impostores eran...',
-      crewCaught: '¡Los Tripulantes lo atraparon!',
+      crewCaught: '¡Los Inocentes lo atraparon!',
       impostorEscaped: '¡El Impostor escapó!',
       eliminatedByMistake: (name) => `Eliminaron a ${name} por error`,
       seeFullResults: 'Ver resultados completos →',
@@ -78,7 +79,7 @@ export const translations = {
       shared: '¡Compartido!',
       copied: '¡Copiado!',
       title: '🔎 Resultados',
-      crewWon: '¡Los Tripulantes Ganaron!',
+      crewWon: '¡Los Inocentes Ganaron!',
       impostorWon: '¡El Impostor Ganó!',
       eliminated: (name) => `Eliminado: ${name}`,
       noOneEliminated: 'Nadie recibió votos suficientes',
@@ -112,8 +113,8 @@ export const translations = {
     },
     share: {
       crewWonText: (multiple) => multiple
-        ? '🎉 ¡Los Tripulantes ganaron! Atraparon a uno de los impostores.'
-        : '🎉 ¡Los Tripulantes ganaron! Atraparon al impostor.',
+        ? '🎉 ¡Los Inocentes ganaron! Atraparon a uno de los impostores.'
+        : '🎉 ¡Los Inocentes ganaron! Atraparon al impostor.',
       impostorWonText: (multiple) => multiple
         ? '😈 ¡Los Impostores ganaron! Nadie los descubrió.'
         : '😈 ¡El Impostor ganó! Nadie lo descubrió.',
@@ -180,11 +181,12 @@ export const translations = {
       youAreThe: '🕵️ You are the',
       youAre: '👤 You are',
       revealRole: 'Reveal Role',
+      scratchHint: 'Drag your finger across the bar to reveal (or just tap)',
       impostorLabel: 'IMPOSTOR',
       yourClueIs: '🔍 Your clue is:',
       impostorHint1: "⚠️ You don't know the exact word, only this clue",
       impostorHint2: '💡 When you speak out loud, blend in without saying something obvious',
-      crewLabel: 'CREWMATE',
+      crewLabel: 'INNOCENT',
       theWordIs: '📝 The word is:',
       crewHint: "✅ When it's your turn, say a related word or phrase out loud",
       goToVoting: '🔎 Go to Voting',
@@ -214,7 +216,7 @@ export const translations = {
       whoWasIt: '🔎 Who was it?',
       impostorWas: 'The impostor was...',
       impostorsWere: 'The impostors were...',
-      crewCaught: 'The Crewmates caught them!',
+      crewCaught: 'The Innocents caught them!',
       impostorEscaped: 'The Impostor got away!',
       eliminatedByMistake: (name) => `${name} was eliminated by mistake`,
       seeFullResults: 'See full results →',
@@ -223,7 +225,7 @@ export const translations = {
       shared: 'Shared!',
       copied: 'Copied!',
       title: '🔎 Results',
-      crewWon: 'The Crewmates Won!',
+      crewWon: 'The Innocents Won!',
       impostorWon: 'The Impostor Won!',
       eliminated: (name) => `Eliminated: ${name}`,
       noOneEliminated: 'No one received enough votes',
@@ -257,8 +259,8 @@ export const translations = {
     },
     share: {
       crewWonText: (multiple) => multiple
-        ? '🎉 The Crewmates won! They caught one of the impostors.'
-        : '🎉 The Crewmates won! They caught the impostor.',
+        ? '🎉 The Innocents won! They caught one of the impostors.'
+        : '🎉 The Innocents won! They caught the impostor.',
       impostorWonText: (multiple) => multiple
         ? '😈 The Impostors won! No one figured them out.'
         : '😈 The Impostor won! No one figured it out.',

@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { sounds } from '../hooks/useSounds';
 import { useLanguage } from '../i18n/LanguageContext';
-import { IconSecret } from './icons';
+import { IconSecret, IconCheck } from './icons';
 
 // Pantalla dramática que aparece antes de ResultsScreen.
 // Hace un countdown 3-2-1 y luego revela quién era el/los impostor(es).
@@ -128,7 +128,7 @@ export const ImpostorReveal = ({ players, eliminatedIndex, impostorIndex, impost
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
-              style={{ color: '#a89a7d', fontSize: '16px', marginBottom: '8px' }}
+              style={{ color: '#a89a7d', fontSize: 'var(--text-md)', marginBottom: '8px' }}
             >
               {multipleImpostors ? t('reveal.impostorsWere') : t('reveal.impostorWas')}
             </motion.div>
@@ -138,15 +138,14 @@ export const ImpostorReveal = ({ players, eliminatedIndex, impostorIndex, impost
               {impostorNames.map((name, idx) => (
                 <motion.div
                   key={name}
-                  initial={{ opacity: 0, scale: 0.5 }}
-                  animate={{ opacity: 1, scale: 1 }}
+                  initial={{ opacity: 0, scale: 0.5, rotate: -14 }}
+                  animate={{ opacity: 1, scale: 1, rotate: -3 }}
                   transition={{ delay: 0.4 + idx * 0.2, type: 'spring', stiffness: 250 }}
+                  className="impostor-stamp"
                   style={{
-                    fontSize: multipleImpostors ? '2rem' : '3rem',
-                    fontWeight: 900,
-                    color: '#a3311c',
-                    textShadow: '3px 3px 0 rgba(0,0,0,0.4)',
+                    fontSize: multipleImpostors ? '1.6rem' : '2.4rem',
                     lineHeight: 1.2,
+                    margin: '4px',
                   }}
                 >
                   {name}
@@ -158,26 +157,24 @@ export const ImpostorReveal = ({ players, eliminatedIndex, impostorIndex, impost
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.9 }}
+              className="verdict-box"
               style={{
-                padding: '16px 24px',
-                borderRadius: '16px',
-                background: isCorrect ? 'rgba(138, 157, 82,0.15)' : 'rgba(163, 49, 28,0.15)',
-                border: `2px solid ${isCorrect ? '#8a9d52' : '#a3311c'}`,
+                borderColor: isCorrect ? 'var(--success)' : 'var(--primary)',
               }}
             >
-              <div style={{ fontSize: '2.5rem', marginBottom: '8px' }}>
-                {isCorrect ? '🎉' : '😈'}
+              <div style={{ marginBottom: '10px', color: isCorrect ? 'var(--success)' : 'var(--primary)' }}>
+                {isCorrect ? <IconCheck size={30} /> : <IconSecret size={30} />}
               </div>
-              <div style={{
-                fontSize: '1.2rem', fontWeight: 700,
-                color: isCorrect ? '#8a9d52' : '#a3311c',
-              }}>
+              <div
+                className="verdict-title"
+                style={{ color: isCorrect ? 'var(--success)' : 'var(--primary)' }}
+              >
                 {isCorrect
                   ? t('reveal.crewCaught')
                   : t('reveal.impostorEscaped')}
               </div>
               {eliminatedName && !allImpostorIndices.includes(eliminatedIndex) && (
-                <div style={{ color: '#a89a7d', fontSize: '13px', marginTop: '8px' }}>
+                <div style={{ color: 'var(--text-secondary)', fontSize: 'var(--text-xs)', marginTop: '10px', fontFamily: 'var(--font-tag)' }}>
                   {t('reveal.eliminatedByMistake', eliminatedName)}
                 </div>
               )}
@@ -190,16 +187,8 @@ export const ImpostorReveal = ({ players, eliminatedIndex, impostorIndex, impost
               whileHover={{ scale: 1.04 }}
               whileTap={{ scale: 0.96 }}
               onClick={onDone}
-              style={{
-                marginTop: '24px',
-                padding: '12px 28px',
-                borderRadius: '12px',
-                border: '1px solid rgba(255,255,255,0.15)',
-                background: 'rgba(255,255,255,0.06)',
-                color: '#a89a7d',
-                fontSize: '14px',
-                cursor: 'pointer',
-              }}
+              className="button button-secondary"
+              style={{ marginTop: '24px', maxWidth: 260, marginLeft: 'auto', marginRight: 'auto' }}
             >
               {t('reveal.seeFullResults')}
             </motion.button>

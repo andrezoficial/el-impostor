@@ -24,7 +24,7 @@ export const FirstPlayerScreen = ({ firstPlayerName, onNext }) => {
       </motion.div>
 
       <div className="role-label">{t('firstPlayer.everyoneSawRole')}</div>
-      <h2 style={{ fontSize: '1.3rem', margin: '10px 0', color: 'var(--text-secondary)' }}>
+      <h2 style={{ fontSize: 'var(--text-lg)', margin: '10px 0', color: 'var(--text-secondary)' }}>
         {t('firstPlayer.startsClue')}
       </h2>
 
@@ -39,7 +39,7 @@ export const FirstPlayerScreen = ({ firstPlayerName, onNext }) => {
           border: '1px solid rgba(217, 165, 68, 0.4)',
           borderRadius: '12px',
           color: '#d9a544',
-          fontSize: '22px',
+          fontSize: 'var(--text-xl)',
           fontWeight: '700',
           maxWidth: '320px',
         }}

@@ -18,6 +18,22 @@
   --font-tag: 'Courier Prime', 'Courier New', monospace;
   --radius-sm: 3px;
   --radius-md: 3px;
+
+  /* Escala tipográfica: cada tamaño tiene un rol fijo en toda la app,
+     en vez de valores sueltos por componente (11.5px, 12.5px, 13.5px,
+     1.3rem, 1.35rem... que hacían el mismo trabajo con números
+     distintos). Los números "hero" (cuenta regresiva 3-2-1, emojis
+     grandes, el nombre estampado del impostor) quedan fuera a propósito:
+     son un momento de dramatismo puntual, no texto de lectura regular. */
+  --text-2xs: 10px;  /* etiqueta micro: pestaña "EXPEDIENTE · CONFIDENCIAL" */
+  --text-xs: 12px;   /* labels en mayúsculas: role-label, badges, footer, hint */
+  --text-sm: 14px;   /* texto secundario/hint, el "cuerpo de texto" de la app */
+  --text-md: 16px;   /* botones, inputs, texto activo estándar */
+  --text-lg: 18px;   /* subtítulos y llamados de atención (veredicto, votos) */
+  --text-xl: 22px;   /* números/etiquetas destacadas (pista del impostor) */
+  --text-2xl: 28px;  /* encabezados secundarios (título móvil, palabra secreta móvil) */
+  --text-3xl: 36px;  /* encabezado principal (la palabra secreta) */
+  --text-heading: 32px; /* nombre del jugador en pantalla completa */
 }
 
 * {
@@ -99,7 +115,7 @@ body {
   background: var(--secondary);
   color: var(--text);
   font-family: var(--font-tag);
-  font-size: 10px;
+  font-size: var(--text-2xs);
   font-weight: 700;
   letter-spacing: 1.5px;
   padding: 5px 12px 4px;
@@ -153,7 +169,7 @@ body {
 .app-footer {
   margin-top: 18px;
   text-align: center;
-  font-size: 12.5px;
+  font-size: var(--text-xs);
   font-family: var(--font-tag);
   color: var(--text-secondary);
 }
@@ -174,7 +190,7 @@ body {
   display: inline-block;
   text-align: center;
   font-family: var(--font-stamp);
-  font-size: 1.9rem;
+  font-size: var(--text-2xl);
   font-weight: 400;
   text-transform: uppercase;
   letter-spacing: 2px;
@@ -219,7 +235,7 @@ body {
   border-bottom: 2px solid var(--line);
   background: var(--card);
   color: var(--text);
-  font-size: 16px;
+  font-size: var(--text-md);
   transition: all 0.2s ease;
 }
 
@@ -240,7 +256,7 @@ body {
   padding: 14px 28px;
   border: 2px solid transparent;
   border-radius: var(--radius-sm);
-  font-size: 16px;
+  font-size: var(--text-md);
   font-weight: 600;
   cursor: pointer;
   transition: transform 0.12s ease, box-shadow 0.12s ease;
@@ -326,7 +342,7 @@ body {
 .role-label {
   color: var(--text-secondary);
   font-family: var(--font-tag);
-  font-size: 12px;
+  font-size: var(--text-xs);
   text-transform: uppercase;
   letter-spacing: 1.5px;
   margin-bottom: 10px;
@@ -334,7 +350,7 @@ body {
 
 .role-word {
   font-family: var(--font-stamp);
-  font-size: 2.2rem;
+  font-size: var(--text-3xl);
   font-weight: 400;
   letter-spacing: 1px;
   margin: 15px 0;
@@ -344,17 +360,61 @@ body {
 
 .role-clue {
   font-family: var(--font-stamp);
-  font-size: 1.35rem;
+  font-size: var(--text-xl);
   color: var(--warning);
 }
 
+/* Nombre del impostor revelado como si fuera un sello de tinta golpeado
+   sobre el expediente: doble borde, ligera rotación, sin esquinas
+   redondeadas -- mismo lenguaje visual que .badge, pero a tamaño de
+   titular para el momento más dramático de la partida. */
+.impostor-stamp {
+  display: inline-block;
+  font-family: var(--font-stamp);
+  font-weight: 400;
+  color: var(--primary);
+  border: 3px double var(--primary);
+  border-radius: var(--radius-sm);
+  padding: 6px 22px;
+  transform: rotate(-3deg);
+  text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.3);
+  letter-spacing: 1px;
+}
+
+/* Veredicto final ("caso cerrado" / "se escapó"): tarjeta de expediente
+   con borde perforado arriba, igual que .role-box, en vez de una
+   burbuja redondeada con emoji. */
+.verdict-box {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  padding: 18px 24px;
+  position: relative;
+}
+
+.verdict-box::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 14px;
+  right: 14px;
+  height: 1px;
+  background-image: repeating-linear-gradient(90deg, var(--text-secondary) 0, var(--text-secondary) 6px, transparent 6px, transparent 12px);
+  opacity: 0.35;
+}
+
+.verdict-title {
+  font-family: var(--font-stamp);
+  font-size: var(--text-lg);
+  letter-spacing: 1px;
+}
 /* Insignias con aspecto de sello de tinta: borde doble irregular y
    ligera rotación, no una etiqueta redondeada plana. */
 .badge {
   display: inline-block;
   padding: 3px 12px;
   border-radius: 2px;
-  font-size: 11.5px;
+  font-size: var(--text-xs);
   font-weight: 700;
   font-family: var(--font-tag);
   text-transform: uppercase;
@@ -372,6 +432,56 @@ body {
   background: transparent;
   border: 2px double var(--success);
   color: var(--success);
+}
+
+/* Barra "censurada" que se raspa/arrastra para revelar el rol, en vez
+   de un botón plano. El texto de aviso vive debajo (z-index 1) y la
+   tinta negra encima (z-index 2) se va encogiendo desde la derecha a
+   medida que el jugador arrastra, como si raspara la censura. */
+.redacted-bar {
+  position: relative;
+  height: 60px;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  background: var(--card-raised);
+  border: 1px solid var(--line);
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+  max-width: 300px;
+  margin: 0 auto;
+}
+
+.redacted-bar:active {
+  cursor: grabbing;
+}
+
+.redacted-label {
+  position: relative;
+  z-index: 1;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-tag);
+  font-size: var(--text-xs);
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  padding: 0 12px;
+  text-align: center;
+}
+
+.redacted-fill {
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 100%;
+  z-index: 2;
+  background:
+    repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.035) 0, rgba(255, 255, 255, 0.035) 2px, transparent 2px, transparent 7px),
+    #0a0906;
+  box-shadow: inset 1px 0 0 rgba(255, 255, 255, 0.05);
 }
 
 /* Tarjetas de jugador como fichas de un índice de testigos. */
@@ -446,7 +556,7 @@ body {
   height: 22px;
   border-radius: 50%;
   font-family: var(--font-tag);
-  font-size: 13px;
+  font-size: var(--text-xs);
   font-weight: 700;
   display: inline-flex;
   align-items: center;
@@ -473,7 +583,7 @@ body {
 .hint {
   color: var(--text-secondary);
   font-family: var(--font-stamp);
-  font-size: 13.5px;
+  font-size: var(--text-xs);
   text-align: center;
   margin-top: 20px;
 }
@@ -489,11 +599,11 @@ body {
   }
 
   .title {
-    font-size: 1.5rem;
+    font-size: var(--text-lg);
     padding: 8px 16px;
   }
 
   .role-word {
-    font-size: 1.8rem;
+    font-size: var(--text-2xl);
   }
 }

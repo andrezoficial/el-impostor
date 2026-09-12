@@ -29,7 +29,7 @@ export const ReplayScreen = ({ players, currentCategory, usedWords, onPlay, onRe
       <div style={{ textAlign: 'center', marginBottom: '24px' }}>
         <div style={{ fontSize: '3rem', marginBottom: '8px' }}>🔁</div>
         <h2 style={{ margin: '0 0 6px', color: 'white' }}>{t('replay.anotherRound')}</h2>
-        <p style={{ color: '#a89a7d', margin: 0, fontSize: '14px' }}>
+        <p style={{ color: '#a89a7d', margin: 0, fontSize: 'var(--text-sm)' }}>
           {t('replay.subtitle')}
         </p>
       </div>
@@ -52,7 +52,7 @@ export const ReplayScreen = ({ players, currentCategory, usedWords, onPlay, onRe
                 borderRadius: '20px',
                 padding: '6px 14px',
                 color: 'white',
-                fontSize: '14px',
+                fontSize: 'var(--text-sm)',
                 fontWeight: '600',
               }}
             >
@@ -70,7 +70,7 @@ export const ReplayScreen = ({ players, currentCategory, usedWords, onPlay, onRe
             alignItems: 'center',
             gap: '8px',
             color: 'var(--text-secondary)',
-            fontSize: '14px',
+            fontSize: 'var(--text-sm)',
             marginBottom: '8px',
           }}
         >
@@ -87,7 +87,7 @@ export const ReplayScreen = ({ players, currentCategory, usedWords, onPlay, onRe
             border: '2px solid rgba(255, 255, 255, 0.1)',
             background: 'var(--card)',
             color: 'var(--text)',
-            fontSize: '16px',
+            fontSize: 'var(--text-md)',
           }}
         >
           <option value="all">{t('common.allCategoriesLabel')}</option>
@@ -109,7 +109,7 @@ export const ReplayScreen = ({ players, currentCategory, usedWords, onPlay, onRe
               ? 'rgba(163, 49, 28, 0.12)'
               : 'rgba(138, 157, 82, 0.1)',
             border: `1px solid ${remaining === 0 ? 'rgba(163, 49, 28,0.3)' : 'rgba(138, 157, 82,0.25)'}`,
-            fontSize: '13px',
+            fontSize: 'var(--text-xs)',
             color: remaining === 0 ? '#a3311c' : '#8a9d52',
             display: 'flex',
             alignItems: 'center',

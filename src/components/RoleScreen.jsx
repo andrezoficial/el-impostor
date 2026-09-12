@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { IconEye, IconSecret, IconCheck, IconLock } from './icons';
+import { IconSecret, IconCheck, IconLock } from './icons';
+import { RedactedReveal } from './RedactedReveal';
 import { PassDevice } from './PassDevice';
 import { sounds } from '../hooks/useSounds';
 import { useLanguage } from '../i18n/LanguageContext';
@@ -69,10 +70,10 @@ export const RoleScreen = ({
             <div className="role-label">
               {isImpostor ? t('role.youAreThe') : t('role.youAre')}
             </div>
-            <h2 style={{ fontSize: '2rem', margin: '10px 0', color: 'white' }}>
+            <h2 style={{ fontSize: 'var(--text-heading)', margin: '10px 0', color: 'white' }}>
               {player}
             </h2>
-            <div style={{ fontSize: '14px', color: '#a89a7d' }}>
+            <div style={{ fontSize: 'var(--text-sm)', color: '#a89a7d' }}>
               {t('role.subtitle', currentIndex + 1, totalPlayers)}
             </div>
           </motion.div>
@@ -80,20 +81,20 @@ export const RoleScreen = ({
           <div style={{ marginTop: '30px' }}>
             <AnimatePresence mode="wait">
               {!revealed ? (
-                <motion.button
+                <motion.div
                   key="reveal"
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -20 }}
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  onClick={handleReveal}
-                  className="button button-primary"
-                  style={{ maxWidth: '300px', margin: '0 auto' }}
                 >
-                  <IconEye style={{ marginRight: '8px' }} />
-                  {t('role.revealRole')}
-                </motion.button>
+                  <RedactedReveal
+                    label={t('role.revealRole')}
+                    onReveal={handleReveal}
+                  />
+                  <div style={{ marginTop: '10px', fontSize: 'var(--text-2xs)', color: 'var(--text-secondary)', fontFamily: 'var(--font-tag)' }}>
+                    {t('role.scratchHint')}
+                  </div>
+                </motion.div>
               ) : (
                 <motion.div
                   key="role"
@@ -104,8 +105,8 @@ export const RoleScreen = ({
                 >
                   {isImpostor ? (
                     <>
-                      <div className="role-label" style={{ color: '#a3311c', fontSize: '18px' }}>
-                        <IconSecret style={{ marginRight: '8px' }} />
+                      <div className="badge badge-impostor" style={{ fontSize: 'var(--text-md)', padding: '6px 18px' }}>
+                        <IconSecret size={14} style={{ marginRight: '6px', verticalAlign: '-2px' }} />
                         {t('role.impostorLabel')}
                       </div>
                       <div style={{ marginTop: '20px' }}>
@@ -118,17 +119,17 @@ export const RoleScreen = ({
                           {clue}
                         </motion.div>
                       </div>
-                      <div style={{ marginTop: '15px', color: '#a89a7d', fontSize: '14px' }}>
+                      <div style={{ marginTop: '15px', color: '#a89a7d', fontSize: 'var(--text-sm)' }}>
                         {t('role.impostorHint1')}
                       </div>
-                      <div style={{ marginTop: '10px', color: '#d9a544', fontSize: '12px' }}>
+                      <div style={{ marginTop: '10px', color: '#d9a544', fontSize: 'var(--text-xs)' }}>
                         {t('role.impostorHint2')}
                       </div>
                     </>
                   ) : (
                     <>
-                      <div className="role-label" style={{ color: '#8a9d52', fontSize: '18px' }}>
-                        <IconCheck style={{ marginRight: '8px' }} />
+                      <div className="badge badge-crew" style={{ fontSize: 'var(--text-md)', padding: '6px 18px' }}>
+                        <IconCheck size={14} style={{ marginRight: '6px', verticalAlign: '-2px' }} />
                         {t('role.crewLabel')}
                       </div>
                       <div style={{ marginTop: '20px' }}>
@@ -141,7 +142,7 @@ export const RoleScreen = ({
                           {word}
                         </motion.div>
                       </div>
-                      <div style={{ marginTop: '15px', color: '#a89a7d', fontSize: '14px' }}>
+                      <div style={{ marginTop: '15px', color: '#a89a7d', fontSize: 'var(--text-sm)' }}>
                         {t('role.crewHint')}
                       </div>
                     </>
