@@ -20,8 +20,8 @@
     "path": "C:\\Users\\Andre\\el-impostor\\android.keystore",
     "alias": "android"
   },
-  "appVersionName": "7",
-  "appVersionCode": 7,
+  "appVersionName": "10",
+  "appVersionCode": 10,
   "shortcuts": [],
   "generatorApp": "bubblewrap-cli",
   "webManifestUrl": "https://el-impostor-delta-woad.vercel.app/manifest.json",
@@ -35,13 +35,15 @@
   "isMetaQuest": false,
   "fullScopeUrl": "https://el-impostor-delta-woad.vercel.app/",
   "minSdkVersion": 21,
-  "orientation": "portrait",
-  "fingerprints": [],
+  "orientation": "default",
+  "fingerprints": [
+    "78:72:E5:14:51:9B:6C:BD:D9:BC:48:54:D4:D7:A5:CA:0C:F2:92:14:C2:C4:69:07:48:66:94:BA:25:47:AC:F3"
+  ],
   "additionalTrustedOrigins": [],
   "retainedBundles": [],
   "protocolHandlers": [],
   "fileHandlers": [],
   "launchHandlerClientMode": "",
   "displayOverride": [],
-  "appVersion": "7"
+  "appVersion": "10"
 }

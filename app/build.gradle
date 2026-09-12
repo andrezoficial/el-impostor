@@ -26,13 +26,13 @@ def twaManifest = [
     launchUrl: '/', // The start path for the TWA. Must be relative to the domain.
     name: 'El Impostor - Juego de fiesta', // The application name.
     launcherName: 'El Impostor', // The name shown on the Android Launcher.
-    themeColor: '#17254A', // The color used for the status bar.
+    themeColor: '#141311', // The color used for the status bar.
     themeColorDark: '#000000', // The color used for the dark status bar.
     navigationColor: '#000000', // The color used for the navigation bar.
     navigationColorDark: '#000000', // The color used for the dark navbar.
     navigationDividerColor: '#000000', // The navbar divider color.
     navigationDividerColorDark: '#000000', // The dark navbar divider color.
-    backgroundColor: '#17254A', // The color used for the splash screen background.
+    backgroundColor: '#141311', // The color used for the splash screen background.
     enableNotifications: true, // Set to true to enable notification delegation.
     // Every shortcut must include the following fields:
     // - name: String that will show up in the shortcut.
@@ -47,7 +47,7 @@ def twaManifest = [
     // 'customtabs' and 'webview'.
     fallbackType: 'customtabs',
     enableSiteSettingsShortcut: 'true',
-    orientation: 'portrait',
+    orientation: 'default',
 ]
 
 android {
@@ -57,8 +57,8 @@ android {
         applicationId "com.andressuarez.elimpostor"
         minSdkVersion 21
         targetSdkVersion 36
-        versionCode 7
-        versionName "7"
+        versionCode 10
+        versionName "10"
 
         // The name for the application
         resValue "string", "appName", twaManifest.name
