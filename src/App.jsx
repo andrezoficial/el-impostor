@@ -11,7 +11,7 @@ import { ReplayScreen } from './components/ReplayScreen';
 import { ImpostorReveal } from './components/ImpostorReveal';
 import { AnimatePresence, motion } from 'framer-motion';
 import { FaInstagram } from 'react-icons/fa';
-import { StampSeal } from './components/icons';
+import { StampSeal, IconPaperclip } from './components/icons';
 import './styles/global.css';
 
 // Selector de idioma: un pequeño toggle ES/EN. Se muestra sobre todo en
@@ -171,7 +171,14 @@ function App() {
   return (
     <div className="app-wrapper">
       <div className="container">
-        <StampSeal size={150} style={{ position: 'absolute', top: '14px', right: '14px', color: 'var(--secondary)', opacity: 0.14, pointerEvents: 'none' }} />
+        <StampSeal size={130} style={{ position: 'absolute', bottom: '10px', left: '10px', color: 'var(--secondary)', opacity: 0.1, pointerEvents: 'none' }} />
+
+        {/* La "foto" del expediente: el ícono de la app, clipeado a la
+            carpeta como si fuera la mugshot adjunta al caso. */}
+        <div className="case-photo">
+          <img src={`${process.env.PUBLIC_URL}/logo192.png`} alt="" />
+          <IconPaperclip size={30} style={{ position: 'absolute', top: '-13px', left: '-6px', color: '#b9bcc2', transform: 'rotate(-12deg)', filter: 'drop-shadow(1px 2px 1px rgba(0,0,0,0.4))' }} />
+        </div>
         {game.phase === 'setup' && <LanguageSwitcher />}
         <AnimatePresence mode="wait">
           <motion.div

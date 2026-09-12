@@ -171,6 +171,12 @@ export const IconIdea = ({ size = 16, style }) => (
   </svg>
 );
 
+export const IconPaperclip = ({ size = 16, style }) => (
+  <svg {...base(size)} style={style}>
+    <path d="M8.5 12.5l6.2-6.2a3 3 0 114.2 4.2l-8.4 8.4a5 5 0 01-7-7l7.8-7.8" />
+  </svg>
+);
+
 // Motivo de marca: sello circular tipo "expediente confidencial",
 // usado como elemento decorativo (ver .stamp-decor en global.css).
 export const StampSeal = ({ size = 140, style }) => (
