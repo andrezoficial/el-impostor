@@ -84,7 +84,7 @@ export const VotingScreen = ({
                   width: 28, height: 28, borderRadius: '50%',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                   fontSize: 12, fontWeight: 700,
-                  background: i + 1 < votingRound ? 'rgba(78,205,196,0.3)' : i + 1 === votingRound ? 'var(--primary)' : 'rgba(255,255,255,0.08)',
+                  background: i + 1 < votingRound ? 'rgba(201, 162, 39,0.3)' : i + 1 === votingRound ? 'var(--primary)' : 'rgba(255,255,255,0.08)',
                   border: i + 1 === votingRound ? '2px solid var(--primary)' : '2px solid rgba(255,255,255,0.15)',
                   color: 'white',
                 }}
@@ -114,7 +114,7 @@ export const VotingScreen = ({
                 <div style={{ color: 'var(--warning)', fontWeight: 700, fontSize: 14 }}>
                   {t('voting.tieRunoff', votingRound)}
                 </div>
-                <div style={{ color: '#a7a9be', fontSize: 12 }}>
+                <div style={{ color: '#a39e93', fontSize: 12 }}>
                   {t('voting.onlyVoteFor', tiedPlayers.map(i => players[i]).join(', '))}
                 </div>
               </div>
@@ -122,7 +122,7 @@ export const VotingScreen = ({
           )}
         </AnimatePresence>
 
-        <p style={{ color: '#a7a9be', marginBottom: '4px', fontSize: 14 }}>
+        <p style={{ color: '#a39e93', marginBottom: '4px', fontSize: 14 }}>
           <FaUsers style={{ marginRight: '6px' }} />{t('voting.whoToEliminate')}
         </p>
         <p style={{ color: 'white', fontWeight: 'bold', marginBottom: '16px' }}>
@@ -156,7 +156,7 @@ export const VotingScreen = ({
             >
               <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                 <span className="name">{player}</span>
-                {isSelf && <span style={{ color: '#a7a9be', fontSize: 12 }}>{t('common.you')}</span>}
+                {isSelf && <span style={{ color: '#a39e93', fontSize: 12 }}>{t('common.you')}</span>}
                 {isInRunoffGroup && !isSelf && (
                   <motion.span
                     animate={{ opacity: [1, 0.5, 1] }}
@@ -180,7 +180,7 @@ export const VotingScreen = ({
       <AnimatePresence>
         {selected !== null && !voted && (
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }}>
-            <motion.button whileHover={{ scale: 1.04, boxShadow: '0 8px 25px rgba(233,69,96,0.45)' }} whileTap={{ scale: 0.96 }} onClick={confirmVote} className="button button-primary">
+            <motion.button whileHover={{ scale: 1.04, boxShadow: '0 8px 25px rgba(193, 68, 14,0.45)' }} whileTap={{ scale: 0.96 }} onClick={confirmVote} className="button button-primary">
               <FaSkull style={{ marginRight: '8px' }} />{t('voting.eliminate', players[selected])}
             </motion.button>
           </motion.div>
@@ -194,11 +194,11 @@ export const VotingScreen = ({
             transition={{ type: 'spring', stiffness: 250 }}
             style={{ textAlign: 'center', marginTop: '16px' }}
           >
-            <div style={{ background: 'rgba(78,205,196,0.1)', padding: '16px', borderRadius: '14px', border: '2px solid #4ecdc4' }}>
-              <motion.div animate={{ scale: [1, 1.15, 1] }} transition={{ duration: 0.6, repeat: 2 }} style={{ color: '#4ecdc4', fontSize: '20px', fontWeight: 'bold' }}>
+            <div style={{ background: 'rgba(201, 162, 39,0.1)', padding: '16px', borderRadius: '14px', border: '2px solid #c9a227' }}>
+              <motion.div animate={{ scale: [1, 1.15, 1] }} transition={{ duration: 0.6, repeat: 2 }} style={{ color: '#c9a227', fontSize: '20px', fontWeight: 'bold' }}>
                 {t('voting.voteRegistered')}
               </motion.div>
-              <div style={{ color: '#a7a9be', fontSize: '14px', marginTop: '6px' }}>
+              <div style={{ color: '#a39e93', fontSize: '14px', marginTop: '6px' }}>
                 {currentVoterIndex === totalPlayers - 1 ? t('voting.calculating') : t('voting.passToNext')}
               </div>
             </div>

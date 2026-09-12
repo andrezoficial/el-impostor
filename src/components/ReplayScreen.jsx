@@ -29,7 +29,7 @@ export const ReplayScreen = ({ players, currentCategory, usedWords, onPlay, onRe
       <div style={{ textAlign: 'center', marginBottom: '24px' }}>
         <div style={{ fontSize: '3rem', marginBottom: '8px' }}>🔁</div>
         <h2 style={{ margin: '0 0 6px', color: 'white' }}>{t('replay.anotherRound')}</h2>
-        <p style={{ color: '#a7a9be', margin: 0, fontSize: '14px' }}>
+        <p style={{ color: '#a39e93', margin: 0, fontSize: '14px' }}>
           {t('replay.subtitle')}
         </p>
       </div>
@@ -106,11 +106,11 @@ export const ReplayScreen = ({ players, currentCategory, usedWords, onPlay, onRe
             padding: '8px 14px',
             borderRadius: '8px',
             background: remaining === 0
-              ? 'rgba(233, 69, 96, 0.12)'
-              : 'rgba(78, 205, 196, 0.1)',
-            border: `1px solid ${remaining === 0 ? 'rgba(233,69,96,0.3)' : 'rgba(78,205,196,0.25)'}`,
+              ? 'rgba(193, 68, 14, 0.12)'
+              : 'rgba(201, 162, 39, 0.1)',
+            border: `1px solid ${remaining === 0 ? 'rgba(193, 68, 14,0.3)' : 'rgba(201, 162, 39,0.25)'}`,
             fontSize: '13px',
-            color: remaining === 0 ? '#e94560' : '#4ecdc4',
+            color: remaining === 0 ? '#c1440e' : '#c9a227',
             display: 'flex',
             alignItems: 'center',
             gap: '6px',
@@ -124,7 +124,7 @@ export const ReplayScreen = ({ players, currentCategory, usedWords, onPlay, onRe
 
       <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
         <motion.button
-          whileHover={{ scale: 1.04, boxShadow: '0 8px 25px rgba(233,69,96,0.4)' }}
+          whileHover={{ scale: 1.04, boxShadow: '0 8px 25px rgba(193, 68, 14,0.4)' }}
           whileTap={{ scale: 0.96 }}
           onClick={() => onPlay(category)}
           className="button button-primary"

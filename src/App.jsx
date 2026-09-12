@@ -41,7 +41,7 @@ const LanguageSwitcher = () => {
             fontWeight: 600,
             cursor: 'pointer',
             border: lang === code ? '2px solid var(--primary)' : '2px solid rgba(255,255,255,0.15)',
-            background: lang === code ? 'rgba(233, 69, 96, 0.15)' : 'transparent',
+            background: lang === code ? 'rgba(193, 68, 14, 0.15)' : 'transparent',
             color: lang === code ? 'white' : 'var(--text-secondary)',
             transition: 'all 0.2s ease',
           }}

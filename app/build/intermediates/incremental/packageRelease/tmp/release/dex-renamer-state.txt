@@ -1,4 +1,0 @@
-#Fri Sep 11 12:46:47 COT 2026
-base.0=C\:\\Users\\Andre\\el-impostor\\app\\build\\intermediates\\dex\\release\\minifyReleaseWithR8\\classes.dex
-renamed.0=classes.dex
-path.0=classes.dex

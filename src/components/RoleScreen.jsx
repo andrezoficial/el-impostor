@@ -54,7 +54,7 @@ export const RoleScreen = ({
             <h2 style={{ fontSize: '2rem', margin: '10px 0', color: 'white' }}>
               {player}
             </h2>
-            <div style={{ fontSize: '14px', color: '#a7a9be' }}>
+            <div style={{ fontSize: '14px', color: '#a39e93' }}>
               {t('role.subtitle', currentIndex + 1, totalPlayers)}
             </div>
           </motion.div>
@@ -85,7 +85,7 @@ export const RoleScreen = ({
                 >
                   {isImpostor ? (
                     <>
-                      <div className="role-label" style={{ color: '#e94560', fontSize: '18px' }}>
+                      <div className="role-label" style={{ color: '#c1440e', fontSize: '18px' }}>
                         <FaUserSecret style={{ marginRight: '8px' }} />
                         {t('role.impostorLabel')}
                       </div>
@@ -99,16 +99,16 @@ export const RoleScreen = ({
                           {clue}
                         </motion.div>
                       </div>
-                      <div style={{ marginTop: '15px', color: '#a7a9be', fontSize: '14px' }}>
+                      <div style={{ marginTop: '15px', color: '#a39e93', fontSize: '14px' }}>
                         {t('role.impostorHint1')}
                       </div>
-                      <div style={{ marginTop: '10px', color: '#f5c842', fontSize: '12px' }}>
+                      <div style={{ marginTop: '10px', color: '#e8b74b', fontSize: '12px' }}>
                         {t('role.impostorHint2')}
                       </div>
                     </>
                   ) : (
                     <>
-                      <div className="role-label" style={{ color: '#4ecdc4', fontSize: '18px' }}>
+                      <div className="role-label" style={{ color: '#c9a227', fontSize: '18px' }}>
                         <FaCheck style={{ marginRight: '8px' }} />
                         {t('role.crewLabel')}
                       </div>
@@ -122,7 +122,7 @@ export const RoleScreen = ({
                           {word}
                         </motion.div>
                       </div>
-                      <div style={{ marginTop: '15px', color: '#a7a9be', fontSize: '14px' }}>
+                      <div style={{ marginTop: '15px', color: '#a39e93', fontSize: '14px' }}>
                         {t('role.crewHint')}
                       </div>
                     </>

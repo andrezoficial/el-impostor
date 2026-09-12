@@ -58,7 +58,7 @@ export const ImpostorReveal = ({ players, eliminatedIndex, impostorIndex, impost
       position: 'fixed', inset: 0, zIndex: 1000,
       display: 'flex', flexDirection: 'column',
       alignItems: 'center', justifyContent: 'center',
-      background: '#0f0e17',
+      background: '#141311',
       overflow: 'hidden',
     }}>
       {/* Partículas de fondo */}
@@ -71,7 +71,7 @@ export const ImpostorReveal = ({ players, eliminatedIndex, impostorIndex, impost
           style={{
             position: 'absolute',
             width: 6, height: 6, borderRadius: '50%',
-            background: i % 3 === 0 ? '#e94560' : i % 3 === 1 ? '#f5c842' : '#4ecdc4',
+            background: i % 3 === 0 ? '#c1440e' : i % 3 === 1 ? '#e8b74b' : '#c9a227',
           }}
         />
       ))}
@@ -86,11 +86,11 @@ export const ImpostorReveal = ({ players, eliminatedIndex, impostorIndex, impost
             transition={{ type: 'spring', stiffness: 300, damping: 20 }}
             style={{ textAlign: 'center' }}
           >
-            <div style={{ fontSize: '5rem', color: '#a7a9be', marginBottom: '16px' }}>
+            <div style={{ fontSize: '5rem', color: '#a39e93', marginBottom: '16px' }}>
               {t('reveal.whoWasIt')}
             </div>
             <motion.div
-              animate={{ color: ['#e94560', '#f5c842', '#4ecdc4'] }}
+              animate={{ color: ['#c1440e', '#e8b74b', '#c9a227'] }}
               transition={{ duration: 0.9, repeat: Infinity }}
               style={{ fontSize: '9rem', fontWeight: 900, lineHeight: 1 }}
             >
@@ -119,7 +119,7 @@ export const ImpostorReveal = ({ players, eliminatedIndex, impostorIndex, impost
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
-              style={{ color: '#a7a9be', fontSize: '16px', marginBottom: '8px' }}
+              style={{ color: '#a39e93', fontSize: '16px', marginBottom: '8px' }}
             >
               {multipleImpostors ? t('reveal.impostorsWere') : t('reveal.impostorWas')}
             </motion.div>
@@ -135,8 +135,8 @@ export const ImpostorReveal = ({ players, eliminatedIndex, impostorIndex, impost
                   style={{
                     fontSize: multipleImpostors ? '2rem' : '3rem',
                     fontWeight: 900,
-                    color: '#e94560',
-                    textShadow: '0 0 30px rgba(233,69,96,0.6)',
+                    color: '#c1440e',
+                    textShadow: '0 0 30px rgba(193, 68, 14,0.6)',
                     lineHeight: 1.2,
                   }}
                 >
@@ -152,8 +152,8 @@ export const ImpostorReveal = ({ players, eliminatedIndex, impostorIndex, impost
               style={{
                 padding: '16px 24px',
                 borderRadius: '16px',
-                background: isCorrect ? 'rgba(78,205,196,0.15)' : 'rgba(233,69,96,0.15)',
-                border: `2px solid ${isCorrect ? '#4ecdc4' : '#e94560'}`,
+                background: isCorrect ? 'rgba(201, 162, 39,0.15)' : 'rgba(193, 68, 14,0.15)',
+                border: `2px solid ${isCorrect ? '#c9a227' : '#c1440e'}`,
               }}
             >
               <div style={{ fontSize: '2.5rem', marginBottom: '8px' }}>
@@ -161,14 +161,14 @@ export const ImpostorReveal = ({ players, eliminatedIndex, impostorIndex, impost
               </div>
               <div style={{
                 fontSize: '1.2rem', fontWeight: 700,
-                color: isCorrect ? '#4ecdc4' : '#e94560',
+                color: isCorrect ? '#c9a227' : '#c1440e',
               }}>
                 {isCorrect
                   ? t('reveal.crewCaught')
                   : t('reveal.impostorEscaped')}
               </div>
               {eliminatedName && !allImpostorIndices.includes(eliminatedIndex) && (
-                <div style={{ color: '#a7a9be', fontSize: '13px', marginTop: '8px' }}>
+                <div style={{ color: '#a39e93', fontSize: '13px', marginTop: '8px' }}>
                   {t('reveal.eliminatedByMistake', eliminatedName)}
                 </div>
               )}
@@ -187,7 +187,7 @@ export const ImpostorReveal = ({ players, eliminatedIndex, impostorIndex, impost
                 borderRadius: '12px',
                 border: '1px solid rgba(255,255,255,0.15)',
                 background: 'rgba(255,255,255,0.06)',
-                color: '#a7a9be',
+                color: '#a39e93',
                 fontSize: '14px',
                 cursor: 'pointer',
               }}

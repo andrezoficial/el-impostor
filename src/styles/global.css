@@ -1,13 +1,13 @@
 :root {
-  --primary: #e94560;
-  --secondary: #533483;
-  --background: #0f0e17;
-  --surface: #1a1a2e;
-  --card: #16213e;
-  --text: #fffffe;
-  --text-secondary: #a7a9be;
-  --success: #4ecdc4;
-  --warning: #f5c842;
+  --primary: #c1440e;
+  --secondary: #6b4226;
+  --background: #141311;
+  --surface: #1e1b17;
+  --card: #262220;
+  --text: #f5f1e8;
+  --text-secondary: #a39e93;
+  --success: #c9a227;
+  --warning: #e8b74b;
   --shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
 }
 
@@ -102,7 +102,7 @@ body {
 .input-group input:focus {
   outline: none;
   border-color: var(--primary);
-  box-shadow: 0 0 0 3px rgba(233, 69, 96, 0.2);
+  box-shadow: 0 0 0 3px rgba(193, 68, 14, 0.2);
 }
 
 .input-group input::placeholder {
@@ -123,14 +123,14 @@ body {
 }
 
 .button-primary {
-  background: linear-gradient(135deg, var(--primary), #c73652);
+  background: linear-gradient(135deg, var(--primary), #8f320a);
   color: white;
-  box-shadow: 0 4px 15px rgba(233, 69, 96, 0.3);
+  box-shadow: 0 4px 15px rgba(193, 68, 14, 0.3);
 }
 
 .button-primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(233, 69, 96, 0.4);
+  box-shadow: 0 8px 25px rgba(193, 68, 14, 0.4);
 }
 
 .button-primary:active {
@@ -144,7 +144,7 @@ body {
 
 .button-secondary:hover {
   transform: translateY(-2px);
-  background: #6a4c8a;
+  background: #85543a;
 }
 
 .button-success {
@@ -219,12 +219,12 @@ body {
 
 .player-card:hover {
   transform: translateX(5px);
-  background: rgba(233, 69, 96, 0.1);
+  background: rgba(193, 68, 14, 0.1);
 }
 
 .player-card.selected {
   border: 2px solid var(--primary);
-  background: rgba(233, 69, 96, 0.15);
+  background: rgba(193, 68, 14, 0.15);
 }
 
 .player-card .name {
