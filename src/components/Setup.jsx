@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { IconTrash, IconUserPlus, IconTags, IconSecret, IconIdea } from './icons';
+import { IconTrash, IconUserPlus, IconTags, IconSecret, IconIdea, IconQuestion } from './icons';
 import { getCategories } from '../data/wordBank';
 import { useLanguage } from '../i18n/LanguageContext';
+import { HowToPlayModal } from './HowToPlayModal';
 
 const ALL_CATEGORIES = getCategories();
 
@@ -12,6 +13,7 @@ export const Setup = ({ onStart }) => {
   const [category, setCategory] = useState('all');
   const [numImpostors, setNumImpostors] = useState(1);
   const [error, setError] = useState('');
+  const [showHowTo, setShowHowTo] = useState(false);
 
   const handleAddPlayer = () => {
     if (players.length < 12) {
@@ -72,7 +74,36 @@ export const Setup = ({ onStart }) => {
     >
       <h1 className="title">{t('setup.title')}</h1>
       <p className="subtitle">{t('setup.subtitle')}</p>
-      
+
+      <motion.button
+        whileHover={{ scale: 1.02 }}
+        whileTap={{ scale: 0.98 }}
+        onClick={() => setShowHowTo(true)}
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: '8px',
+          width: '100%',
+          background: 'transparent',
+          border: '2px dashed var(--line)',
+          borderRadius: 'var(--radius-sm)',
+          color: 'var(--text-secondary)',
+          padding: '10px',
+          fontSize: 'var(--text-sm)',
+          fontWeight: 600,
+          cursor: 'pointer',
+          marginBottom: '18px',
+        }}
+      >
+        <IconQuestion size={15} />
+        {t('howTo.button')}
+      </motion.button>
+
+      <AnimatePresence>
+        {showHowTo && <HowToPlayModal onClose={() => setShowHowTo(false)} />}
+      </AnimatePresence>
+
       <div className="input-group">
         <AnimatePresence>
           {players.map((player, index) => (

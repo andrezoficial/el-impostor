@@ -194,6 +194,22 @@ export const IconIdea = ({ size = 16, style }) => (
   </svg>
 );
 
+export const IconQuestion = ({ size = 16, style }) => (
+  <svg {...base(size)} style={style}>
+    <g transform="rotate(-2 12 12)">
+      <circle cx="12" cy="12" r="9.2" />
+    </g>
+    <path d="M9 9.3c0-1.9 1.4-3 3-3s3 1 3 2.7c0 1.9-2.8 2.1-2.8 4.3" />
+    <circle cx="12.1" cy="16.6" r=".9" fill="currentColor" stroke="none" />
+  </svg>
+);
+
+export const IconClose = ({ size = 16, style }) => (
+  <svg {...base(size)} style={style}>
+    <path d="M5 5l14 14M19 5L5 19" />
+  </svg>
+);
+
 export const IconPaperclip = ({ size = 16, style }) => (
   <svg {...base(size)} style={style}>
     <path d="M8.5 12.5l6.2-6.2a3 3 0 114.2 4.2l-8.4 8.4a5 5 0 01-7-7l7.8-7.8" />

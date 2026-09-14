@@ -71,7 +71,7 @@ export const wordBank = [
   { id: 'concert', category: 'entertainment', es: { word: 'Concierto', clue: 'Coldplay' }, en: { word: 'Concert', clue: 'Coldplay' } },
 
   // Lugares / Places
-  { id: 'beach', category: 'places', es: { word: 'Playa', clue: 'Baywatch' }, en: { word: 'Beach', clue: 'Baywatch' } },
+  { id: 'beach', category: 'places', es: { word: 'Playa', clue: 'Guardianes de la Bahía' }, en: { word: 'Beach', clue: 'Baywatch' } },
   { id: 'mountain', category: 'places', es: { word: 'Montaña', clue: 'El Rey León' }, en: { word: 'Mountain', clue: 'The Lion King' } },
   { id: 'forest', category: 'places', es: { word: 'Bosque', clue: 'Shrek' }, en: { word: 'Forest', clue: 'Shrek' } },
   { id: 'city', category: 'places', es: { word: 'Ciudad', clue: 'Batman' }, en: { word: 'City', clue: 'Batman' } },
@@ -89,7 +89,7 @@ export const wordBank = [
   { id: 'swimming', category: 'sports', es: { word: 'Natación', clue: 'Michael Phelps' }, en: { word: 'Swimming', clue: 'Michael Phelps' } },
   { id: 'cycling', category: 'sports', es: { word: 'Ciclismo', clue: 'Lance Armstrong' }, en: { word: 'Cycling', clue: 'Lance Armstrong' } },
   { id: 'boxing', category: 'sports', es: { word: 'Boxeo', clue: 'Rocky Balboa' }, en: { word: 'Boxing', clue: 'Rocky Balboa' } },
-  { id: 'surfing', category: 'sports', es: { word: 'Surf', clue: 'Point Break' }, en: { word: 'Surfing', clue: 'Point Break' } },
+  { id: 'surfing', category: 'sports', es: { word: 'Surf', clue: 'Punto de Quiebre' }, en: { word: 'Surfing', clue: 'Point Break' } },
   { id: 'wrestling', category: 'sports', es: { word: 'Lucha Libre', clue: 'John Cena' }, en: { word: 'Wrestling', clue: 'John Cena' } },
   { id: 'golf', category: 'sports', es: { word: 'Golf', clue: 'Tiger Woods' }, en: { word: 'Golf', clue: 'Tiger Woods' } },
 
@@ -149,7 +149,7 @@ export const wordBank = [
 
   // Celebraciones / Celebrations
   { id: 'birthday', category: 'celebrations', es: { word: 'Cumpleaños', clue: 'Marilyn Monroe' }, en: { word: 'Birthday', clue: 'Marilyn Monroe' } },
-  { id: 'wedding', category: 'celebrations', es: { word: 'Boda', clue: 'La Novia Cadáver' }, en: { word: 'Wedding', clue: 'Corpse Bride' } },
+  { id: 'wedding', category: 'celebrations', es: { word: 'Boda', clue: 'El Cadáver de la Novia' }, en: { word: 'Wedding', clue: 'Corpse Bride' } },
   { id: 'christmas', category: 'celebrations', es: { word: 'Navidad', clue: 'Papá Noel' }, en: { word: 'Christmas', clue: 'Santa Claus' } },
   { id: 'carnival', category: 'celebrations', es: { word: 'Carnaval', clue: 'V de Vendetta' }, en: { word: 'Carnival', clue: 'V for Vendetta' } },
   { id: 'graduation', category: 'celebrations', es: { word: 'Graduación', clue: 'High School Musical' }, en: { word: 'Graduation', clue: 'High School Musical' } },
