@@ -8,6 +8,7 @@ export const translations = {
       allCategories: 'Todas',
       allCategoriesLabel: '🎲 Todas las categorías',
       you: '(tú)',
+      cancel: 'Cancelar',
     },
     app: {
       createdBy: 'Creado por',
@@ -83,6 +84,9 @@ export const translations = {
       calculating: 'Calculando resultados...',
       passToNext: 'Pasa el dispositivo al siguiente jugador...',
       hint: 'Vota en privado, no muestres tu elección a los demás',
+      changeWord: '🔄 Cambiar palabra',
+      changeWordConfirm: '¿El impostor dijo la palabra? Se cancelará la votación actual y se asignará una palabra nueva.',
+      confirmChangeWord: 'Sí, cambiar',
     },
     reveal: {
       whoWasIt: '🔎 ¿Quién fue?',
@@ -172,6 +176,7 @@ export const translations = {
       allCategories: 'All',
       allCategoriesLabel: '🎲 All categories',
       you: '(you)',
+      cancel: 'Cancel',
     },
     app: {
       createdBy: 'Created by',

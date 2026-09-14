@@ -156,6 +156,28 @@ export const useGame = () => {
     });
   }, [players.length, currentVoterIndex, votingRound, maxVotingRounds, resolveVotes]);
 
+  // Cambia la palabra durante la votación sin cambiar los impostores.
+  // Se cancela cualquier votación parcial y se vuelve a mostrar el reparto
+  // de roles para que todos reciban la nueva palabra de forma privada.
+  const changeWord = useCallback(() => {
+    if (players.length < 3 || !currentWord) return;
+
+    const word = getRandomWord(usedWords, category);
+
+    setCurrentWord(word);
+    setLastWord(word.id);
+    setUsedWords(prev => [...prev, word.id]);
+    setCurrentPlayerIndex(0);
+    setCurrentVoterIndex(0);
+    setVotes(new Array(players.length).fill(0));
+    setEliminatedIndex(-1);
+    setVotingRound(1);
+    setVotingTied(false);
+    setTiedPlayers([]);
+    setAllRoundsVotes([]);
+    setPhase('role');
+  }, [players.length, currentWord, usedWords, category]);
+
   const resetGame = useCallback(() => {
     setPlayers([]);
     setCategory(null);
@@ -219,6 +241,7 @@ export const useGame = () => {
     nextPlayer,
     startVoting,
     castVote,
+    changeWord,
     resetGame,
     getCurrentPlayer,
     isImpostor,

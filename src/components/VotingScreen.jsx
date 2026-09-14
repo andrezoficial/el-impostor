@@ -14,11 +14,13 @@ export const VotingScreen = ({
   maxVotingRounds,
   votingTied,
   tiedPlayers,
+  onChangeWord,
 }) => {
   const { t } = useLanguage();
   const [deviceReady, setDeviceReady] = useState(false);
   const [selected, setSelected] = useState(null);
   const [voted, setVoted] = useState(false);
+  const [confirmChange, setConfirmChange] = useState(false);
 
   const totalPlayers = players.length;
   const isRunoff = votingTied && tiedPlayers && tiedPlayers.length > 0;
@@ -205,6 +207,80 @@ export const VotingScreen = ({
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* Cambio de palabra de emergencia: no elimina a nadie ni registra votos. */}
+      {!voted && (
+        <AnimatePresence mode="wait">
+          {!confirmChange ? (
+            <motion.button
+              key="change-word"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              onClick={() => setConfirmChange(true)}
+              style={{
+                width: '100%',
+                marginTop: '12px',
+                padding: '12px 16px',
+                borderRadius: '12px',
+                border: '2px dashed rgba(217,165,68,0.55)',
+                background: 'rgba(217,165,68,0.08)',
+                color: 'var(--warning)',
+                cursor: 'pointer',
+                fontSize: 'var(--text-sm)',
+                fontWeight: 700,
+              }}
+            >
+              🔄 {t('voting.changeWord')}
+            </motion.button>
+          ) : (
+            <motion.div
+              key="confirm-change-word"
+              initial={{ opacity: 0, scale: 0.96 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.96 }}
+              style={{
+                marginTop: '12px',
+                padding: '14px',
+                borderRadius: '12px',
+                border: '2px solid var(--warning)',
+                background: 'rgba(217,165,68,0.10)',
+                textAlign: 'center',
+              }}
+            >
+              <div style={{ color: 'var(--warning)', fontWeight: 700, fontSize: 'var(--text-sm)', marginBottom: '10px' }}>
+                {t('voting.changeWordConfirm')}
+              </div>
+              <div style={{ display: 'flex', gap: '8px' }}>
+                <button
+                  onClick={() => setConfirmChange(false)}
+                  style={{
+                    flex: 1, padding: '10px', borderRadius: '10px',
+                    border: '2px solid rgba(255,255,255,0.12)',
+                    background: 'transparent', color: 'var(--text-secondary)',
+                    cursor: 'pointer', fontWeight: 600,
+                  }}
+                >
+                  {t('common.cancel')}
+                </button>
+                <button
+                  onClick={onChangeWord}
+                  style={{
+                    flex: 1, padding: '10px', borderRadius: '10px',
+                    border: '2px solid var(--warning)',
+                    background: 'var(--warning)', color: '#1b1712',
+                    cursor: 'pointer', fontWeight: 700,
+                  }}
+                >
+                  {t('voting.confirmChangeWord')}
+                </button>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      )}
 
       <div className="progress-bar">
         <motion.div className="progress-bar-fill" initial={{ width: 0 }} animate={{ width: `${((currentVoterIndex + 1) / totalPlayers) * 100}%` }} transition={{ duration: 0.5 }} />

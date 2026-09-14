@@ -121,6 +121,7 @@ function App() {
             maxVotingRounds={game.maxVotingRounds}
             votingTied={game.votingTied}
             tiedPlayers={game.tiedPlayers}
+            onChangeWord={game.changeWord}
           />
         );
 
