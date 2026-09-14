@@ -4,6 +4,7 @@ import { getRandomWord } from '../data/wordBank';
 export const useGame = () => {
   const [players, setPlayers] = useState([]);
   const [category, setCategory] = useState(null);
+  const [difficulty, setDifficulty] = useState('all');
   const [currentWord, setCurrentWord] = useState(null);
   const [impostorIndices, setImpostorIndices] = useState([]);
   const [currentPlayerIndex, setCurrentPlayerIndex] = useState(0);
@@ -49,8 +50,8 @@ export const useGame = () => {
     return 1;
   };
 
-  const beginRound = useCallback((playerNames, cat, impostorCount) => {
-    const word = getRandomWord(usedWords, cat);
+  const beginRound = useCallback((playerNames, cat, impostorCount, diff = difficulty) => {
+    const word = getRandomWord(usedWords, cat, diff);
     const impostors = pickImpostors(playerNames, impostorCount, lastImpostorNames);
     const rounds = calcMaxRounds(playerNames.length);
     const firstPlayer = Math.floor(Math.random() * playerNames.length);
@@ -72,28 +73,30 @@ export const useGame = () => {
     setTiedPlayers([]);
     setAllRoundsVotes([]);
     setPhase('role');
-  }, [usedWords, lastImpostorNames, pickImpostors]);
+  }, [usedWords, lastImpostorNames, pickImpostors, difficulty]);
 
-  const startGame = useCallback((playerNames, selectedCategory = null, impostorCount = 1) => {
+  const startGame = useCallback((playerNames, selectedCategory = null, impostorCount = 1, selectedDifficulty = 'all') => {
     if (playerNames.length < 3) {
       throw new Error('Necesitas al menos 3 jugadores');
     }
     setUsedWords([]);
     setCategory(selectedCategory);
+    setDifficulty(selectedDifficulty);
     setNumImpostors(impostorCount);
-    beginRound(playerNames, selectedCategory, impostorCount);
+    beginRound(playerNames, selectedCategory, impostorCount, selectedDifficulty);
   }, [beginRound]);
 
   const playAgainSamePlayers = useCallback(() => {
     if (players.length < 3) return;
-    beginRound(players, category, numImpostors);
+    beginRound(players, category, numImpostors, difficulty);
   }, [players, category, numImpostors, beginRound]);
 
-  const playAgainWithCategory = useCallback((newCategory) => {
+  const playAgainWithCategory = useCallback((newCategory, newDifficulty = difficulty) => {
     if (players.length < 3) return;
     setCategory(newCategory);
-    beginRound(players, newCategory, numImpostors);
-  }, [players, numImpostors, beginRound]);
+    setDifficulty(newDifficulty);
+    beginRound(players, newCategory, numImpostors, newDifficulty);
+  }, [players, numImpostors, beginRound, difficulty]);
 
   const nextPlayer = useCallback(() => {
     if (currentPlayerIndex < players.length - 1) {
@@ -162,7 +165,7 @@ export const useGame = () => {
   const changeWord = useCallback(() => {
     if (players.length < 3 || !currentWord) return;
 
-    const word = getRandomWord(usedWords, category);
+    const word = getRandomWord(usedWords, category, difficulty);
 
     setCurrentWord(word);
     setLastWord(word.id);
@@ -176,11 +179,12 @@ export const useGame = () => {
     setTiedPlayers([]);
     setAllRoundsVotes([]);
     setPhase('role');
-  }, [players.length, currentWord, usedWords, category]);
+  }, [players.length, currentWord, usedWords, category, difficulty]);
 
   const resetGame = useCallback(() => {
     setPlayers([]);
     setCategory(null);
+    setDifficulty('all');
     setCurrentWord(null);
     setImpostorIndices([]);
     setCurrentPlayerIndex(0);
@@ -219,6 +223,7 @@ export const useGame = () => {
   return {
     players,
     category,
+    difficulty,
     currentWord,
     impostorIndex,       // legacy – primer impostor
     impostorIndices,     // nuevo – todos los impostores

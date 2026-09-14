@@ -157,6 +157,7 @@ function App() {
           <ReplayScreen
             players={game.players}
             currentCategory={game.category}
+            currentDifficulty={game.difficulty}
             usedWords={game.usedWords}
             onPlay={game.playAgainWithCategory}
             onReset={game.resetGame}

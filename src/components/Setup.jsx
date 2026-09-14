@@ -11,6 +11,7 @@ export const Setup = ({ onStart }) => {
   const { t } = useLanguage();
   const [players, setPlayers] = useState(['', '', '', '']);
   const [category, setCategory] = useState('all');
+  const [difficulty, setDifficulty] = useState('all');
   const [numImpostors, setNumImpostors] = useState(1);
   const [error, setError] = useState('');
   const [showHowTo, setShowHowTo] = useState(false);
@@ -63,7 +64,7 @@ export const Setup = ({ onStart }) => {
     const safeImpostors = Math.min(numImpostors, Math.floor(validPlayers.length / 2));
 
     setError('');
-    onStart(validPlayers, category, safeImpostors);
+    onStart(validPlayers, category, safeImpostors, difficulty);
   };
 
   return (
@@ -268,6 +269,31 @@ export const Setup = ({ onStart }) => {
             </option>
           ))}
         </select>
+      </div>
+
+      {/* Selector de dificultad */}
+      <div style={{ marginBottom: '20px' }}>
+        <label
+          style={{
+            display: 'flex', alignItems: 'center', gap: '8px',
+            color: 'var(--text-secondary)', fontSize: 'var(--text-sm)', marginBottom: '10px'
+          }}
+        >
+          <span style={{ fontSize: '18px' }}>🎚️</span>
+          {t('setup.difficultyLabel')}
+        </label>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '8px' }}>
+          {[['all','🎲', 'difficultyAll'], ['easy','🟢','difficultyEasy'], ['medium','🟡','difficultyMedium'], ['hard','🔴','difficultyHard']].map(([value, icon, key]) => {
+            const selected = difficulty === value;
+            return (
+              <motion.button key={value} whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }} onClick={() => setDifficulty(value)}
+                style={{ padding: '11px 6px', borderRadius: '12px', border: selected ? '2px solid #a3311c' : '2px solid rgba(255,255,255,0.1)', background: selected ? 'rgba(163,49,28,0.18)' : 'var(--card)', color: 'var(--text)', fontSize: '12px', fontWeight: selected ? 700 : 500, cursor: 'pointer' }}>
+                <div style={{ fontSize: '18px' }}>{icon}</div>
+                {t(`setup.${key}`)}
+              </motion.button>
+            );
+          })}
+        </div>
       </div>
 
       <motion.button

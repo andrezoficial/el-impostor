@@ -6,14 +6,18 @@ import { useLanguage } from '../i18n/LanguageContext';
 
 const ALL_CATEGORIES = getCategories();
 
-export const ReplayScreen = ({ players, currentCategory, usedWords, onPlay, onReset }) => {
+export const ReplayScreen = ({ players, currentCategory, currentDifficulty, usedWords, onPlay, onReset }) => {
   const { t } = useLanguage();
   const [category, setCategory] = useState(currentCategory || 'all');
+  const [difficulty, setDifficulty] = useState(currentDifficulty || 'all');
 
   const getStats = (cat) => {
-    const pool = cat && cat !== 'all'
+    const categoryPool = cat && cat !== 'all'
       ? wordBank.filter(w => w.category === cat)
       : wordBank;
+    const pool = difficulty && difficulty !== 'all'
+      ? categoryPool.filter(w => w.difficulty === difficulty)
+      : categoryPool;
     const used = pool.filter(w => usedWords.includes(w.id)).length;
     return { total: pool.length, used, remaining: pool.length - used };
   };
@@ -63,6 +67,20 @@ export const ReplayScreen = ({ players, currentCategory, usedWords, onPlay, onRe
       </div>
 
       {/* Selector de categoría */}
+      {/* Selector de dificultad */}
+      <div style={{ marginBottom: '20px' }}>
+        <label style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--text-secondary)', fontSize: 'var(--text-sm)', marginBottom: '10px' }}>
+          <span style={{ fontSize: '18px' }}>🎚️</span>
+          {t('replay.difficultyLabel')}
+        </label>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '8px' }}>
+          {[['all','🎲','difficultyAll'],['easy','🟢','difficultyEasy'],['medium','🟡','difficultyMedium'],['hard','🔴','difficultyHard']].map(([value, icon, key]) => {
+            const selected = difficulty === value;
+            return <motion.button key={value} whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }} onClick={() => setDifficulty(value)} style={{ padding: '11px 6px', borderRadius: '12px', border: selected ? '2px solid #a3311c' : '2px solid rgba(255,255,255,0.1)', background: selected ? 'rgba(163,49,28,0.18)' : 'var(--card)', color: 'var(--text)', fontSize: '12px', fontWeight: selected ? 700 : 500, cursor: 'pointer' }}><div style={{ fontSize: '18px' }}>{icon}</div>{t(`replay.${key}`)}</motion.button>;
+          })}
+        </div>
+      </div>
+
       <div style={{ marginBottom: '20px' }}>
         <label
           style={{
@@ -126,7 +144,7 @@ export const ReplayScreen = ({ players, currentCategory, usedWords, onPlay, onRe
         <motion.button
           whileHover={{ scale: 1.04, boxShadow: '6px 6px 0 rgba(0,0,0,0.35)' }}
           whileTap={{ scale: 0.96 }}
-          onClick={() => onPlay(category)}
+          onClick={() => onPlay(category, difficulty)}
           className="button button-primary"
           style={{ flex: '1', minWidth: '200px' }}
         >
